@@ -1,0 +1,118 @@
+.deviceModelFull {
+    width: auto;
+    height: auto;
+    pointer-events: none !important;
+}
+
+.deviceModelFull > .popup-close {
+    pointer-events: visible;
+}
+
+.limojiBG {
+    width: 1074px;
+    height: auto;
+    background-image: url(../../public/3dModel/3d/device/LMCJ/弹窗.png);
+    background-repeat: no-repeat;
+    /* background-size: 100% 100%; */
+    transform: scale(0.3);
+    overflow: hidden;
+}
+
+.limoTitle {
+    font-size: 43px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 60px;
+    margin: 23px 0 87px 144px;
+}
+
+.limoTap {
+    width: 489px;
+    height: 75px;
+    margin-left: 335px;
+    text-align: center;
+}
+
+.leftTap {
+    vertical-align: top;
+    font-size: 36px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 75px;
+    width: 49%;
+    box-sizing: border-box;
+    border-top-left-radius: 38px;
+    border-bottom-left-radius: 38px;
+    border-top: 1px solid #048ef9;
+    border-left: 1px solid #048ef9;
+    border-bottom: 1px solid #048ef9;
+    float: left;
+    cursor: pointer;
+    pointer-events: visible;
+}
+
+.rightTap {
+    vertical-align: top;
+    font-size: 36px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 75px;
+    width: 49%;
+    box-sizing: border-box;
+    border-top-right-radius: 38px;
+    border-bottom-right-radius: 38px;
+    border-top: 1px solid #048ef9;
+    border-right: 1px solid #048ef9;
+    border-bottom: 1px solid #048ef9;
+    float: left;
+    cursor: pointer;
+    pointer-events: visible;
+    margin-bottom: 41px;
+}
+
+.limoHightLight {
+    background-color: #048ef9;
+}
+
+.limoContainer {
+    width: 852px;
+    height: auto;
+    margin-left: 111px;
+}
+
+.limoKey {
+    float: left;
+    width: 444px;
+    margin-right: 41px;
+    text-align: right;
+    font-size: 38px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: 400;
+    color: #92a6cb;
+    line-height: 70px;
+}
+
+.limoValue {
+    float: left;
+    font-size: 38px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 70px;
+}
+
+.limoDeviceWeibao {
+    display: none;
+}
+
+.fillBox {
+    width: 100%;
+    height: 40px;
+}
+
+.clear {
+    clear: both;
+}

@@ -1,0 +1,45 @@
+{
+	"code": "0",
+	"msg": "success",
+	"data": {
+		"total": 14,
+		"pageNo": 1,
+		"pageSize": 20,
+		"list": [{
+			"indexCode": "root000000",
+			"name": "长寿微粉产业园",
+			"parentIndexCode": "-1",
+			"treeCode": "0"
+		}, {
+			"indexCode": "488f2d78-c4f1-4382-9f08-a43e1e9143f4",
+			"name": "3#、4#厂房",
+			"parentIndexCode": "root000000",
+			"treeCode": "0"
+		}, {
+			"indexCode": "ab486017-ebc1-49cd-b2d6-7b7c72777dd9",
+			"name": "破碎间、筛分间",
+			"parentIndexCode": "root000000",
+			"treeCode": "0"
+		}, {
+			"indexCode": "c88416af-e6ef-464b-b15e-e4a9899120…ac019801-dbcd-4c6a-add1-274c58d0188d",
+			"name": "1#、2#库房",
+			"parentIndexCode": "root000000",
+			"treeCode": "0"
+		}, {
+			"indexCode": "3bb22e5d-3d5f-43cb-bb20-8bb9e2cd95b4",
+			"name": "1#、2#收发室",
+			"parentIndexCode": "root000000",
+			"treeCode": "0"
+		}, {
+			"indexCode": "0cd46b13-c945-489d-a9c5-e9e3443cf9a2",
+			"name": "室外公共通道",
+			"parentIndexCode": "root000000",
+			"treeCode": "0"
+		}, {
+			"indexCode": "7cc1121b-9b6f-47f4-b76d-13883c37f2cd",
+			"name": "危险区域",
+			"parentIndexCode": "root000000",
+			"treeCode": "0"
+		}]
+	}
+}

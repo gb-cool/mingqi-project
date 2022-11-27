@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>接口数据</title>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 物联网接口 -->
+			<Device></Device>
+		</div>
+		
+		<!-- 物联网接口 -->
+		<template id="device">
+			<div>
+				<div>
+					<input type="button" value="获取app下辖的设备列表" @click='getBatchDevices' />
+					<span>设备唯一标识:</span>
+					<input v-model = 'deviceKey' />
+					<input type="button" value="查询设备影子" @click='getQueryDeviceShadowList' />
+					<input type="button" value="查询设备运行状态" @click='getQueryDeviceShadow' />
+				</div>
+			</div>
+		</template>
+		
+		<script src="./js/crypto-js.min.js"></script>
+		<script src="./js/axios.min.js"></script>
+		<script src="./js/vue.min.js"></script>
+		
+		<script type="module">
+			import { Device } from './js/device.js'
+			const _device = new Device()
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					name:"111"
+				},
+				components:{
+					Device: {
+						template: '#device',
+						data(){
+							return {
+								deviceKey: ''
+							}
+						},
+						methods:{
+							// 获取app下辖的设备列表
+							getBatchDevices(){
+								_device.getBatchDevices()
+							},
+							// 查询设备影子
+							getQueryDeviceShadowList(){
+								_device.getQueryDeviceShadowList(this.deviceKey)
+							},
+							// 查询设备运行状态
+							getQueryDeviceShadow(){
+								_device.getQueryDeviceShadow(this.deviceKey)
+							}
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
