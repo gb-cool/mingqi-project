@@ -44,8 +44,6 @@
 	
 	// 3d part
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity } from "../3d/index";
-	import { Device } from '../assets/js/device.js'
-	new Device()
 	export default {
 		name: "app",
 		components: {
