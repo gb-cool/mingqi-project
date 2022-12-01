@@ -2,23 +2,25 @@
 <template>
 	<div class="ModuleEnvironment">
 		<div class="center">
-			<div class="pie">
+			<div class="pie" @click="showEvent('oxygen')" style="cursor: pointer;">
 				<div class="chart">
-					<ModulePieChart name="氧浓度" value="89" color='#0473F9' :barWidth='barWidth'/>
-					<div class="price">89<span>%</span></div>
+					<div class="point" v-if="Object.is(stiveItemColor, '#D10202')"></div>
+					<ModulePieChart name="氧浓度" value="100" :color='oxygenItemColor' :barWidth='barWidth'/>
+					<div class="price">{{oxygenItemMax}}<span>%</span></div>
 				</div>
 				<p>氧浓度</p>
 			</div>
-			<div class="pie">
+			<div class="pie" @click="showEvent('stive')" style="cursor: pointer;">
 				<div class="chart">
-					<ModulePieChart name="粉尘浓度" value="36" color='#FE9418' :barWidth='barWidth'/>
-					<div class="price">36<span>%</span></div>
+					<div class="point" v-if="Object.is(stiveItemColor, '#D10202')"></div>
+					<ModulePieChart name="粉尘浓度" value="100" :color='stiveItemColor' :barWidth='barWidth'/>
+					<div class="price">{{stiveItemMax}}<span>%</span></div>
 				</div>
 				<p>粉尘浓度</p>
 			</div>
 			<div class="pie">
 				<div class="chart">
-					<ModulePieChart name="空气质量" :value="airQualityValue" color=' #00D98B' :barWidth='barWidth'/>
+					<ModulePieChart name="空气质量" :value="airQualityValue" :color='airQualityColor' :barWidth='barWidth'/>
 					<div class="price">{{airQuality}}</div>
 				</div>
 				<p>空气质量</p>
@@ -44,9 +46,10 @@
 </template>
 
 <script>
-	import { ref } from 'vue'
+	import { ref, inject, provide, onMounted, onDeactivated } from 'vue'
 	import axios from 'axios'
 	import ModulePieChart from './ModulePieChart.vue'
+	import { Device } from '../assets/js/device.js'
 	export default {
 		name: "ModuleEnvironment",
 		components: {
@@ -59,6 +62,13 @@
 			let weatherData = ref(defaultWData)	// 一周天气数据
 			let airQuality = ref('优')	// 空气质量
 			let airQualityValue = ref(0)
+			let airQualityColor = ref('#00D98B')
+			let color = {
+				one: '#00D98B',
+				two: '#FFF100',
+				three: '#FE9418',
+				four: '#D10202'
+			}
 			changeBarWidth()
 			weather()
 			function changeBarWidth(){
@@ -83,18 +93,23 @@
 					if(air >= 0 && air <= 50){
 						airQuality.value = '优'
 						airQualityValue.value = 100
+						airQualityColor.value = color.one
 					} else if(air >= 51 && air <= 100){
 						airQuality.value = '良'
-						airQualityValue.value = 80
+						airQualityColor.value = color.one
+						airQualityValue.value = 100
 					} else if(air >= 101 && air <= 150){
 						airQuality.value = '轻度'
-						airQualityValue.value = 60
+						airQualityValue.value = 100
+						airQualityColor.value = color.two
 					} else if(air >= 151 && air <= 200){
 						airQuality.value = '中度'
-						airQualityValue.value = 40
+						airQualityValue.value = 100
+						airQualityColor.value = color.three
 					} else if(air >= 201 && air <= 300){
 						airQuality.value = '重度'
-						airQualityValue.value = 20
+						airQualityValue.value = 100
+						airQualityColor.value = color.four
 					}
 				})
 				.catch((error) => console.log(error))
@@ -138,21 +153,139 @@
 			function mouseOverEvent(index){
 				selectIndex.value = index
 			}
+			
+			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
+			let popupTitle = inject('popupTitle')	// 弹出标题
+			let popupContent = inject('popupContent')	// 弹窗内容
+			let popupFileds = inject('popupFileds')	//弹出结构
+			let popupType = inject('popupType') // 弹窗内容类型
+			// 氧浓度、 粉尘浓度点击详情
+			const showEvent = (type) => {
+				popupIsShow.value = true
+				popupTitle.value = Object.is(type, 'oxygen') ? "氧浓度" : "粉尘浓度"
+				popupContent.value = ""
+				popupFileds.value = ""
+				popupType.value = type
+			}
+			
+			// 氧 粉尘浓度数据
+			const oxygenTableData = ref()
+			const stiveTableData = ref()
+			const oxygenItemMax = ref(0)
+			const stiveItemMax = ref(0)
+			
+			const oxygenItemColor = ref(color.one)
+			const stiveItemColor = ref(color.one)
+			
+			const device = new Device()
+			device.getBatchDevices((result) => {
+				const devices= result.data.devices
+				oxygenTableData.value = devices.filter((item) =>  item.deviceName.includes('氧'))
+				stiveTableData.value = devices.filter((item) => item.deviceName.includes('粉尘'))
+				let _index = 0
+				if(oxygenTableData.value.length > 0){
+					const item = oxygenTableData.value[0]
+					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {
+						_index++
+						if(result.code == 200) oxygenItemMax.value = parseFloat(result.data['O2']).toFixed(2)
+						if(_index > 1) realTime()
+					})
+				}
+				if(stiveTableData.value.length > 0){
+					const item = stiveTableData.value[0]
+					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {
+						_index++
+						if(result.code == 200) stiveItemMax.value = parseFloat(result.data['dust_concent']).toFixed(2)
+						if(_index > 1) realTime()
+					})
+				}
+			})
+			const realTime = (status = null) => {
+				oxygenTableData.value.forEach((item) => {
+					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {
+						if(result.code == 200){
+							oxygenItemMax.value = Math.max(oxygenItemMax.value, parseFloat(result.data['O2']).toFixed(2))
+							if(oxygenItemMax.value < 19.5){
+								oxygenItemColor.value = color.one
+							}else if(oxygenItemMax.value >= 19.5 && oxygenItemMax.value < 23.5){
+								oxygenItemColor.value = color.two
+							}else{
+								oxygenItemColor.value = color.four
+							}
+						}
+					})
+				})
+				stiveTableData.value.forEach((item) => {
+					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {
+						if(result.code == 200){
+							stiveItemMax.value = Math.max(stiveItemMax.value, parseFloat(result.data['dust_concent']).toFixed(2))
+							if(stiveItemMax.value < 30){
+								stiveItemColor.value = color.one
+							}else if(stiveItemMax.value >= 30 && stiveItemMax.value < 60){
+								stiveItemColor.value = color.two
+							}else{
+								stiveItemColor.value = color.four
+							}
+						}
+					})
+				})
+			}
+			const timer = ref(0)
+			onMounted(()=>{ //组件挂载时的生命周期执行的方法
+				timer.value = window.setInterval(realTime, 100000)
+			})
+			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
+				window.clearInterval(timer.value);
+			})
+			
 			return {
 				barWidth,
 				selectIndex,
 				weatherData,
 				airQuality,
 				airQualityValue,
+				airQualityColor,
 				dateFilters,
 				getWeatherIcon,
-				mouseOverEvent
+				mouseOverEvent,
+				showEvent,
+				oxygenItemMax,
+				stiveItemMax,
+				oxygenItemColor,
+				stiveItemColor
 			}
 		}
 	}
 </script>
 
 <style scoped>
+	.point{
+		position: absolute;
+		width: 4px;
+		height: 4px;
+		border-radius: 50%;
+		content: '';
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #f22;
+	}
+	.point::before,.point::after{
+		position: absolute;
+		width: 4px;
+		height: 4px;
+		border-radius: 50%;
+		content: '';
+	}
+	.point::before{animation: scale 2s infinite; }
+	.point::after{animation: scale2 2s infinite; }
+	@keyframes scale{0%{ transform: scale(0); opacity:.9}100%{ transform: scale(20); opacity: 0;}}
+	@keyframes scale2{0%{ transform: scale(0);opacity:.9;}100%{ transform: scale(80);opacity:0;}}
+	.point::before,.point::after{
+		/* 设置颜色 */
+		background-color: rgba(209, 2, 2, 0.9);
+	}
+	
 	.ModuleEnvironment{
 		width: 100%;
 		height: 100%;
@@ -182,6 +315,7 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
+		font-size: 1rem;
 	}
 	.pie .chart .price span{
 		font-size: 0.8rem;
@@ -250,6 +384,12 @@
 		border-right-width: 0;
 	}
 	@media screen and (max-width: 1920px) {
+		.point,.point::before,.point::after{
+			width: 2px;
+			height: 2px;
+		}
+		@keyframes scale{0%{ transform: scale(0); opacity:.9}100%{ transform: scale(22); opacity: 0;}}
+		@keyframes scale2{0%{ transform: scale(0);opacity:.9;}100%{ transform: scale(54);opacity:0;}}
 		.center{
 			height: 114px;
 			margin: 0 8px;

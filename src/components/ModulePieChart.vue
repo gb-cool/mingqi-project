@@ -34,6 +34,11 @@
 					myChart.setOption(getBallCharts(data, props.color))
 				}
 			})
+			watch(() => props.color, (newValue, oldValue) => {
+				if(myChart!=null){
+					myChart.setOption(getBallCharts(data, props.color))
+				}
+			})
 			/**
 			 * @param {Object} datalist	// 饼图数据
 			 * @param {Object} color	// 颜色

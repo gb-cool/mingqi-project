@@ -1,10 +1,11 @@
 import CryptoJS from 'crypto-js'
 import axios from 'axios'
+
 class PositionPerson{
 	Seekey = {	// 寻息@位置物联网开放平台
 		// 接口请求方式式为POST，请求数据格式为json，返回数据格式为json，统一编码为UTF-8，
 		// url: 'http://10.12.67.17:46000',
-		url: 'api-Seekey',
+		url: 'http://10.12.67.17:46000',
 		name: 'client',
 		licence: 'd63a6557aa5fe703cefc5cc50f846895',
 		Headers: {
@@ -16,7 +17,7 @@ class PositionPerson{
 	}
 	JoySuch = {	// 真趣化工人员定位系统
 		// url: 'http://10.12.67.17:9999',
-		url: '/api-JoySuch',
+		url: 'http://10.12.67.17:9999',
 		appId: this.Seekey.name,
 		secret: this.Seekey.licence,
 		Headers: {
@@ -24,11 +25,12 @@ class PositionPerson{
 		}
 	}
 	constructor () {
+		// const interfaceParameter = require('../json/interfaceParameter.json')
+		const interfaceParameter = urlConfig
 		this.Seekey.Headers["X-Timestamp"] = Date.now()
-		
-		// X-Token：MD5(accessToken+MD5(signId+MD5(accessToken)).toLowerCase()+XTimestamp).toLowerCase()
-		
-		
+		this.Seekey.url = interfaceParameter.Seekey
+
+		this.JoySuch.url = interfaceParameter.JoySuch
 		this.JoySuch.Headers.Authorization = this.getAuthorization()	
 	}
 	/*
@@ -110,7 +112,7 @@ export class JoySuch extends PositionPerson{
 	/**
 	 * 查询建筑下所有内部人员
 	 */
-	getPersonList(){
+	getPersonList(callback){
 		const path = this.JoySuch.url + '/api/v2/person/list'	// 接口地址
 		axios({
 			method: 'post',
@@ -127,7 +129,7 @@ export class JoySuch extends PositionPerson{
 		.then( (response) => {
 			const data = response.data
 			if(Object.is(data.status, 'success')){
-				console.log(data)
+				if(callback) callback(response.data)
 			}else{
 				console.log(data)
 			}

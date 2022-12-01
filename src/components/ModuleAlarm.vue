@@ -50,9 +50,10 @@
 		},
 		setup() {
 			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
-			let popupTitle = inject('popupTitle')	// 弹出标题
+			let popupTitle = inject('popupTitle')	// 弹窗 标题
 			let popupContent = inject('popupContent')	// 弹窗内容
-			let popupFileds = inject('popupFileds')	//弹出结构
+			let popupFileds = inject('popupFileds')	// 弹窗结构
+			let popupType = inject('popupType') // 弹窗内容类型
 			const dataList = [
 				{time: '2022/11/08 10:50', area: '均化车间', type: '摄像头', content: '编号23132546人员，在2022年11月8日10点50分进入均化车间危险区域范围内，由摄像头检测结果。'},
 				{time: '2022/11/08 15:50', area: '破碎车间', type: '摄像头', content: '编号23132546人员，在2022年11月8日15点50分进入破碎车间危险区域范围内，由摄像头检测结果。'},
@@ -72,6 +73,7 @@
 				popupIsShow.value = true
 				popupContent.value = row
 				popupFileds.value = fileds
+				popupType.value = 'json'
 			}
 			// 序号参数
 			const indexMethod = (index) => {

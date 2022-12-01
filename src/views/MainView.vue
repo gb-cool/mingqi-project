@@ -24,7 +24,7 @@
 			<ToolsMenu/>
 		</footer>
 		<!-- 弹出窗口 -->
-		<PopupLayer :title="popupTitle" ref="popup" :class="[popupIsShow?'show':'hide']" @isShow='(v) => popupIsShow = v' :fileds="popupFileds" :information="popupContent"></PopupLayer>
+		<PopupLayer :title="popupTitle" :type="popupType" ref="popup" :class="[popupIsShow?'show':'hide']" @isShow='(v) => popupIsShow = v' :fileds="popupFileds" :information="popupContent"></PopupLayer>
 	</div>
 </template>
 
@@ -67,10 +67,12 @@
 			let popupTitle	= ref('')	//弹窗标题
 			let popupContent = ref()	// 弹窗内容
 			let popupFileds = ref()		//弹窗表结构
+			let popupType = ref('json')	// 弹出内容类型 默认json，list
 			provide('popupIsShow', popupIsShow)
 			provide('popupTitle', popupTitle)
 			provide('popupContent', popupContent)
 			provide('popupFileds', popupFileds)
+			provide('popupType', popupType)
 			
 			// 返回主场景事件
 			const returnEvent = () => {
@@ -90,6 +92,12 @@
 				})
 			});
 	
+			// 氧 \ 粉尘浓度实时数据
+			const oxygenItem =ref({max: 0})
+			const stiveItem =ref({max: 0})
+			provide('oxygenItem', oxygenItem)
+			provide('stiveItem', stiveItem)
+			
 			return {
 				returnEvent,
 				tCanvas,
@@ -97,7 +105,8 @@
 				popupIsShow,
 				popupTitle,
 				popupContent,
-				popupFileds
+				popupFileds,
+				popupType
 			};
 		}
 	};

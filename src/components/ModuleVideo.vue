@@ -17,15 +17,17 @@
 </template>
 
 <script>
-	import { onMounted } from 'vue'
+	import { ref, onMounted } from 'vue'
 	import Swiper, {Pagination, Autoplay} from 'swiper'
 	import 'swiper/swiper-bundle.css'
 	import ModuleVideoMonitor from './ModuleVideoMonitor.vue'
+	import videoM3 from '../components/Video'
 	Swiper.use([Pagination, Autoplay])
 	export default {
 		name: 'ModuleVideo',
 		components: {
-			ModuleVideoMonitor
+			ModuleVideoMonitor,
+			videoM3
 		},
 		setup(){
 			const videoData = [
@@ -35,8 +37,10 @@
 				{ip:'10.12.64.93', name:'南-均化仓楼上1', url:'../assets/video/video2.mp4'},
 				{ip:'10.12.64.94', name:'南-均化仓楼上2', url:'../assets/video/video2.mp4'},
 				{ip:'10.12.64.95', name:'南-均化仓楼下1', url:'../assets/video/video2.mp4'},
-				{ip:'10.12.64.96', name:'立磨一期'},
+				{ip:'10.12.64.96', name:'立磨一期', url:'../assets/video/video2.mp4'},
 			]
+			let urls = ref(['http://10.12.108.10:83/openUrl/4BBQcMw/live.mu38'])
+
 			onMounted(() => {
 				const swiper = new Swiper('.swiper', {
 					loop: true,

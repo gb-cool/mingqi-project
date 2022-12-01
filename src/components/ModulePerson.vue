@@ -12,19 +12,18 @@
 <script>
 	import { ref, inject } from 'vue'
 	import ModulePersonInfo from './ModulePersonInfo.vue'
-	import PopupLayer from './PopupLayer.vue'
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	export default {
 		name: 'ModulePerson',
 		components: {
-			ModulePersonInfo,
-			PopupLayer
+			ModulePersonInfo
 		},
 		setup() {
 			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
 			let popupTitle = inject('popupTitle')	// 弹出标题
 			let popupContent = inject('popupContent')	// 弹窗内容
 			let popupFileds = inject('popupFileds')	//弹出结构
+			let popupType = inject('popupType') // 弹窗内容类型
 			const fileds = {
 				deviceNo: '穿戴设备编号（Mac地址）',
 				empName: '员工姓名',
@@ -46,19 +45,19 @@
 			
 			// 触发弹窗点击事件
 			const intelligentWorkshopEvent = (row) => {
-				popupTitle.value = '人员详情'
+				popupTitle.value = '危险区域人员详情'
 				popupIsShow.value = true
 				popupContent.value = row
 				popupFileds.value = fileds
+				popupType.value = 'json'
 			}
 			
 			let personData = ref([])
 			const joySuch = new JoySuch()
 			const getData = joySuch.getToken(() => {
 				joySuch.getRealTimeData((result) => {
-					// console.log(result)
 					if(result.code == 0){	//成功
-						personData.value = result.data
+						personData.value = result.data.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
 					}else if(result.code == 1002){  // token失效
 						getData()
 					}

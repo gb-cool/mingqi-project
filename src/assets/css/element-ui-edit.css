@@ -41,6 +41,7 @@
 .el-table td.el-table__cell{
 	border-bottom: 1px solid rgba(172, 199, 255, 0.15);
 	border-top: 1px solid rgba(172, 199, 255, 0);
+	border-right: 1px solid rgba(172, 199, 255, 0.15);
 }
 .el-table td.el-table__cell:last-child{
 	border-right: 1px solid rgba(172, 199, 255, 0.15);
@@ -50,6 +51,9 @@
 }
 .el-table__row:first-child td.el-table__cell{
 	border-top: 1px solid rgba(172, 199, 255, 0.15);
+}
+.el-table--border th.el-table__cell{
+	border-right: 1px solid rgba(172, 199, 255, 0.15);
 }
 .el-table tr{
 	background: none;
@@ -63,6 +67,15 @@
 }
 .el-table{
 	
+}
+.el-table--border .el-table__inner-wrapper::after{
+	height: 0px
+}
+.el-table--border::after{
+	height: 0px;
+}
+.el-table__border-left-patch{
+	height: 0px;
 }
 /**
  * 选中效果

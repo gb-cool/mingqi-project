@@ -70,7 +70,8 @@
 				<el-table
 				:data="personData" 
 				style="width: 100%" 
-				:height="contentHeight" 
+				:height="contentHeight"
+				@row-click="personEvent"
 				:show-header="true">
 				    <el-table-column 
 					prop="name" 
@@ -78,13 +79,13 @@
 					align="center">
 					</el-table-column>
 					<el-table-column
-					prop="serial" 
-					label="编号" 
+					prop="sn" 
+					label="SN号" 
 					align="center">
 					</el-table-column>
 					<el-table-column
-					prop="area" 
-					label="区域" 
+					prop="postName" 
+					label="岗位" 
 					align="center">
 					</el-table-column>
 				</el-table>
@@ -96,6 +97,7 @@
 <script>
 	import { ref, inject, watch } from 'vue'
 	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity } from "../3d/index";	// 三维
+	import { JoySuch } from '../assets/js/positionPerson.js'
 	export default {
 		name: 'ModulePark',
 		setup() {
@@ -207,13 +209,67 @@
 			]
 			
 			//人员
-			const personData = [
-				{name: '李欣欣', serial: '23132546', area: 'B1598'},
-				{name: '郑小林', serial: '22189751', area: 'B1856'},
-				{name: '彭鹏', serial: '12596227', area: 'B2698'},
-				{name: '杨虎', serial: '3254824', area: 'B7518'},
-			]
-			
+			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
+			let popupTitle = inject('popupTitle')	// 弹出标题
+			let popupContent = inject('popupContent')	// 弹窗内容
+			let popupFileds = inject('popupFileds')	//弹出结构
+			let popupType = inject('popupType') // 弹窗内容类型
+			const fileds = {
+				id: "人员ID",
+				postId: "岗位ID",
+				postName: "岗位",
+				departId: "部门ID",
+				departName: "部门名称",
+				name: "人员姓名",
+				sex: "性别",
+				sn: "SN号",
+				cardNumber: "门禁卡号",
+				iconId: "图标ID",
+				alarmTemplate: "报警模板",
+				extFields: "扩展数据",
+				url: "人员详情链接",
+				code: "人员工号",
+				telephone: "电话号码",
+				gender: "性别",
+				birthday: "生日",
+				oldName: "曾用名",
+				role: "身份",
+				workCompany: "工作单位",
+				idCardImgId: "证件照id",
+				nation: "民族",
+				idCardType: "证件类型",
+				idCardNo: "证件号",
+				healthStatus: "健康状况",
+				education: "学历",
+				major: "专业",
+				address: "通讯地址",
+				postcode: "邮编",
+				joinWorkDate: "参加工作时间",
+				jobDuty: "工作职责",
+				title: "职称/技能等级",
+				jobHistory: "工作经历",
+				socialCreditCode: "企业信用代码"
+			}
+			let personData = ref([])
+			const joySuch = new JoySuch()
+			const getData = joySuch.getToken(() => {
+				joySuch.getPersonList((result) => {
+					if(result.code == 0){	//成功
+						personData.value = result.data.content
+					}else if(result.code == 1002){  // token失效
+						getData()
+					}
+				})
+			})
+			const personEvent = (row, event, column) => {
+				row.alarmTemplate =""
+				popupTitle.value = '人员详情'
+				popupIsShow.value = true
+				popupContent.value = row
+				popupFileds.value = fileds
+				popupType.value = 'json'
+			}
+			// >> 人员
 			return {
 				activeName,
 				contentHeight,
@@ -222,7 +278,8 @@
 				intelligentWorkshopEvent,
 				robotData,
 				carData,
-				personData
+				personData,
+				personEvent
 			}
 		},
 		methods: {

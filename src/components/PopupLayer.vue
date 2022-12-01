@@ -7,14 +7,25 @@
 			</div>
 			<div class="box">
 				<div class="main">
-					<el-descriptions class="margin-top" title="" :column="1">
-						<el-descriptions-item v-for="(item, key) of information" :label="getFiled(key)" :key="key">
-							{{item}}
-						</el-descriptions-item>
-						<el-descriptions-item v-for="(item, key) of information" :label="getFiled(key)" :key="key">
-							{{item}}
-						</el-descriptions-item>
-					</el-descriptions>
+					<!-- json数据格式类型显示 -->
+					<div class="jsonBox" v-if="Object.is(type, 'json')" >
+						<el-descriptions class="margin-top" title="" :column="1">
+							<el-descriptions-item v-for="(item, key) of information" :label="getFiled(key)" :key="key">
+								{{item}}
+							</el-descriptions-item>
+						</el-descriptions>
+					</div>
+					
+					<div style="min-width: 1200px;" v-if="Object.is(type, 'oxygen')">
+						<!-- 氧浓度 -->
+						<PopupDeviceView type="oxygen"/>
+					</div>
+					
+					<div style="min-width: 1200px;" v-if="Object.is(type, 'stive')">
+						<!-- 粉尘浓度 -->
+						<PopupDeviceView type="stive"/>
+					</div>
+					
 				</div>
 			</div>		
 	</div>
@@ -22,14 +33,21 @@
 
 <script>
 	import { ref, onMounted } from 'vue'
+	import PopupDeviceView from './PopupDeviceView.vue'
 	export default {
 		name: 'PopupLayer',
-		props: ['title', 'fileds', 'information'],
+		components: {
+			PopupDeviceView
+		},
+		props: ['title', 'fileds', 'information', 'type'],
 		setup(props, context) {
 			// console.log(props)
 			// 获取表结构名称
 			const getFiled = (key) => {
-				return props.fileds[key] + "："
+				if(props.fileds[key] == undefined){
+					return key + "： "
+				}
+				return props.fileds[key] + "： "
 			}
 			//关闭事件
 			return {
@@ -74,19 +92,21 @@
 	}
 	.box{
 		box-sizing: border-box;
-		padding: 100px 0px;
 		border: 3px solid rgba(71,136,255,0.5);
 		background: rgba(1,0,55,0.7);
 		box-shadow: inset 0px 0px 46px rgb(4 142 249 / 20%);
+		padding: 20px;
 	}
 	.main{
 		overflow: auto;
 		max-height: calc(80vh - 106px);
 		height: auto;
-		width: auto;
+		width: 100%;
 		min-width: 540px;
 	}
-	
+	.jsonBox{
+		padding: 80px 0px;
+	}
 	
 	@media screen and (max-width: 1920px) {
 		.title{
@@ -96,8 +116,10 @@
 			border-width: 1px;
 		}
 		.box{
-			padding: 20px 0px;
 			border-width: 1px;
+		}
+		.jsonBox{
+			padding: 20px 0px;
 		}
 		.main{
 			max-height: calc(80vh - 42px);
