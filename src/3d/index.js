@@ -19,7 +19,7 @@ export const mainView = () => {
     backMainView();
 };
 
-// 进入内部场景 参数  0 == 筛粉间   1 == 均化间  2 == 立磨间  3 == 碎石仓配料间  4 == 破碎间
+// 进入内部场景 参数  0 == 筛粉间   1 == 均化间  2 == 立磨间  3 == 碎石仓配料间  4 == 破碎间   5 == 堆石厂
 export const intoRoom = (i) => {
     floorHide(i);
 };
