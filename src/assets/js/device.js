@@ -6,7 +6,7 @@ import axios from 'axios'
 import qs from 'qs'
 import { DateTime } from './dateTime.js'
 export class Device {
-	url = 'http://10.12.3.102:32076'
+	url = 'http://10.12.3.102:32076/'
 	appId = 'cbd60b1fe4d64ac1a1ea9164117045bd' // 应用唯一标识。
 	appKey = '30214779b8e44ecdbd0fde68913ac4bb'
 	timestamp = '' // 请求时间，格式：YYYY-MM-DD HH:mm:ss
@@ -99,7 +99,36 @@ export class Device {
 	 * 查询设备运行状态
 	 */
 	getQueryDeviceShadow(deviceKey, projectId, callback) {
-		const path = this.url + '/north-gateway/device-v001/queryDeviceShadow'
+		const path = this.url + 'north-gateway/device-v001/queryDeviceShadow'
+		axios({
+				method: 'post',
+				url: path,
+				headers: {
+					appId: this.appId,
+					timestamp: this.timestamp,
+					signatureNonce: this.signatureNonce,
+					signature: this.signature,
+					"deviceKey": deviceKey,
+					"projectId": projectId
+				},
+				data: {
+					"deviceKey": deviceKey,
+					"projectId": projectId
+				}
+			})
+			.then(function(response) {
+				// console.log(response);
+				if(callback) callback(response.data)
+			})
+			.catch(function(error) {
+				console.log(error);
+			})
+	}
+	/**
+	 * 查询设备历史数据
+	 */
+	getDeviceDataHistory(deviceKey, projectId, callback) {
+		const path = this.url + 'north-gateway/device-v001/getDeviceDataHistory'
 		axios({
 				method: 'post',
 				url: path,

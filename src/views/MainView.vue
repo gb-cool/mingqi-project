@@ -68,17 +68,21 @@
 			let popupContent = ref()	// 弹窗内容
 			let popupFileds = ref()		//弹窗表结构
 			let popupType = ref('json')	// 弹出内容类型 默认json，list
+			let popupRealData = ref({})	// 实时数据
 			provide('popupIsShow', popupIsShow)
 			provide('popupTitle', popupTitle)
 			provide('popupContent', popupContent)
 			provide('popupFileds', popupFileds)
 			provide('popupType', popupType)
+			provide('popupRealData', popupRealData)
 			
 			// 返回主场景事件
 			const returnEvent = () => {
 				if (isThreeDLoad.value == 1) {
 					// momentMoveing([-19,-0,129], [6,65,364])
-					tweenMoveing([-19,-0,129], [6,65,364], 2000, (e) => {
+					/* tweenMoveing([-19,-0,129], [6,65,364], 2000, (e) => {
+					}) */
+					tweenMoveing([126,-0,69], [296,96,218], 2000, (e) => {
 					})
 					mainView()
 				}

@@ -13,7 +13,7 @@
 		<div class="module-center">
 			<ModuleBg>
 				<template v-slot:title>
-					<ModuleTitle title="危险区域视频"/>
+					<ModuleTitle title="重点区域视频"/>
 				</template>
 				<template v-slot:main>
 					<ModuleVideo/>
@@ -23,7 +23,7 @@
 		<div class="module-down">
 			<ModuleBg>
 				<template v-slot:title>
-					<ModuleTitle title="危险区域人员"/>
+					<ModuleTitle title="重点区域人员"/>
 				</template>
 				<template v-slot:main>
 					<ModulePerson/>

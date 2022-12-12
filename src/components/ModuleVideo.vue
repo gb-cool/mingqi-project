@@ -5,9 +5,12 @@
 			<!-- Additional required wrapper -->
 			<div class="swiper-wrapper">
 				<!-- Slides -->
-				<div class="swiper-slide" v-for="(item,index) in videoData" :key="index">
+				<!-- <div class="swiper-slide" v-for="(item,index) in videoData" :key="index">
 					<ModuleVideoMonitor :url="item.url"/>
 					<span>{{item.name}}</span>
+				</div> -->
+				<div class="swiper-slide">
+					<ModuleVideoMonitor :list="urls"  />
 				</div>
 			</div>
 			<!-- If we need pagination -->
@@ -22,6 +25,7 @@
 	import 'swiper/swiper-bundle.css'
 	import ModuleVideoMonitor from './ModuleVideoMonitor.vue'
 	import videoM3 from '../components/Video'
+	import { Video } from '../assets/js/video.js'
 	Swiper.use([Pagination, Autoplay])
 	export default {
 		name: 'ModuleVideo',
@@ -30,20 +34,22 @@
 			videoM3
 		},
 		setup(){
-			const videoData = [
-				{ip:'10.12.64.90', name:'北-均化仓楼上1', url:'../assets/video/video2.mp4'},
-				{ip:'10.12.64.91', name:'北-均化仓楼上2', url:'../assets/video/video2.mp4'},
-				{ip:'10.12.64.92', name:'北-均化仓楼下1', url:'../assets/video/video2.mp4'},
-				{ip:'10.12.64.93', name:'南-均化仓楼上1', url:'../assets/video/video2.mp4'},
-				{ip:'10.12.64.94', name:'南-均化仓楼上2', url:'../assets/video/video2.mp4'},
-				{ip:'10.12.64.95', name:'南-均化仓楼下1', url:'../assets/video/video2.mp4'},
-				{ip:'10.12.64.96', name:'立磨一期', url:'../assets/video/video2.mp4'},
-			]
-			let urls = ref(['http://10.12.108.10:83/openUrl/4BBQcMw/live.mu38'])
-
+			let urls = ref([])
+			let video = new Video()
+			video.getRegions((regions) => {
+				const regionIndexCode = "7cc1121b-9b6f-47f4-b76d-13883c37f2cd"
+				video.getCameras((cameras) => {
+					let dataList = cameras.data.list
+					urls.value = dataList.filter((item) => Object.is(item.regionIndexCode, regionIndexCode))
+					// console.log(urls.value)
+				})
+			})
+			// video.getPreviewURLs('36fd26f851ff4f97b09a73549ad78f29', (result) => {
+				// console.log(result)
+			// })
 			onMounted(() => {
 				const swiper = new Swiper('.swiper', {
-					loop: true,
+					loop: false,
 					// slidesPerView: 1.2,
 					centeredSlides: true,
 					pagination: {
@@ -63,7 +69,7 @@
 			})
 			
 			return {
-				videoData
+				urls
 			}
 		}
 	}

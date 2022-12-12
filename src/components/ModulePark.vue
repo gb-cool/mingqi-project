@@ -53,15 +53,16 @@
 				:data="carData" 
 				style="width: 100%" 
 				:height="contentHeight" 
+				@row-click="carEvent"
 				:show-header="true">
 				    <el-table-column 
-					prop="plate" 
+					prop="empName" 
 					label="车牌" 
 					align="center">
 					</el-table-column>
 					<el-table-column
-					prop="time" 
-					label="时间" 
+					prop="deviceNo" 
+					label="设备编号" 
 					align="center">
 					</el-table-column>
 				</el-table>
@@ -122,7 +123,7 @@
 			// 参数  0 == 筛粉间   1 == 均化间  2 == 立磨间  3 == 碎石仓配料间  4 == 破碎间
 			const isThreeDLoad = inject('isThreeDLoad')	// 获取三维加载状态，1表示已初始完成可以执行事件
 			const intelligentWorkshopData = [	//智能车间数据
-					{id: -1, name: '矿石堆场'},
+					{id: 5, name: '矿石堆场'},
 					{id: 4, name: '破碎车间'},
 					{id: 0, name: '筛粉车间'},
 					{id: 3, name: '碎石仓配料车间'},
@@ -141,27 +142,34 @@
 					switch(row.id){
 						case 0: 
 							// momentMoveing([3,0,24], [31,12,63])
-							tweenMoveing([3,0,24], [31,12,63], 2000, (e) => {
+							tweenMoveing([-9,-0,8], [27,19,57], 2000, (e) => {
 							})
 							break;
 						case 1: 
 							// momentMoveing([25,0,-12], [27,27,97])
-							tweenMoveing([25,0,-12], [27,27,97], 2000, (e) => {
+							tweenMoveing([33,0,-96], [30,29,89], 2000, (e) => {
 							})
 							break;
 						case 2: 
 							// momentMoveing([9,0,19], [8,14,85])
-							tweenMoveing([9,0,19], [8,14,85], 2000, (e) => {
+							// tweenMoveing([9,0,19], [8,14,85], 2000, (e) => {
+							// })
+							tweenMoveing([-59,-0,-7], [-61,15,89], 2000, (e) => {
 							})
 							break;
 						case 3: 
 							// momentMoveing([14,0,1], [16,47,-89]) 
-							tweenMoveing([-0,0,56], [-1,85,157], 2000, (e) => {
+							tweenMoveing([-2,-0,18], [-7,24,170], 2000, (e) => {
 							})
 							break;
 						case 4: 
 							// momentMoveing([0,0,-11], [-0,38,44]) 
-							tweenMoveing([0,0,-11], [-0,38,44], 2000, (e) => {
+							tweenMoveing([1,-0,10], [-0,29,74], 2000, (e) => {
+							})
+							break;
+						case 5:
+							// momentMoveing([0,0,-11], [-0,38,44]) 
+							tweenMoveing([7,-0,32], [7,57,201], 2000, (e) => {
 							})
 							break;
 					}
@@ -200,13 +208,25 @@
 			]
 			
 			// 车辆数据
-			const carData = [
-				{time: '2022/11/08 10:50', plate: '渝A134567', type: '出'},
-				{time: '2022/11/08 15:50', plate: '渝A134779', type: '出'},
-				{time: '2022/11/07 14:20', plate: '渝A153479', type: '入'},
-				{time: '2022/11/07 14:10', plate: '渝A128796', type: '入'},
-				{time: '2022/11/06 17:50', plate: '渝A154677', type: '入'}
-			]
+			const carFileds = {
+				deviceNo: '穿戴设备编号（Mac地址）',
+				empName: '员工姓名',
+				empNo: '员工工号',
+				imgaddr: '头像图片地址',
+				dateTime: '时间',
+				longitude: '经度',
+				latitude: '纬度',
+				layer: '楼层数',
+				worktype: '工种类型',
+				specifictype: '人员卡类型',
+				worktypename: '岗位名称',
+				tel: '电话号码',
+				electric: '穿戴设备当前电量',
+				islxsign: '状态',
+				workunit: '工作单位',
+				department: '部门_工作组'
+			}
+			const carData = ref([])
 			
 			//人员
 			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
@@ -214,7 +234,7 @@
 			let popupContent = inject('popupContent')	// 弹窗内容
 			let popupFileds = inject('popupFileds')	//弹出结构
 			let popupType = inject('popupType') // 弹窗内容类型
-			const fileds = {
+			const personFileds = {
 				id: "人员ID",
 				postId: "岗位ID",
 				postName: "岗位",
@@ -260,13 +280,29 @@
 						getData()
 					}
 				})
+				joySuch.getRealTimeData((result) => {
+					if(result.code == 0){	//成功
+						carData.value = result.data.filter((item) => (item.specifictype == '4'))
+					}else if(result.code == 1002){  // token失效
+						getData()
+					}
+				})
 			})
+			// 人员触发弹窗点击事件
 			const personEvent = (row, event, column) => {
 				row.alarmTemplate =""
 				popupTitle.value = '人员详情'
 				popupIsShow.value = true
 				popupContent.value = row
-				popupFileds.value = fileds
+				popupFileds.value = personFileds
+				popupType.value = 'json'
+			}
+			// 车辆触发弹窗点击事件
+			const carEvent = (row) => {
+				popupTitle.value = '车辆详情'
+				popupIsShow.value = true
+				popupContent.value = row
+				popupFileds.value = carFileds
 				popupType.value = 'json'
 			}
 			// >> 人员
@@ -278,6 +314,7 @@
 				intelligentWorkshopEvent,
 				robotData,
 				carData,
+				carEvent,
 				personData,
 				personEvent
 			}

@@ -10,7 +10,7 @@
         margin: 0;
     }
     .playWnd {
-        margin: 30px 0 0 400px;
+        margin: 30px 0 0 30px;
         width: 1000px;                  /*播放容器的宽和高设定*/
         height: 600px;
         border: 1px solid red;
@@ -136,7 +136,8 @@
 
     // 推送消息
     function cbIntegrationCallBack(oData) {
-        showCBInfo(JSON.stringify(oData.responseMsg));
+		console.log(oData)
+        // showCBInfo(JSON.stringify(oData.responseMsg));
     }
 	
     //初始化
@@ -145,14 +146,14 @@
         getPubKey(function () {
 			
 			////////////////////////////////// 请自行修改以下变量值	////////////////////////////////////		
-            var appkey = "28730366";                           //综合安防管理平台提供的appkey，必填
-            var secret = setEncrypt("HSZkCJpSJ7gSUYrO6wVi");   //综合安防管理平台提供的secret，必填
-            var ip = "10.12.64.90";                           //综合安防管理平台IP地址，必填
+            var appkey = "24445827";                           //综合安防管理平台提供的appkey，必填
+            var secret = setEncrypt("bpZcS82j1mfV3sdSsN8G");   //综合安防管理平台提供的secret，必填
+            var ip = "10.12.108.10";                           //综合安防管理平台IP地址，必填
             var playMode = 0;                                  //初始播放模式：0-预览，1-回放
             var port = 443;                                    //综合安防管理平台端口，若启用HTTPS协议，默认443
             var snapDir = "D:\\SnapDir";                       //抓图存储路径
             var videoDir = "D:\\VideoDir";                     //紧急录像或录像剪辑存储路径
-            var layout = "1x1";                                //playMode指定模式的布局
+            var layout = "3x3";                                //playMode指定模式的布局
             var enableHTTPS = 1;                               //是否启用HTTPS协议与综合安防管理平台交互，这里总是填1
             var encryptedFields = 'secret';					   //加密字段，默认加密领域为secret
 			var showToolbar = 1;                               //是否显示工具栏，0-不显示，非0-显示

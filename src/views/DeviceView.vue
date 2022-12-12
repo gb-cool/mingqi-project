@@ -1,6 +1,14 @@
 <template>
 	<div class="DeviceView">
 		<el-table :data="tableData" border style="width: 100%" height="960">
+			<el-table-column
+			type="index"
+			label="序号"
+			align="center">
+				<template #default="scope">
+					<span>{{(scope.$index + 1).toString().padStart(2, '0')}}</span>
+				</template>
+			</el-table-column>
 			<el-table-column prop="deviceIdentifyType" label="设备识别类型"/>
 			<el-table-column prop="deviceKey" label="设备KEY" />
 			<el-table-column prop="deviceName" label="设备名称" />
@@ -29,7 +37,8 @@
 			device.getBatchDevices((result) => {
 				console.log(result)
 				const devices= result.data.devices
-				tableData.value = devices.filter((item) => item.deviceName.includes('粉尘') || item.deviceName.includes('氧'))
+				tableData.value = devices
+				// tableData.value = devices.filter((item) => item.deviceName.includes('粉尘') || item.deviceName.includes('氧'))
 			})
 			
 			return {

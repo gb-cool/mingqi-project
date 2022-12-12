@@ -4,7 +4,7 @@
 		<div class="center">
 			<div class="pie" @click="showEvent('oxygen')" style="cursor: pointer;">
 				<div class="chart">
-					<div class="point" v-if="Object.is(stiveItemColor, '#D10202')"></div>
+					<div class="point" v-if="Object.is(oxygenItemColor, '#D10202')"></div>
 					<ModulePieChart name="氧浓度" value="100" :color='oxygenItemColor' :barWidth='barWidth'/>
 					<div class="price">{{oxygenItemMax}}<span>%</span></div>
 				</div>
@@ -159,72 +159,76 @@
 			let popupContent = inject('popupContent')	// 弹窗内容
 			let popupFileds = inject('popupFileds')	//弹出结构
 			let popupType = inject('popupType') // 弹窗内容类型
-			// 氧浓度、 粉尘浓度点击详情
-			const showEvent = (type) => {
-				popupIsShow.value = true
-				popupTitle.value = Object.is(type, 'oxygen') ? "氧浓度" : "粉尘浓度"
-				popupContent.value = ""
-				popupFileds.value = ""
-				popupType.value = type
-			}
+			let popupRealData = inject('popupRealData') // 实时数据
 			
 			// 氧 粉尘浓度数据
-			const oxygenTableData = ref()
-			const stiveTableData = ref()
+			let oxygenTableData = []
+			let stiveTableData = []
 			const oxygenItemMax = ref(0)
 			const stiveItemMax = ref(0)
+			const oxygenItemMaxItem = ref({})
+			const stiveItemMaxItem = ref({})
 			
 			const oxygenItemColor = ref(color.one)
 			const stiveItemColor = ref(color.one)
 			
+			// 氧浓度、 粉尘浓度点击详情
+			const showEvent = (type) => {
+				popupIsShow.value = true
+				popupTitle.value = Object.is(type, 'oxygen') ? "氧浓度" : "粉尘浓度"
+				popupContent.value = Object.is(type, 'oxygen') ? oxygenTableData : stiveTableData
+				popupFileds.value = ""
+				popupType.value = type
+				realTime()
+			}
+			
+			/**
+			 * 增加最高值记录，点击显示列表时，选中最高值的列
+			 */
 			const device = new Device()
 			device.getBatchDevices((result) => {
 				const devices= result.data.devices
-				oxygenTableData.value = devices.filter((item) =>  item.deviceName.includes('氧'))
-				stiveTableData.value = devices.filter((item) => item.deviceName.includes('粉尘'))
-				let _index = 0
-				if(oxygenTableData.value.length > 0){
-					const item = oxygenTableData.value[0]
-					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {
-						_index++
-						if(result.code == 200) oxygenItemMax.value = parseFloat(result.data['O2']).toFixed(2)
-						if(_index > 1) realTime()
-					})
-				}
-				if(stiveTableData.value.length > 0){
-					const item = stiveTableData.value[0]
-					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {
-						_index++
-						if(result.code == 200) stiveItemMax.value = parseFloat(result.data['dust_concent']).toFixed(2)
-						if(_index > 1) realTime()
-					})
-				}
+				oxygenTableData = devices.filter((item) =>  item.deviceName.includes('氧'))
+				stiveTableData = devices.filter((item) => item.deviceName.includes('粉尘'))
+				realTime()
 			})
+			// 实时监听
 			const realTime = (status = null) => {
-				oxygenTableData.value.forEach((item) => {
+				let _oxygenIndex = 0
+				oxygenTableData.forEach((item) => {
 					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {
-						if(result.code == 200){
-							oxygenItemMax.value = Math.max(oxygenItemMax.value, parseFloat(result.data['O2']).toFixed(2))
-							if(oxygenItemMax.value < 19.5){
-								oxygenItemColor.value = color.one
-							}else if(oxygenItemMax.value >= 19.5 && oxygenItemMax.value < 23.5){
-								oxygenItemColor.value = color.two
-							}else{
-								oxygenItemColor.value = color.four
+						_oxygenIndex++
+						if(result.code != 200){
+							return false
+						}
+						item._concentration = parseFloat(result.data['O2'])	// 浓度
+						if(_oxygenIndex >= oxygenTableData.length){
+							oxygenItemMax.value = Math.max.apply(null, oxygenTableData.map((o) => o._concentration)).toFixed(2)
+							// 显示颜色
+							oxygenItemColor.value = oxygenItemMax.value < 19.5 ? color.one : (oxygenItemMax.value >= 19.5 && oxygenItemMax.value < 23.5) ? color.two : color.four
+							// 弹窗开启 数据存入弹出框内容
+							oxygenTableData.sort((a, b) => b._concentration - a._concentration)
+							if(Object.is(popupType.value, 'oxygen') && popupIsShow.value) {
+								popupContent.value = oxygenTableData
 							}
 						}
 					})
 				})
-				stiveTableData.value.forEach((item) => {
+				let _stiveIndex = 0
+				stiveTableData.forEach((item) => {
 					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {
-						if(result.code == 200){
-							stiveItemMax.value = Math.max(stiveItemMax.value, parseFloat(result.data['dust_concent']).toFixed(2))
-							if(stiveItemMax.value < 30){
-								stiveItemColor.value = color.one
-							}else if(stiveItemMax.value >= 30 && stiveItemMax.value < 60){
-								stiveItemColor.value = color.two
-							}else{
-								stiveItemColor.value = color.four
+						_stiveIndex++
+						if(result.code != 200){
+							return false
+						}
+						item._concentration = parseFloat(result.data['dust_concent'])	// 浓度
+						if(_stiveIndex >= stiveTableData.length){
+							stiveItemMax.value = Math.max.apply(null, stiveTableData.map((o) => o._concentration)).toFixed(2)
+							// 颜色设置
+							stiveItemColor.value = stiveItemMax.value < 30 ? color.one : (stiveItemMax.value >= 30 && stiveItemMax.value < 60) ? color.two : color.four
+							stiveTableData.sort((a, b) => b._concentration - a._concentration)
+							if(Object.is(popupType.value, 'stive') && popupIsShow.value) {
+								popupContent.value = stiveTableData
 							}
 						}
 					})

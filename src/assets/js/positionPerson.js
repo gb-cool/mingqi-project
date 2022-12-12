@@ -39,7 +39,7 @@ class PositionPerson{
 	 接口重新获取，accessToken获取后进行缓存方便使用。
 	 */
 	getAccessToken(){
-		const path = this.Seekey.url + '/api/v3/getAccessToken'	// 接口地址
+		const path = this.Seekey.url + 'api/v3/getAccessToken'	// 接口地址
 		axios({
 			method: 'post',
 			url: path,
@@ -73,18 +73,16 @@ export class JoySuch extends PositionPerson{
 	constructor () {
 		super()
 		// 获取Token
-		// this.getToken(() => {
-		// 	// this.getPersonList()	// 查询建筑下所有人员
-		// 	this.getRealTimeData()	// 人员实时位置数据
-		// 	// this.getSubscribe()	// 报（预）警信息订阅
-		// })	
-		// console.log(this)
+		this.getToken(() => {
+			// this.getSubscribe()	// 报（预）警信息订阅
+			this.getAlarmList()
+		})	
 	}
 	/**
 	 * 获取人员定位系统token
 	 */
 	getToken(callback = null){
-		const path = this.JoySuch.url + '/api/v2/get-token'	// 接口地址
+		const path = this.JoySuch.url + 'api/v2/get-token'	// 接口地址
 		axios({
 			method: 'post',
 			url: path,
@@ -113,7 +111,7 @@ export class JoySuch extends PositionPerson{
 	 * 查询建筑下所有内部人员
 	 */
 	getPersonList(callback){
-		const path = this.JoySuch.url + '/api/v2/person/list'	// 接口地址
+		const path = this.JoySuch.url + 'api/v2/person/list'	// 接口地址
 		axios({
 			method: 'post',
 			url: path,
@@ -140,9 +138,10 @@ export class JoySuch extends PositionPerson{
 	}
 	/**
 	 * 人员实时位置数据
+	 * 经纬度坐标系 WGS84
 	 */
 	getRealTimeData(callback){
-		const path = this.JoySuch.url + '/api/v2/person/realTimeData'	// 接口地址
+		const path = this.JoySuch.url + 'api/v2/person/realTimeData'	// 接口地址
 		axios({
 			method: 'post',
 			url: path,
@@ -168,7 +167,7 @@ export class JoySuch extends PositionPerson{
 		作业报警 ：jobAlarmEvent
 	 */
 	getSubscribe(){
-		const path = this.JoySuch.url + '/api/v2/subscribe'	// 接口地址
+		const path = this.JoySuch.url + 'api/v2/subscribe'	// 接口地址
 		axios({
 			method: 'post',
 			url: path,
@@ -193,6 +192,132 @@ export class JoySuch extends PositionPerson{
 		.catch(function (error) {
 			console.log(error);
 		});
+	}
+	/**
+	 * 查询报警列表
+	 */
+	// 人员报警（一键报警、越界报警、滞留报警、超员报警、缺员报警、静止报警） 如下类型
+	// 一键报警：oneKeyAlarm:alarm
+	// 滞留预警：stayAlarm
+	// 越界报警：overBoundaryAlarm
+	// 超员预警：overNum
+	// 缺员预警：lackNum
+	// 静止预警：stillAlarm
+	// 车辆报警（超速报警）如下类型
+	// 车辆超速报警：alarmSpeed
+	// 作业报警（作业人员离开报警、非作业人员闯入报警）如下类型
+	// 作业人员离开报警	  ：leaveAlarm
+	// 非作业人员闯入报警   ：intrudeAlarm
+	getAlarmList(callback){
+		const path = this.JoySuch.url + 'api/v2/alarm/list'	// 接口地址
+		axios({
+			method: 'post',
+			url: path,
+			headers: {
+				'token': this.token
+			},
+			data: {
+				buildId: '205046',
+				pageNumber: 1,
+				pageSize: 100
+			}
+		})
+		.then((response) => {
+			if(callback) callback(response.data)
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+	}
+	/**
+	 * 查询区域列表
+	 */
+	getAreaList(){
+		const path = this.JoySuch.url + 'api/v2/area/list'	// 接口地址
+		axios({
+			method: 'post',
+			url: path,
+			headers: {
+				'token': this.token
+			},
+			data: {
+				buildId: '205046'
+			}
+		})
+		.then((response) => {
+			console.log(response)
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+	}
+	/**
+	 * 查询区域分类列表
+	 */
+	getAreaClassifyList(){
+		const path = this.JoySuch.url + 'api/v2/area/classify-list'	// 接口地址
+		axios({
+			method: 'post',
+			url: path,
+			headers: {
+				'token': this.token
+			},
+			data: {
+				buildId: '205046'
+			}
+		})
+		.then((response) => {
+			console.log(response)
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+	}
+	/**
+	 * 查询当前区域人数
+	 */
+	getAreaPersonCount(){
+		const path = this.JoySuch.url + 'api/v2/area/person-count'	// 接口地址
+		axios({
+			method: 'post',
+			url: path,
+			headers: {
+				'token': this.token
+			},
+			data: {
+				buildId: '205046'
+			}
+		})
+		.then((response) => {
+			console.log(response)
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+	}
+	/**
+	 * 查询风险分区列表
+	 */
+	getAreaRiskList(){
+		const path = this.JoySuch.url + 'api/v2/risk/list'	// 接口地址
+		axios({
+			method: 'post',
+			url: path,
+			headers: {
+				'token': this.token
+			},
+			data: {
+				buildId: '205046',
+				pageNumber: 1,
+				pageSize: 100
+			}
+		})
+		.then((response) => {
+			console.log(response)
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
 	}
 }
 /**
