@@ -6,17 +6,19 @@
 </template>
 
 <script>
-	import { ref, inject, onBeforeUnmount, watch } from 'vue'
+	import { ref, inject, onBeforeUnmount, watch, onMounted } from 'vue'
 	export default {
 		name: 'ModuleVideoMonitor',
 		props: ['list'],
 		setup(props) {
+			let _width = 354
+			let _height = 230
 			// 创建播放实例
 			let initCount = 0
 			let pubKey = ''
 			let oWebControl = null
 			let playWnd = ref()
-			initPlugin()
+			
 			function initPlugin () {
 			    oWebControl = new WebControl({
 			        szPluginContainer: "playWnd",                       // 指定容器id
@@ -31,7 +33,7 @@
 								cbIntegrationCallBack: cbIntegrationCallBack
 							});
 							
-							oWebControl.JS_CreateWnd("playWnd", 354, 230).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
+							oWebControl.JS_CreateWnd("playWnd", _width, _height).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
 								init();  // 创建播放实例成功后初始化
 							});
 						}, function (e) { // 启动插件服务失败
@@ -112,7 +114,7 @@
 							buttonIDs: buttonIDs                       //自定义工具条按钮
 			            })
 			        }).then(function (oData) {
-						oWebControl.JS_Resize(354, 230);  // 初始化后resize一次，规避firefox下首次显示窗口后插件窗口未与DIV窗口重合问题
+						oWebControl.JS_Resize(_width, _height);  // 初始化后resize一次，规避firefox下首次显示窗口后插件窗口未与DIV窗口重合问题
 						// props.list.forEach((item) => {
 						// 	startPreview(item.cameraIndexCode)
 						// })
@@ -155,15 +157,23 @@
 			    encrypt.setPublicKey(pubKey);
 			    return encrypt.encrypt(value);
 			}
-			
 			const calculate = () => {
-				if (oWebControl != null) {
-				    oWebControl.JS_Resize(354, 230);
-				    setWndCover();
-				}
-			}
-			window.addEventListener('scroll', calculate, true);	// 监听滚动条scroll事件，使插件窗口跟随浏览器滚动而移动
-			window.addEventListener('resize', calculate);	//监听resize事件，使插件窗口尺寸跟随DIV窗口变化
+				setTimeout(() => {
+					_height = playWnd.value.offsetHeight
+					_width = playWnd.value.offsetWidth
+					if (oWebControl != null) {
+					    oWebControl.JS_Resize(_width, _height);
+					    setWndCover();
+					}
+				},3000)
+			}		
+			onMounted(()=>{
+				_width = playWnd.value.offsetWidth
+				_height = playWnd.value.offsetHeight
+				initPlugin()
+				window.addEventListener('scroll', calculate, true);	// 监听滚动条scroll事件，使插件窗口跟随浏览器滚动而移动
+				window.addEventListener('resize', calculate);	//监听resize事件，使插件窗口尺寸跟随DIV窗口变化
+			})
 			onBeforeUnmount(() => { 
 				window.removeEventListener('scroll', calculate, true);  
 				window.removeEventListener('resize', calculate);
@@ -210,23 +220,23 @@
 			    var iCoverRight = (oDivRect.right - iWidth > 0) ? Math.round(oDivRect.right - iWidth) : 0;
 			    var iCoverBottom = (oDivRect.bottom - iHeight > 0) ? Math.round(oDivRect.bottom - iHeight) : 0;
 			
-			    iCoverLeft = (iCoverLeft > 354) ? 354 : iCoverLeft;
-			    iCoverTop = (iCoverTop > 230) ? 230 : iCoverTop;
-			    iCoverRight = (iCoverRight > 354) ? 354 : iCoverRight;
-			    iCoverBottom = (iCoverBottom > 230) ? 230 : iCoverBottom;
+			    iCoverLeft = (iCoverLeft > _width) ? _width : iCoverLeft;
+			    iCoverTop = (iCoverTop > _height) ? _height : iCoverTop;
+			    iCoverRight = (iCoverRight > _width) ? _width : iCoverRight;
+			    iCoverBottom = (iCoverBottom > _height) ? _height : iCoverBottom;
 			
-				oWebControl.JS_RepairPartWindow(0, 0, 355, 230);    // 多1个像素点防止还原后边界缺失一个像素条
+				oWebControl.JS_RepairPartWindow(0, 0, _width + 1, _height);    // 多1个像素点防止还原后边界缺失一个像素条
 			    if (iCoverLeft != 0) {
-					oWebControl.JS_CuttingPartWindow(0, 0, iCoverLeft, 230);
+					oWebControl.JS_CuttingPartWindow(0, 0, iCoverLeft, _height);
 			    }
 			    if (iCoverTop != 0) {
-			        oWebControl.JS_CuttingPartWindow(0, 0, 355, iCoverTop);    // 多剪掉一个像素条，防止出现剪掉一部分窗口后出现一个像素条
+			        oWebControl.JS_CuttingPartWindow(0, 0, _width + 1, iCoverTop);    // 多剪掉一个像素条，防止出现剪掉一部分窗口后出现一个像素条
 			    }
 			    if (iCoverRight != 0) {
-			        oWebControl.JS_CuttingPartWindow(354 - iCoverRight, 0, iCoverRight, 230);
+			        oWebControl.JS_CuttingPartWindow(_width - iCoverRight, 0, iCoverRight, _height);
 			    }
 			    if (iCoverBottom != 0) {
-			        oWebControl.JS_CuttingPartWindow(0, 230 - iCoverBottom, 354, iCoverBottom);
+			        oWebControl.JS_CuttingPartWindow(0, _height - iCoverBottom, _width, iCoverBottom);
 			    }
 			}
 			//视频预览功能
@@ -288,7 +298,7 @@
 			const stopAllPreview = () => {
 				oWebControl.JS_RequestInterface({
 				    funcName: "stopAllPreview"
-				});
+				})
 			}
 			// 标签关闭
 			/* $(window).unload(function () {
@@ -319,7 +329,7 @@
 		object-fit: fill;
 	} */
 	.playWnd{
-		width: 354px;                  /*播放容器的宽和高设定*/
-		height: 230px;
+		/* width: 354px; */              
+		height: 100%;
 	}
 </style>

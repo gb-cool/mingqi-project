@@ -5,7 +5,7 @@
 			v-for="(item, index) in gridData"
 			:key="index"
 		    :column="4">
-		    <el-descriptions-item width="200">{{item.time}}</el-descriptions-item>
+		    <el-descriptions-item :width="timeWidth">{{item.time}}</el-descriptions-item>
 		    <el-descriptions-item v-if="item['O2']">{{item['O2']}}</el-descriptions-item>
 			<el-descriptions-item v-if="item.dust_concent">{{item.dust_concent}}</el-descriptions-item>
 		</el-descriptions>
@@ -26,12 +26,23 @@
 					gridData.value = result.data.list
 				}
 			})
+			const timeWidth = ref(200)
+			
+			const getWidth = () => {
+				let w = 200/1920*window.innerWidth
+				if(w < 200) w = 200
+				timeWidth.value = w
+			}
+			getWidth()
+			window.addEventListener('resize', getWidth);
 			return {
-				gridData
+				gridData,
+				timeWidth
 			}
 		}
 	}
 </script>
 
 <style scoped>
+	
 </style>

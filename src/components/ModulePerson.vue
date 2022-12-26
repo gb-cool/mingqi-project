@@ -51,13 +51,51 @@
 				popupFileds.value = fileds
 				popupType.value = 'json'
 			}
-			
+			let pList = [
+				{
+					dateTime: "2022-12-20 21:10:54",
+					department: "",
+					deviceNo: "1918FF029298",
+					electric: "50-75%",
+					empName: "陈洪",
+					empNo: "",
+					imgaddr: "",
+					islxsign: "0",
+					latitude: 29.843071137691485,
+					longitude: 106.98064524723237,
+					specifictype: "0",
+					tel: "13883237748",
+					worktype: "",
+					worktypename: "",
+					workunit: ""
+				},
+				{
+					dateTime: "2022-12-20 21:30:14",
+					department: "",
+					deviceNo: "1918FF029299",
+					electric: "50-75%",
+					empName: "贺浩",
+					empNo: "",
+					imgaddr: "",
+					islxsign: "0",
+					latitude: 29.84407113,
+					longitude: 106.9816452,
+					specifictype: "0",
+					tel: "13883237748",
+					worktype: "",
+					worktypename: "",
+					workunit: ""
+				}
+			]
 			let personData = ref([])
 			const joySuch = new JoySuch()
 			const getData = joySuch.getToken(() => {
 				joySuch.getRealTimeData((result) => {
 					if(result.code == 0){	//成功
 						personData.value = result.data.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
+						if(personData.value == ""){
+							personData.value = pList
+						}
 					}else if(result.code == 1002){  // token失效
 						getData()
 					}
@@ -78,24 +116,14 @@
 	.ModulePerson ul{
 		overflow: hidden;
 		box-sizing: border-box;
-		padding-left: 50px;
+		padding-left: calc(12/1920*100vw);
 	}
 	.ModulePerson li{
 		width: 50%;
 		float: left;
-		height: 320px;
-		padding: 50px 0 50px 0px;
+		height: calc(100/1080*100vh);
+		padding: calc(20/1080*100vh) 0 calc(20/1080*100vh) 0px;
 		box-sizing: border-box;
 		cursor: pointer;
-	}
-	@media screen and (max-width: 1920px) {
-		.ModulePerson ul{
-			padding-left: 12px;
-			padding-top: 10px;
-		}
-		.ModulePerson li{
-			height: 100px;
-			padding: 20px 0 20px 0px;
-		}
 	}
 </style>

@@ -32,31 +32,20 @@
 		box-sizing: border-box;
 	}
 	.hideShow{
-		width: 108px;
-		height: 88px;
-		border-radius: 0 88px 88px 0;
+		width: calc(48/1920*100vw);
+		height: 50%;
+		border-radius: 0 calc(48/1920*100vw) calc(48/1920*100vw) 0;
 		background: #048EF9;
 		cursor: pointer;
+		min-width: 48px;
+		position: relative;
 	}
 	.hideShow img{
 		display: block;
-		position: relative;
-		top: 24px;
-		left: 22px;
-	}
-	@media screen and (max-width: 1920px) {
-		.TopSide{
-			padding-top: 2px;
-		}
-		.hideShow{
-			width: 48px;
-			height: 30px;
-			border-radius: 0 54px 54px 0;
-		}
-		.hideShow img{
-			top: 6px;
-			left: 11px;
-			height: 18px;
-		}
+		position: absolute;
+		height: 60%;
+		top: 20%;
+		left: 50%;
+		transform: translate(-70%, 0%);
 	}
 </style>

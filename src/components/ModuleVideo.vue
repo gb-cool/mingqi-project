@@ -75,12 +75,13 @@
 	}
 </script>
 
-<style>
+<style scoped lang="less">
+	@import "../assets/css/public.less";
 	.ModuleVideo{
 		width: 100%;
 		height: 100%;
 		box-sizing: border-box;
-		padding: 40px;
+		padding: @module-content-mw;
 	}
 	.swiper{
 		height: 100%;
@@ -107,24 +108,5 @@
 	.swiper-pagination .swiper-pagination-bullet-active{
 		background: #0473F9;
 		box-shadow: inset 0px 0px 10px rgb(4 142 249);
-	}
-	@media screen and (max-width: 1920px) {
-		.ModuleVideo{
-			padding: 12px;
-		}
-		.swiper-pagination{
-			height: 32px;
-			padding: 10px 0;
-		}
-		.swiper-pagination .swiper-pagination-bullet{
-			width: 12px !important;
-			height: 12px !important;
-			margin: 0 6px !important;
-		}
-		.swiper-slide span{
-			right: 8px;
-			bottom: auto;
-			top: 5px;
-		}
 	}
 </style>

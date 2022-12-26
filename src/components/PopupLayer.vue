@@ -58,6 +58,7 @@
 </script>
 
 <style lang="less" scoped>
+	@title-height: ~"calc(44 / 1080 * 100vh)";
 	.PopupLayer{
 		position: fixed;
 		top: 50%;
@@ -66,6 +67,7 @@
 		overflow: hidden;
 		transform: translate(-50%, -50%);
 		transition: 1s;
+		max-width: calc(100vw*0.8);
 	}
 	.PopupLayer.hide{
 		top: 100%;
@@ -76,9 +78,9 @@
 		transform: translate(-50%, -50%);
 	}
 	.title{
-		height: 106px;
-		line-height: 110px;
-		text-indent: 110px;
+		height: @title-height;
+		line-height: @title-height;
+		text-indent: @title-height;
 		font-family: Microsoft YaHei;
 		background: url('../assets/img/popup-title-bg.png') no-repeat left center, url('../assets/img/popup-title-bg2.png') no-repeat right -1px center, url('../assets/img/popup-title-bg1.png') repeat left top -1px;
 		background-size: auto 100%;
@@ -86,9 +88,11 @@
 		top: 1px;
 	}
 	.title img{
-		float: right;
-		margin: 46px;
 		cursor: pointer;
+		position: absolute;
+		top: 40%;
+		height: 40%;
+		right: 20px;
 	}
 	.box{
 		box-sizing: border-box;
@@ -99,13 +103,13 @@
 	}
 	.main{
 		overflow: auto;
-		max-height: calc(80vh - 106px);
+		max-height: calc(80vh - @title-height);
 		height: auto;
 		width: 100%;
-		min-width: 540px;
+		min-width: calc(540/1920*100vw);
 	}
 	.jsonBox{
-		padding: 80px 0px;
+		padding: calc(20/1080*100vh) 0px;
 	}
 	
 	@media screen and (max-width: 1920px) {
@@ -117,16 +121,6 @@
 		}
 		.box{
 			border-width: 1px;
-		}
-		.jsonBox{
-			padding: 20px 0px;
-		}
-		.main{
-			max-height: calc(80vh - 42px);
-		}
-		.title img{
-			width: 14px;
-			margin: 13px;
 		}
 	}
 </style>

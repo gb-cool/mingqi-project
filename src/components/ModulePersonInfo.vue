@@ -27,7 +27,7 @@
 	}
 	.photo{
 		float: left;
-		width: 220px;
+		width: auto;
 		height: 100%;
 		background-color: #fff;
 	}
@@ -36,37 +36,20 @@
 		height: 100%;
 	}
 	.info{
-		margin: 0 0 0 220px;
 		height: 100%;
 		font-family: 'Alibaba-PuHuiTi-R';
 	}
 	.info p{
 		color:  #92A6CB;
-		line-height: 1.85rem;
 		white-space: nowrap;
 		text-indent: 0.9rem;
 		height: 33.3%;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		line-height: calc(20/1080*100vh);
 	}
 	.info p span{
 		color: #fff;
 		margin-left: 0.7rem;
-	}
-	@media screen and (max-width: 1920px) {
-		.photo{
-			width: 60px;
-		}
-		.info{
-			margin-left: 60px;
-		}
-		.info p{
-			line-height: 1.2rem;
-			font-size: 14px;
-			text-indent: 8px;
-		}
-		.info p span{
-			margin-left: 4px;
-		}
 	}
 </style>

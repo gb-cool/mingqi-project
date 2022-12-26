@@ -28,16 +28,18 @@
 		</div>
 		<div class="weather">
 			<h3>7天天气预报</h3>
-			<ul>
+			<ul ref="weatherElem">
 				<li v-for="(item, index) in weatherData" 
 				:key="index" 
 				:class="[index==selectIndex?'active':'', selectIndex-index==1?'prev-active':'']"
 				@mouseover="mouseOverEvent(index)">
 					<p>{{ dateFilters(item.date, index)}}</p>
-					<p class="icon">
-						<img :src="getWeatherIcon(item.wea_img)" />
-						<span>{{item.wea}}</span>
-					</p>
+					<div class="icon">
+						<p class="iconBox">
+							<img :class="[isWeatherImg?'show':'hide']" :src="getWeatherIcon(item.wea_img)" />
+						</p>
+						<span  :class="[isWeatherIcon?'show':'hide']">{{item.wea}}</span>
+					</div>
 					<p>{{item.tem_day}}℃</p>
 				</li>
 			</ul>
@@ -56,6 +58,7 @@
 			ModulePieChart
 		},
 		setup(){
+			const weatherElem = ref()	// 天气列表元素
 			let barWidth = ref(6)	// 饼图宽度
 			let selectIndex = ref(0)	// 选中天气序号
 			const defaultWData = JSON.parse('[{"date":"2022-11-18","wea":"阴","wea_img":"yin","tem_day":"16","tem_night":"13","win":"西南风","win_speed":"<3级"},{"date":"2022-11-19","wea":"多云","wea_img":"yun","tem_day":"18","tem_night":"12","win":"西南风","win_speed":"<3级"},{"date":"2022-11-20","wea":"阴转小雨","wea_img":"yu","tem_day":"21","tem_night":"11","win":"东北风","win_speed":"<3级"},{"date":"2022-11-21","wea":"小雨转多云","wea_img":"yun","tem_day":"16","tem_night":"14","win":"西南风","win_speed":"<3级"},{"date":"2022-11-22","wea":"阴转小雨","wea_img":"yu","tem_day":"15","tem_night":"13","win":"东北风","win_speed":"<3级"},{"date":"2022-11-23","wea":"小雨","wea_img":"yu","tem_day":"16","tem_night":"14","win":"西南风","win_speed":"<3级"},{"date":"2022-11-24","wea":"小雨转多云","wea_img":"yun","tem_day":"16","tem_night":"13","win":"西南风","win_speed":"<3级"}]')
@@ -72,11 +75,7 @@
 			changeBarWidth()
 			weather()
 			function changeBarWidth(){
-				if(window.innerWidth > 1920) {
-					barWidth.value = 18
-				}else{
-					barWidth.value = 6
-				}
+				barWidth.value = 6 / 1920 * window.innerWidth;
 			}
 			window.addEventListener("resize", function () {
 			    changeBarWidth()
@@ -84,7 +83,9 @@
 			function weather(){
 				// 天气预报
 				axios.get('https://www.yiketianqi.com/free/week?unescape=1&appid=51168891&appsecret=8NRa2gPZ&style=tw&skin=sogou&cityid=101041000')
-				.then((response) => weatherData.value = response.data.data)
+				.then((response) => {
+					weatherData.value = response.data.data
+				})
 				.catch((error) => console.log(error))
 				// 空气质量
 				axios.get('https://www.yiketianqi.com/free/day?unescape=1&appid=51168891&appsecret=8NRa2gPZ&cityid=101041000')
@@ -205,7 +206,7 @@
 						if(_oxygenIndex >= oxygenTableData.length){
 							oxygenItemMax.value = Math.max.apply(null, oxygenTableData.map((o) => o._concentration)).toFixed(2)
 							// 显示颜色
-							oxygenItemColor.value = oxygenItemMax.value < 19.5 ? color.one : (oxygenItemMax.value >= 19.5 && oxygenItemMax.value < 23.5) ? color.two : color.four
+							oxygenItemColor.value = oxygenItemMax.value < 19.95 ? color.one : (oxygenItemMax.value >= 19.95 && oxygenItemMax.value < 23) ? color.two : color.four
 							// 弹窗开启 数据存入弹出框内容
 							oxygenTableData.sort((a, b) => b._concentration - a._concentration)
 							if(Object.is(popupType.value, 'oxygen') && popupIsShow.value) {
@@ -225,7 +226,7 @@
 						if(_stiveIndex >= stiveTableData.length){
 							stiveItemMax.value = Math.max.apply(null, stiveTableData.map((o) => o._concentration)).toFixed(2)
 							// 颜色设置
-							stiveItemColor.value = stiveItemMax.value < 30 ? color.one : (stiveItemMax.value >= 30 && stiveItemMax.value < 60) ? color.two : color.four
+							stiveItemColor.value = stiveItemMax.value < 20 ? color.one : (stiveItemMax.value >= 20 && stiveItemMax.value < 60) ? color.two : color.four
 							stiveTableData.sort((a, b) => b._concentration - a._concentration)
 							if(Object.is(popupType.value, 'stive') && popupIsShow.value) {
 								popupContent.value = stiveTableData
@@ -235,11 +236,33 @@
 				})
 			}
 			const timer = ref(0)
+			const isWeatherIcon = ref(true)
+			const isWeatherImg = ref(true)
+			/**
+			 * 改变天气图标显示
+			 */
+			const changeWeatherSH = () => {
+				let li = weatherElem.value.getElementsByTagName("li")[0]
+				let icon = li.getElementsByClassName("icon")[0]
+				let iconBox = icon.getElementsByClassName("iconBox")[0]
+				let span = li.getElementsByTagName("span")[0]
+				// let img = icon.getElementsByTagName("img")
+				
+				let img = weatherElem.value.getElementsByTagName("img")
+				let imgw = iconBox.offsetWidth + "px"
+				for(let i =0; i<img.length; i++){
+					img[i].style.maxHeight = imgw
+				}
+			}
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
 				timer.value = window.setInterval(realTime, 100000)
+				changeWeatherSH()
+				window.addEventListener('resize', changeWeatherSH);
 			})
+			
 			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
 				window.clearInterval(timer.value);
+				window.removeEventListener('resize', changeWeatherSH);
 			})
 			
 			return {
@@ -256,17 +279,26 @@
 				oxygenItemMax,
 				stiveItemMax,
 				oxygenItemColor,
-				stiveItemColor
+				stiveItemColor,
+				weatherElem,
+				isWeatherIcon,
+				isWeatherImg
 			}
 		}
 	}
 </script>
 
-<style scoped>
+<style scoped lang="less">
+	@import "../assets/css/public.less";
+	@center-height: ~"calc(124 / 1080 * 100vh)";
+	@center-height-half: ~"calc(62 / 1080 * 100vh)";
+	@center-mw: @module-content-mw;
+	@pie-ph: 2.4rem;
+	@scale: @center-height;
 	.point{
 		position: absolute;
-		width: 4px;
-		height: 4px;
+		width: 0px;
+		height: 0px;
 		border-radius: 50%;
 		content: '';
 		top: 50%;
@@ -276,82 +308,88 @@
 	}
 	.point::before,.point::after{
 		position: absolute;
-		width: 4px;
-		height: 4px;
+		width: 0px;
+		height: 0px;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 		border-radius: 50%;
 		content: '';
 	}
 	.point::before{animation: scale 2s infinite; }
 	.point::after{animation: scale2 2s infinite; }
-	@keyframes scale{0%{ transform: scale(0); opacity:.9}100%{ transform: scale(20); opacity: 0;}}
-	@keyframes scale2{0%{ transform: scale(0);opacity:.9;}100%{ transform: scale(80);opacity:0;}}
+	@keyframes scale{0%{width: 0px;height:0px; opacity:.9}100%{ width: @center-height-half; height:@center-height-half; opacity: 0;}}
+	@keyframes scale2{0%{width: 0px;height:0px; opacity:.9}100%{ width: @center-height; height:@center-height; opacity: 0;}}
 	.point::before,.point::after{
 		/* 设置颜色 */
 		background-color: rgba(209, 2, 2, 0.9);
 	}
-	
 	.ModuleEnvironment{
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
 	}
 	.center{
-		margin: 0 40px;
+		margin: 0 @center-mw;
 		border-bottom: 3px solid #3C4863;
-		height: 358px;
+		height: @center-height;
 		overflow: hidden;
 		box-sizing: border-box;
-		padding: 60px 0 30px 0;
 	}
 	.pie{
 		width: 33%;
 		height: 100%;
 		float: left;
+		padding-top: 1rem;
+		box-sizing: border-box;
+		overflow: hidden;
 	}
 	.pie .chart{
 		width: 100%;
-		height: calc(100% - 75px);
+		height: calc(100% - @pie-ph);
 		position: relative;
-	}
-	.pie .chart .price{
-		font-size: 1.54rem;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 1rem;
-	}
-	.pie .chart .price span{
-		font-size: 0.8rem;
 	}
 	.pie p{
 		font-size: 1rem;
 		text-align: center;
-		margin-top: 25px;
-		height: 50px;
-		line-height: 50px;
+		height: @pie-ph;
+		line-height: @pie-ph;
+	}
+	.pie .chart .price{
+		font-size: calc(18 / 1080 * 100vh);
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	.pie .chart .price span{
+		font-size: 0.8rem;
 	}
 	/**
 	 * 天气
 	 */
 	.weather{
-		margin: 0 50px;
+		margin: 0 @center-mw;
+		height: calc(100% - @center-height - @center-mw);
 	}
 	.weather h3{
 		font-size: 1rem;
 		font-weight: 400;
-		margin: 46px 0;
+		height: 2rem;
+		text-indent: 5px;
+		padding: 1rem 0 0.5rem 0;
 	}
 	.weather ul{
-		overflow: hidden;	
+		overflow: hidden;
+		height: calc(100% - 3.5rem);
 	}
 	.weather li{
 		float: left;
 		width: 14%;
 		font-size: 0.9rem;
 		text-align: center;
-		padding: 46px 0;
 		position: relative;
+		height: 100%;
 	}
 	.weather li:first-child{
 		margin-left: 1%;
@@ -360,23 +398,51 @@
 		content: '';
 		display: block;
 		position: absolute;
-		top: 23px;
-		bottom: 46px;
+		top: 0px;
+		bottom: 0px;
 		right: 0px;
 		border-right: 1px solid #3C4863;
 	}
 	.weather li:last-child::after{
 		border-right: 0px solid #3C4863;
 	}
+	.weather li p{
+		height: 2rem;
+		line-height: 2.5rem;
+	}
+	.weather li .icon{
+		height: calc(100% - 4rem);
+		overflow: hidden;
+		padding: 0 10%;
+		box-sizing: border-box;
+		line-height: 1.5rem;
+	}
+	.weather li .icon .hide{
+		opacity: 0;
+	}
+	.weather li .icon .show{
+		opacity: 1;
+	}
+	.weather li .iconBox{
+		height: calc(100% - 3rem);
+		line-height: normal;
+		position: relative;
+		overflow: hidden;
+	}
 	.weather li img{
 		display: block;
 		margin: 0 auto;
+		position: absolute;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		height: 100%;
+		left: 50%;
+		max-width: 100%;
 	}
 	.weather li span{
-		font-size: 0.48rem;
-	}
-	.weather li .icon{
-		margin: 40px 0 46px 0;
+		font-size: 0.8rem;
+		display: block;
+		height: 3rem;
 	}
 	.weather li.active{
 		background: rgba(0,64,255,0.32);
@@ -388,55 +454,17 @@
 		border-right-width: 0;
 	}
 	@media screen and (max-width: 1920px) {
-		.point,.point::before,.point::after{
-			width: 2px;
-			height: 2px;
-		}
-		@keyframes scale{0%{ transform: scale(0); opacity:.9}100%{ transform: scale(22); opacity: 0;}}
-		@keyframes scale2{0%{ transform: scale(0);opacity:.9;}100%{ transform: scale(54);opacity:0;}}
 		.center{
-			height: 114px;
-			margin: 0 8px;
 			border-bottom-width: 1px;
-			padding: 12px 0 10px 0;
 		}
-		.pie .chart{
-			height: calc(100% - 24px);
-		}
-		.pie .chart .price{
-			font-size: 1.2rem;
-		}
-		.pie p{
-			font-size: 1rem;
-			height: 24px;
-			line-height: 24px;
-			margin-top: 6px;
-		}
-		
-		.weather{
-			margin: 0 8px;
-		}
-		.weather h3{
-			margin: 15px 0 10px 0;
-			text-indent: 5px;
-		}
-		.weather li{
-			padding: 12px 0;
+		.weather li .iconBox{
+			height: auto;
 		}
 		.weather li img{
-			height: 38px;
-		}
-		.weather li .icon{
-			margin: 8px 2px 10px 2px;
-		}
-		.weather li span{
-			display: block;
-			height: 32px;
-			overflow: hidden;
-		}
-		.weather li::after{
-			top: 7px;
-			bottom: 12px;
+			position: relative;
+			top: 0%;
+			left: 0%;
+			transform: none;
 		}
 	}
 </style>

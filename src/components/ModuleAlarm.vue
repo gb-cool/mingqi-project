@@ -1,45 +1,57 @@
 <!-- 设备告警 -->
 <template>
-	<div class="ModuleAlarm">
-		<div class="box">
-			<el-table
-			:data="dataList" 
-			style="width: 100%" 
-			:height="contentHeight" 
-			highlight-current-row
-			@row-click="intelligentWorkshopEvent"
-			:show-header="true">
-				<el-table-column 
-				type="index"
-				label="序号"
-				:width="indexWidth"
-				align="center">
-					<template #default="scope">
-						<span>{{(scope.$index + 1).toString().padStart(2, '0')}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-				prop="time" 
-				:width="timeWidth"
-				label="告警日期" 
-				align="center">
-					<template #default="scope">
-						<span>{{scope.row.time.split(" ")[0]}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-				prop="areaName" 
-				label="告警位置" 
-				align="center">
-				</el-table-column>
-				<el-table-column
-				prop="type" 
-				label="告警类别" 
-				align="center">
-				</el-table-column>
-			</el-table>
+	<div class="ModuleAlarm" ref="componentElem">
+		<div class="box"  ref="elTabs">
+			<el-tabs v-model="activeName" @tab-click="handleClick">
+				<el-tab-pane label="设备告警" name="first">
+					
+				</el-tab-pane>
+				<el-tab-pane label="巡检机器人告警" name="second">
+					
+				</el-tab-pane>
+				<el-tab-pane label="监控告警" name="third">
+					
+				</el-tab-pane>
+				<el-tab-pane label="定位告警" name="fourth">
+					<el-table
+					:data="dataList" 
+					style="width: 100%" 
+					:height="contentHeight" 
+					highlight-current-row
+					@row-click="intelligentWorkshopEvent"
+					:show-header="true">
+						<el-table-column 
+						type="index"
+						label="序号"
+						:width="indexWidth"
+						align="center">
+							<template #default="scope">
+								<span>{{(scope.$index + 1).toString().padStart(2, '0')}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
+						prop="time" 
+						:width="timeWidth"
+						label="告警日期" 
+						align="center">
+							<template #default="scope">
+								<span>{{scope.row.time.split(" ")[0]}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
+						prop="areaName" 
+						label="告警位置" 
+						align="center">
+						</el-table-column>
+						<el-table-column
+						prop="type" 
+						label="告警类别" 
+						align="center">
+						</el-table-column>
+					</el-table>
+				</el-tab-pane>
+			</el-tabs>
 		</div>
-		<!-- <PopupLayer title="" ref="popup" v-if="popupIsShow" @isShow='(v) => popupIsShow = v' :fileds="fileds" :information="popupContent"></PopupLayer> -->
 	</div>
 </template>
 
@@ -54,22 +66,19 @@
 			PopupLayer
 		},
 		setup() {
+			const elTabs = ref()	// 取盒子高度，计算表格内容高度值
+			const componentElem = ref()
 			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
 			let popupTitle = inject('popupTitle')	// 弹窗 标题
 			let popupContent = inject('popupContent')	// 弹窗内容
 			let popupFileds = inject('popupFileds')	// 弹窗结构
 			let popupType = inject('popupType') // 弹窗内容类型
-			// const dataList = [
-			// 	{time: '2022/11/08 10:50', area: '均化车间', type: '摄像头', content: '编号23132546人员，在2022年11月8日10点50分进入均化车间危险区域范围内，由摄像头检测结果。'},
-			// 	{time: '2022/11/08 15:50', area: '破碎车间', type: '摄像头', content: '编号23132546人员，在2022年11月8日15点50分进入破碎车间危险区域范围内，由摄像头检测结果。'},
-			// 	{time: '2022/11/07 14:20', area: '水泵房', type: '摄像头', content: '编号23132546人员，在2022年11月7日14点20分进入水泵房危险区域范围内，由摄像头检测结果。'},
-			// 	{time: '2022/11/07 14:10', area: '中控室', type: '烟感', content: '中控室烟感异常，请及时排查安全隐患！'},
-			// 	{time: '2022/11/06 17:50', area: '运输皮带', type: '温感', content: '运输皮带温度偏高，温度为70摄氏度'},
-			// ]
+			
+			const activeName = 'fourth'	// 默认选中导航值
+			
 			const dateTime = new DateTime()
 			const dataList = ref([])
 			const joySuch = new JoySuch()
-			
 			const alarmListHandle = (result) => {
 				if(result.code == 0){	//成功
 					let jsonData = result.data.content
@@ -117,12 +126,7 @@
 				joySuch.getAlarmList((result) => alarmListHandle(result))
 			}
 			const timer = ref(0)
-			onMounted(()=>{ //组件挂载时的生命周期执行的方法
-				timer.value = window.setInterval(realTime, 100000)
-			})
-			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
-				window.clearInterval(timer.value);
-			})
+			
 			const fileds = {
 				id: '报警ID',
 				time: '报警时间',
@@ -145,50 +149,56 @@
 			const indexMethod = (index) => {
 				return index + 1;
 			}
-			let contentHeight = ref(228)	// 内容盒子高度
+			//改变盒子内容高度
+			let contentHeight = ref(190)	// 内容盒子高度
 			let indexWidth = ref(55)
 			let timeWidth = ref(114)
 			const initObj = () => {
-				if(window.innerWidth > 1920){
-					contentHeight.value = 684
-					indexWidth.value = 120
-					timeWidth.value = 340
-				}else{
-					contentHeight.value = 228
-					indexWidth.value = 55
-					timeWidth.value = 114
-				}
+				indexWidth.value = 55/1920*window.innerWidth
+				timeWidth.value = 114/1920*window.innerWidth
+				let h = 36/1080*window.innerHeight
+				contentHeight.value = elTabs.value.offsetHeight - h - 15
 			}
-			initObj()
-			window.addEventListener("resize", function () {
+			onMounted(()=>{ //组件挂载时的生命周期执行的方法
+				timer.value = window.setInterval(realTime, 100000)
 				initObj()
+				window.addEventListener("resize", function () {
+					initObj()
+				})
 			})
+			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
+				window.clearInterval(timer.value);
+			})
+			
+			// 导航切换
+			const handleClick = () => {
+				
+			}
 			return {
+				elTabs,
+				componentElem,
+				activeName,
 				dataList,
 				indexMethod,
 				contentHeight,
 				indexWidth,
 				intelligentWorkshopEvent,
-				timeWidth
+				timeWidth,
+				handleClick
 			}
 		}
 	}
 </script>
 
-<style scoped>
+<style scoped lang="less">
+	@import "../assets/css/public.less";
 	.ModuleAlarm{
 		width: 100%;
 		height: 100%;
 		box-sizing: border-box;
-		padding: 36px 70px 36px 70px;
+		padding: @module-content-mw;
 	}
 	.box{
 		height: 100%;
-		overflow: auto;
-	}
-	@media screen and (max-width: 1920px) {
-		.ModuleAlarm{	
-			padding: 13px 15px 13px 15px;
-		}
 	}
 </style>

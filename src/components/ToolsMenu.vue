@@ -2,26 +2,31 @@
 <template>
 	<div class="ToolsMenu">
 		<ul>
-			<li @click="changeSky">
+			<!-- <li @click="changeSky">
 				<div class="rectangle">天空</div>
+			</li> -->
+			<li>
+				<div class="rectangle" :class="[Object.is(rectangleActive, 'mainScene')?'active':'']" @click="btnEvent('mainScene')">园区总览</div>
 			</li>
-			<li class="diaphaneity">
-				<div class="rectangle">
-					<div class="rectangleContent">
-						<img src="../assets/img/foot-minus.png" @click="minusEvent"/>
-						<span>透明度</span>
-						<img src="../assets/img/foot-plus.png" @click="plusEvent"/>
+			<li>
+				<div class="rectangle" :class="[Object.is(rectangleActive, 'security')?'active':'']" @click="btnEvent('security')">智慧安防</div>
+			</li>
+			<li>
+				<div class="rectangle" :class="[Object.is(rectangleActive, 'pipe')?'active':'']" @click="btnEvent('pipe')">园区管道</div>
+				<div class="otherBox" v-show="isPipelineShow">
+					<div class="pipelineBox"  v-for="(item, index) in pipelineData" :key="item.type">
+						<el-tooltip :content="item.name" placement="top" effect="light">
+							<div 
+							:class="['pipeline', (item.type == pipelineSelect)?'active':'']"
+							@click="pipelineEvent(item)">
+								<img :src="require('../assets/img/'+ item.img)"/>
+							</div>
+						</el-tooltip>
 					</div>
 				</div>
 			</li>
-			<li v-for="(item, index) in pipelineData" :key="item.type">
-				<el-tooltip :content="item.name" placement="top" effect="light">
-					<div 
-					:class="['pipeline', (item.type == pipelineSelect)?'active':'']"
-					@click="pipelineEvent(item)">
-						<img :src="require('../assets/img/'+ item.img)"/>
-					</div>
-				</el-tooltip>
+			<li>
+				<div class="rectangle" :class="[Object.is(rectangleActive, 'roaming')?'active':'']" @click="btnEvent('roaming')">园区漫游</div>
 			</li>
 		</ul>
 	</div>
@@ -30,7 +35,7 @@
 <script>
 	import { ref, inject } from 'vue'
 	import * as THREE from 'three'
-	import { replaceSkyBox, outWallSetOpacity } from "../3d/index"	// 三维
+	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing} from "../3d/index"	// 三维
 	export default {
 		name: "ToolsMenu",
 		setup() {
@@ -84,6 +89,7 @@
 			}
 			// 管道事件
 			// 压缩空气管道、氮气管道、粉料输送管道、循环水管道、罗茨风机管道、磁悬浮风机管道
+			const isPipelineShow = ref(false)	// 是否显示管道
 			const pipelineSelect = ref('1')
 			const pipelineData = [
 				{img: 'foot-1.png', type:'1', name: '压缩空气管道'},
@@ -96,6 +102,34 @@
 			const pipelineEvent = (item) => {
 				pipelineSelect.value = item.type
 			}
+			
+			// 返回主场景事件
+			const returnEvent = () => {
+				if (isThreeDLoad.value == 1) {
+					tweenMoveing([126,-0,69], [296,96,218], 2000, (e) => {})
+					mainView()
+				}
+			};
+			
+			// 按钮事件，按钮选中
+			const rectangleActive = ref('mainScene')
+			const btnEvent = (name) => {
+				rectangleActive.value = name
+				isPipelineShow.value = false
+				switch(name){
+					case "mainScene":
+						returnEvent()	// 返回主场景
+						break;
+					case "security":	// 安防
+						break;
+					case "roaming":	// 漫游
+						break;
+					case "pipe":	//管道
+						isPipelineShow.value = true
+						break;
+				}
+			}
+			
 			return {
 				changeSky,
 				opacityWidth,
@@ -103,7 +137,10 @@
 				plusEvent,
 				pipelineData,
 				pipelineSelect,
-				pipelineEvent
+				isPipelineShow,
+				pipelineEvent,
+				btnEvent,
+				rectangleActive
 			}
 		}
 	}
@@ -111,13 +148,12 @@
 
 <style scoped>
 	.ToolsMenu{
-		height: 120px;
-		line-height: 120px;
+		height: 3.6rem;
+		line-height: 3.6rem;
 		text-align: center;
-		margin-bottom: 126px;
+		margin-bottom: 3rem;
 	}
 	.ToolsMenu ul{
-		overflow: hidden;
 		position: relative;
 		moz-user-select: -moz-none;
 		-moz-user-select: none;
@@ -129,22 +165,22 @@
 		height: 100%;
 	}
 	.ToolsMenu li{
-		float: left;
 		height: 100%;
 		position: relative;
 		cursor: pointer;
 		transition: 0.8s;
-		margin: 0px 24px;
+		margin: 0px 0.8rem;
+		display: inline-block;
 	}
 	.ToolsMenu li div{
 		position: relative;
 	}
 	.rectangle{
-		width: 300px;
+		padding: 0 3rem;
 		height: 100%;
 		background: rgba(1,0,55,0.7);
 		border: 2px solid rgba(71,136,255,0.5);
-		border-radius: 60px;
+		border-radius: 4rem;
 		box-sizing: border-box;
 		box-shadow: inset 0px 0px 23px rgb(4 142 249 / 20%);
 	}
@@ -159,9 +195,22 @@
 		display: inline-block;
 		overflow: hidden;
 	}
+	.ToolsMenu li .otherBox{
+		position: absolute;
+		bottom: 100%;
+		white-space: nowrap;
+		transform: translate(-50%, -0%);
+		left: 50%;
+	}
+	.otherBox .pipelineBox{
+		display: inline-block;
+		margin: 0 0.6rem;
+	}
 	.pipeline{
-		width: 120px;
-		height: 120px;
+		width: calc(40/1920*100vw);
+		height: calc(40/1920*100vw);
+		min-width: 40px;
+		min-height: 40px;
 		background: rgba(1,0,55,0.7);
 		border-radius: 50%;
 		border: 2px solid rgba(71,136,255,0.5);
@@ -181,28 +230,7 @@
 	.pipeline.active{
 		background: rgba(4, 142, 249, 1);
 	}
-	@media screen and (max-width: 1920px) {
-		.ToolsMenu{
-			height: 40px;
-			line-height: 40px;
-			margin-bottom: 42px;
-		}
-		.ToolsMenu ul{
-			min-width: 660px;
-		}
-		.rectangle{
-			width: 130px;
-		}
-		.rectangle img{
-			height: 20px;
-			padding: 9px;
-		}
-		.pipeline{
-			width: 40px;
-			height: 40px;
-		}
-		.ToolsMenu li{
-			margin: 0px 10px;
-		}
+	.rectangle.active{
+		background: rgba(4, 142, 249, 1);
 	}
 </style>

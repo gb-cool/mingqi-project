@@ -1,122 +1,123 @@
 <!-- 微粉园 -->
 <template>
 	<div class="ModulePark">
-		<el-tabs v-model="activeName" @tab-click="handleClick">
-			<el-tab-pane label="智能车间" name="first">
-				<el-table 
-				:data="intelligentWorkshopData" 
-				style="width: 100%" 
-				:height="contentHeight" 
-				highlight-current-row
-				@row-click="intelligentWorkshopEvent"
-				:show-header="false">
-					<el-table-column
-					type="index"
-					:width="indexWidth"
-					align="center">
-						<template #default="scope">
-							<span>{{(scope.$index + 1).toString().padStart(2, '0')}}</span>
-						</template>
-					</el-table-column>
-				    <el-table-column 
-					prop="name" 
-					label="姓名" 
-					align="left">
-					</el-table-column>
-				</el-table>
-			</el-tab-pane>
-			<el-tab-pane label="巡检机器人" name="second">
-				<el-table
-				:data="robotData" 
-				style="width: 100%" 
-				:height="contentHeight" 
-				:show-header="true">
-				    <el-table-column 
-					prop="robotSn" 
-					label="唯一编码" 
-					align="center">
-					</el-table-column>
-					<el-table-column
-					prop="robotName" 
-					label="名称" 
-					align="center">
-					</el-table-column>
-					<el-table-column
-					prop="robotType" 
-					label="类型" 
-					align="center">
-					</el-table-column>
-				</el-table>
-			</el-tab-pane>
-			<el-tab-pane label="车辆" name="third">
-				<el-table
-				:data="carData" 
-				style="width: 100%" 
-				:height="contentHeight" 
-				@row-click="carEvent"
-				:show-header="true">
-				    <el-table-column 
-					prop="empName" 
-					label="车牌" 
-					align="center">
-					</el-table-column>
-					<el-table-column
-					prop="deviceNo" 
-					label="设备编号" 
-					align="center">
-					</el-table-column>
-				</el-table>
-			</el-tab-pane>
-			<el-tab-pane label="人员" name="fourth">
-				<el-table
-				:data="personData" 
-				style="width: 100%" 
-				:height="contentHeight"
-				@row-click="personEvent"
-				:show-header="true">
-				    <el-table-column 
-					prop="name" 
-					label="姓名" 
-					align="center">
-					</el-table-column>
-					<el-table-column
-					prop="sn" 
-					label="SN号" 
-					align="center">
-					</el-table-column>
-					<el-table-column
-					prop="postName" 
-					label="岗位" 
-					align="center">
-					</el-table-column>
-				</el-table>
-			</el-tab-pane>
-		</el-tabs>
+		<div class="box" ref="elTabs">
+			<el-tabs v-model="activeName" @tab-click="handleClick">
+				<el-tab-pane label="智能车间" name="first">
+					<el-table 
+					:data="intelligentWorkshopData" 
+					style="width: 100%" 
+					:height="contentHeight" 
+					highlight-current-row
+					@row-click="intelligentWorkshopEvent"
+					:show-header="false">
+						<el-table-column
+						type="index"
+						:width="indexWidth"
+						align="center">
+							<template #default="scope">
+								<span>{{(scope.$index + 1).toString().padStart(2, '0')}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column 
+						prop="name" 
+						label="姓名" 
+						align="left">
+						</el-table-column>
+					</el-table>
+				</el-tab-pane>
+				<el-tab-pane label="巡检机器人" name="second">
+					<el-table
+					:data="robotData" 
+					style="width: 100%" 
+					:height="contentHeight" 
+					:show-header="true">
+						<el-table-column 
+						prop="robotSn" 
+						label="唯一编码" 
+						align="center">
+						</el-table-column>
+						<el-table-column
+						prop="robotName" 
+						label="名称" 
+						align="center">
+						</el-table-column>
+						<el-table-column
+						prop="robotType" 
+						label="类型" 
+						align="center">
+						</el-table-column>
+					</el-table>
+				</el-tab-pane>
+				<el-tab-pane label="车辆" name="third">
+					<el-table
+					:data="carData" 
+					style="width: 100%" 
+					:height="contentHeight" 
+					@row-click="carEvent"
+					:show-header="true">
+						<el-table-column 
+						prop="empName" 
+						label="车牌" 
+						align="center">
+						</el-table-column>
+						<el-table-column
+						prop="deviceNo" 
+						label="设备编号" 
+						align="center">
+						</el-table-column>
+					</el-table>
+				</el-tab-pane>
+				<el-tab-pane label="人员" name="fourth">
+					<el-table
+					:data="personData" 
+					style="width: 100%" 
+					:height="contentHeight"
+					@row-click="personEvent"
+					:show-header="true">
+						<el-table-column 
+						prop="name" 
+						label="姓名" 
+						align="center">
+						</el-table-column>
+						<el-table-column
+						prop="sn" 
+						label="SN号" 
+						align="center">
+						</el-table-column>
+						<el-table-column
+						prop="postName" 
+						label="岗位" 
+						align="center">
+						</el-table-column>
+					</el-table>
+				</el-tab-pane>
+			</el-tabs>
+		</div>
 	</div>
 </template>
 
 <script>
-	import { ref, inject, watch } from 'vue'
+	import { ref, inject, watch, onMounted } from 'vue'
 	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity } from "../3d/index";	// 三维
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	export default {
 		name: 'ModulePark',
 		setup() {
+			const elTabs = ref()	// 取盒子高度，计算表格内容高度值
 			const activeName = 'first'	// 默认选中导航值
 			let contentHeight = ref(190)	// 内容盒子高度
 			let indexWidth = ref(60)	// 序号宽度
 			const initObj = () => {
-				if(window.innerWidth > 1920){
-					contentHeight.value = 571
-					indexWidth.value = 180
-				}else{
-					contentHeight.value = 190
-					indexWidth.value = 60
-				}
+				indexWidth.value = 60/1920*window.innerWidth
+				let h = 36/1080*window.innerHeight
+				contentHeight.value = elTabs.value.offsetHeight - h - 15
 			}
-			initObj()
-			window.addEventListener("resize", function () {
+			onMounted(() => {
 				initObj()
+				window.addEventListener("resize", function () {
+					initObj()
+				})
 			})
 			// 智能车间
 			const intelligentWorkshopIndex = 0
@@ -307,6 +308,7 @@
 			}
 			// >> 人员
 			return {
+				elTabs,
 				activeName,
 				contentHeight,
 				indexWidth,
@@ -335,16 +337,15 @@
 	}
 </script>
 
-<style scoped>
+<style scoped lang="less">
+	@import "../assets/css/public.less";
 	.ModulePark{
 		width: 100%;
 		height: 100%;
 		box-sizing: border-box;
-		padding: 36px 70px 36px 70px;
+		padding: @module-content-mw;
 	}
-	@media screen and (max-width: 1920px) {
-		.ModulePark{
-			padding: 13px 15px 13px 15px;
-		}
+	.box{
+		height: 100%;
 	}
 </style>

@@ -162,4 +162,78 @@ export class Device {
 		const rawHmac = CryptoJS.HmacSHA1(content, key)
 		return CryptoJS.enc.Base64.stringify(rawHmac)
 	}
+	/**
+	 * 设备位置信息
+	 */
+	getWorkshop(name){
+		let json = {
+			workshop: "",	// 所属车间位置
+			describe: "",	// 描述
+			number: ""	//编号
+		}
+		switch(name){
+			case "粉尘05":
+				json.workshop="均化仓顶"; json.describe="北均化仓顶--中部附近"; json.number="22060046";
+				break;
+			case "粉尘03":
+				json.workshop="均化仓顶"; json.describe="北均化仓顶--中部附近"; json.number="22060044";
+				break;
+			case "粉尘04":
+				json.workshop="均化仓顶"; json.describe="南均化仓顶--中部附近"; json.number="22060065";
+				break;
+			case "粉尘16":
+				json.workshop="立磨仓收尘器"; json.describe="立磨收尘器烟囱"; json.number="22060057";
+				break;
+			case "粉尘02":
+				json.workshop="立磨仓收尘器"; json.describe="立磨收尘器烟囱"; json.number="22060043";
+				break;
+			case "粉尘12":
+				json.workshop="立磨仓收尘器"; json.describe="立磨收尘器烟囱"; json.number="22060049";
+				break;
+			case "粉尘11":
+				json.workshop="立磨仓收尘器"; json.describe="立磨收尘器烟囱"; json.number="22060052";
+				break;
+			case "粉尘10":
+				json.workshop="立磨仓收尘器"; json.describe="立磨收尘器烟囱"; json.number="22060042";
+				break;
+			case "粉尘07":
+				json.workshop="立磨仓收尘器"; json.describe="立磨收尘器烟囱"; json.number="22060047";
+				break;
+			case "粉尘09":
+				json.workshop="立磨仓收尘器"; json.describe="立磨收尘器烟囱"; json.number="22060050";
+				break;
+			case "粉尘1":
+				json.workshop="立磨仓收尘器"; json.describe="立磨收尘器烟囱"; json.number="22060061";
+				break;
+			case "粉尘06":
+				json.workshop="筛分间收尘器"; json.describe="筛分间收尘器烟囱"; json.number="22060053";
+				break;
+			case "粉尘13":
+				json.workshop="破碎口收尘器"; json.describe="破碎口收尘器烟囱"; json.number="22060063";
+				break;
+			case "粉尘14":
+				json.workshop="堆场"; json.describe="4#堆场墙壁上"; json.number="22060064";
+				break;
+			case "粉尘15":
+				json.workshop="堆场"; json.describe="3#堆场墙壁上"; json.number="22060055";
+				break;
+			case "粉尘08":
+				json.workshop="碎石车间收尘器"; json.describe="碎石车间收尘器烟囱"; json.number="22060062";
+				break;
+				
+			case "氧浓度2":
+				json.workshop="均化仓顶"; json.describe="北均化仓顶--中部附近"; json.number="22060024";
+				break;
+			case "氧浓度4":
+				json.workshop="均化仓顶"; json.describe="北均化仓顶--中部附近"; json.number="22060023";
+				break;
+			case "氧浓度1":
+				json.workshop="均化仓顶"; json.describe="南均化仓顶--中部附近"; json.number="22060021";
+				break;
+			case "氧浓度3":
+				json.workshop="均化仓顶"; json.describe="南均化仓顶--中部附近"; json.number="22060022";
+				break;
+		}
+		return json
+	}
 }

@@ -5,12 +5,12 @@
 			highlight-current-row
 			@row-click="intelligentWorkshopEvent"
 			border style="width: 100%, height: 200px">
-			<el-table-column align="center" prop="deviceIdentifyType" label="设备识别类型" width="100"/>
-			<el-table-column align="center" prop="deviceKey" label="设备KEY" width="160">
+			<el-table-column align="center" prop="deviceIdentifyType" label="设备识别类型"/>
+			<el-table-column align="center" prop="deviceKey" label="设备KEY">
 				<template  #default="scope">
 					<el-popover 
 					placement="right" 
-					:width="330" 
+					:width="getWidth(330)"
 					@show="moduleDeviceTaskSelect = scope.row.deviceKey"
 					trigger="click">
 						<template #reference>
@@ -24,16 +24,25 @@
 			</el-table-column>
 			
 			<el-table-column align="center" prop="deviceName" label="设备名称" />
-			
-			<el-table-column align="center" prop="deviceUnique" label="唯一标识码"/>
+			<el-table-column align="center" prop="deviceName" label="位置">
+				<template #default="scope">
+					<span>{{getWorkShonInfo(scope.row.deviceName, 'workshop')}}</span>
+				</template>
+			</el-table-column>
+			<el-table-column align="center" prop="deviceName" label="描述">
+				<template #default="scope">
+					<span>{{getWorkShonInfo(scope.row.deviceName, 'describe')}}</span>
+				</template>
+			</el-table-column>
+			<!-- <el-table-column align="center" prop="deviceUnique" label="唯一标识码"/> -->
 			<!-- <el-table-column align="center" prop="isSecure" label="isSecure" /> -->
 			<!-- <el-table-column align="center" prop="level" label="设备层级" /> -->
 			
-			<el-table-column align="center" prop="parentDeviceKey" label="父设备KEY" width="160"/>
-			<el-table-column align="center" prop="productId" label="产品ID" width="160" />
-			<el-table-column align="center" prop="productKey" label="产品名称" width="240" />
+			<!-- <el-table-column align="center" prop="parentDeviceKey" label="父设备KEY"/>
+			<el-table-column align="center" prop="productId" label="产品ID"/>
+			<el-table-column align="center" prop="productKey" label="产品名称"/> -->
 			
-			<el-table-column align="center" prop="projectId" label="项目ID" width="160" />
+			<!-- <el-table-column align="center" prop="projectId" label="项目ID"/> -->
 			<el-table-column align="center" prop="state" label="设备状态">
 				<template #default="scope">
 					<span>{{scope.row.state==1? "在线":"离线"}}</span>
@@ -71,10 +80,21 @@
 				// console.log(context)
 				// console.log(event, column)
 			}
+			const getWidth = (width) => {
+				let w = width/1920*window.innerWidth
+				if(w<330) w = 330
+				return w
+			}
+			const device = new Device()
+			const getWorkShonInfo = (name, filed) => {
+				return device.getWorkshop(name)[filed]
+			}
 			return {
 				tableData,
 				moduleDeviceTaskSelect,
-				intelligentWorkshopEvent
+				intelligentWorkshopEvent,
+				getWidth,
+				getWorkShonInfo
 			}
 		}
 	}
@@ -84,7 +104,6 @@
 	.DeviceView{
 		width: 100%;
 		height: 100%;
-		/* background: #048EF9; */
 		overflow: auto;
 	}
 </style>

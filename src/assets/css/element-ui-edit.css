@@ -1,10 +1,15 @@
+.el-tabs{
+	height: 100%;
+	overflow: hidden;
+}
 .el-tabs__item {
 	color: #fff;
 	font-size: 1.1rem;
-	height: 112px;
 	font-family: 'Adobe Heiti Std R';
 	font-weight: normal;
-	padding: 22px 50px 0 50px;
+	height: calc(36/1080*100vh);
+	line-height: calc(36/1080*100vh);
+	padding: 0px calc(8/1920*100vw) 0 calc(8/1920*100vw);
 }
 .el-tabs__active-bar{
 	height: 10px;
@@ -19,9 +24,6 @@
 .el-tabs__nav-wrap::after{
 	background-color: #92A6CB;
 }
-.el-tabs{
-	height: 100%;
-}
 .el-tabs__content{
 	margin-top: 25px;
 }
@@ -30,11 +32,11 @@
 	font-size: 1rem;
 }
 .el-table .cell{
-	height: 110px;
-	line-height: 110px;
+	height: calc(36/1080*100vh);
+	line-height:calc(36/1080*100vh);
 	padding: 0 6px;
 	color: #fff;
-	white-space: nowrap;
+	/* white-space: nowrap; */
 }
 .el-table .el-table__cell{
 	padding: 0px;
@@ -156,7 +158,7 @@
 	font-size: 1rem;
 	height: 100%;
 	overflow: auto;
-	padding: 0px 250px;
+	padding: 0px calc(40/1920*100vw);
 }
 .PopupLayer .el-descriptions__body{
 	background: none;
@@ -172,17 +174,22 @@
 .PopupLayer .el-descriptions__body .el-descriptions__table .el-descriptions-item__cell{
 	line-height: 1.8;
 }
+.el-descriptions__title{
+	font-size: 1rem;
+}
+.el-descriptions__body .el-descriptions__table .el-descriptions__cell{
+	font-size: 1rem !important;
+	line-height: 1.8rem;
+}
 .PopupLayer .el-descriptions__body .el-descriptions__table .el-descriptions__cell{
 	line-height: 1.8;
+	font-size: 1rem !important;
 }
 .PopupLayer .el-descriptions__content:not(.is-bordered-label) {
 	color: #fff;
 }
 .PopupLayer .el-descriptions__label:not(.is-bordered-label){
 	color: #92A6CB;
-}
-.PopupLayer .el-descriptions__body .el-descriptions__table .el-descriptions__cell{
-	font-size: 1.2rem;
 }
 /**
  * 滚动条
@@ -203,26 +210,14 @@
 /**
  * ===============================
  */
-@media screen and (max-width: 1920px) {
-	.el-tabs__item{
-		font-size: 1rem;
-		height: 36px;
-		padding: 0px 10px 0 10px;
-		line-height: initial;
-	}
+@media screen and (max-width: 7680px) {
 	.el-tabs__active-bar{
 		height: 3px;
-	}
-	.el-table .cell{
-		height: 36px;
-		line-height: 36px;
 	}
 	.el-tabs__content{
 		margin-top: 0px;
 	}
-	.el-tabs__header{
-		margin: 0 0 12px;
-	}
+
 	/**
 	 * 滚动条
 	 */
@@ -240,9 +235,6 @@
 	/**
 	 * 弹出窗
 	 */
-	.PopupLayer .el-descriptions{
-		padding: 0px 40px;
-	}
 	.PopupLayer .el-descriptions :not(.is-bordered) .el-descriptions-item__cell{
 		padding-bottom: 8px;
 	}

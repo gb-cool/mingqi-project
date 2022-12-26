@@ -23,7 +23,7 @@
 		<div class="module-down">
 			<ModuleBg>
 				<template v-slot:title>
-					<ModuleTitle title="设备告警"/>
+					<ModuleTitle title="告警信息"/>
 				</template>
 				<template v-slot:main>
 					<ModuleAlarm/>
@@ -51,27 +51,22 @@
 	}
 </script>
 
-<style scoped>
+<style scoped lang="less">
+	@import "../assets/css/public.less";
+	.RightSide{
+		height: 100%;
+	}
 	.module-up{
-		height: 938px;
+		height: 33%;
 	}
 	.module-center{
-		height: 938px;
-		margin: 40px 0px;
+		height: 34%;
+		padding: @module-padding 0;
+		box-sizing: border-box;
 	}
 	.module-down{
-		height: 938px;
-	}
-	@media screen and (max-width: 1920px) {
-		.module-up{
-			height: 312px;
-		}
-		.module-center{
-			height: 313px;
-			margin: 20px 0px;
-		}
-		.module-down{
-			height: 313px;
-		}
+		height: 33%;
+		padding: 0 0 @module-padding 0;
+		box-sizing: border-box;
 	}
 </style>

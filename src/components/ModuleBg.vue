@@ -23,95 +23,89 @@
 	}
 </script>
 
-<style scoped>
+<style scoped lang="less">
+	@title-height: ~"calc(46 / 1080 * 100vh)";
+	@edges-border-width: 3px;
+	@edges-wh: ~"calc(16 / 1080 * 100vh)";
+	@border-radius: 4px;
 	.ModuleBg{
 		width: 100%;
 		height: 100%;
 		background: rgba(1,0,55,0.7);
 		border: 3px solid rgba(71,136,255,0.5);
-		border-radius: 4px;
+		border-radius: @border-radius;
 		box-sizing: border-box;
 		position: relative;
 		box-shadow: inset 0px 0px 46px rgba(4, 142, 249, 0.2);
 	}
 	.edges{
 		position: absolute;
-		width: 28px;
-		height: 28px;
+		width: @edges-wh;
+		height: @edges-wh;
 	}
 	.top{
-		top: -3px;
-		left: -3px;
-		border-top: 3px solid #0BF1FF;
-		border-left: 3px solid #0BF1FF;
-		border-radius: 4px 0 0 0;
+		top: -@edges-border-width;
+		left: -@edges-border-width;
+		border-top: @edges-border-width solid #0BF1FF;
+		border-left: @edges-border-width solid #0BF1FF;
+		border-radius: @border-radius 0 0 0;
 	}
 	.right{
-		top: -3px;
-		right: -3px;
-		border-top: 3px solid #0BF1FF;
-		border-right: 3px solid #0BF1FF;
-		border-radius: 0 4px 0 0;
+		top: -@edges-border-width;
+		right: -@edges-border-width;
+		border-top: @edges-border-width solid #0BF1FF;
+		border-right: @edges-border-width solid #0BF1FF;
+		border-radius: 0 @border-radius 0 0;
 	}
 	.bottom{
-		bottom: -3px;
-		right: -3px;
-		border-bottom: 3px solid #0BF1FF;
-		border-right: 3px solid #0BF1FF;
-		border-radius: 0 0 4px 0;
+		bottom: -@edges-border-width;
+		right: -@edges-border-width;
+		border-bottom: @edges-border-width solid #0BF1FF;
+		border-right: @edges-border-width solid #0BF1FF;
+		border-radius: 0 0 @border-radius 0;
 	}
 	.left{
-		bottom: -3px;
-		left: -3px;
-		border-bottom: 3px solid #0BF1FF;
-		border-left: 3px solid #0BF1FF;
-		border-radius: 0 0 0 4px;
+		bottom: -@edges-border-width;
+		left: -@edges-border-width;
+		border-bottom: @edges-border-width solid #0BF1FF;
+		border-left: @edges-border-width solid #0BF1FF;
+		border-radius: 0 0 0 @border-radius;
 	}
 	.title{
 		width: 62.5%;
-		height: 142px;
-		line-height: 180px;
+		height: @title-height;
+		line-height: @title-height;
 		margin: 0 auto;
 	}
 	.main{
-		height: calc(100% - 142px);
+		height: calc(100% - @title-height);
 		overflow: hidden;
 	}
 	@media screen and (max-width: 1920px) {
+		@edges-border-width: 1px;
 		.ModuleBg{
-			border-width: 1px;
+			border-width: @edges-border-width;
 			box-shadow: inset 0px 0px 23px rgba(4, 142, 249, 0.2);
 		}
-		.edges{
-			width: 16px;
-			height: 16px;
-		}
 		.top{
-			top: -1px;
-			left: -1px;
-			border-width: 1px;
+			top: -@edges-border-width;
+			left: -@edges-border-width;
+			border-width: @edges-border-width;
 		}
 		.right{
-			top: -1px;
-			right: -1px;
-			border-width: 1px;
+			top: -@edges-border-width;
+			right: -@edges-border-width;
+			border-width: @edges-border-width;
 		}
 		.bottom{
-			bottom: -1px;
-			right: -1px;
-			border-width: 1px;
+			bottom: -@edges-border-width;
+			right: -@edges-border-width;
+			border-width: @edges-border-width;
 		}
 		.left{
-			bottom: -1px;
-			left: -1px;
-			border-width: 1px;
-		}
-		.title{
-			height: 46px;
-			line-height: 46px;
-		}
-		.main{
-			height: calc(100% - 46px);
+			bottom: -@edges-border-width;
+			left: -@edges-border-width;
+			border-width: @edges-border-width;
 		}
 	}
 </style>

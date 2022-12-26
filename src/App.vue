@@ -6,7 +6,8 @@
 	
 </script>
 
-<style>
+<style lang="less">
+	@import "./assets/css/html-font-size.less";
 	body,
 	p,
 	ul,
@@ -21,12 +22,12 @@
 		padding: 0px;
 	}
 	html {
-		font-size: 39px;
 		height: 100%;
 	}
 	body{
 		overflow: hidden;
 		height: 100%;
+		overflow-x: hidden;
 	}
 	ul {
 		list-style: none;
@@ -37,10 +38,5 @@
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		overflow: auto;
-	}
-	@media screen and (max-width: 1920px) {
-		html {
-			font-size: 13px;
-		}
 	}
 </style>

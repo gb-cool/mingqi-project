@@ -91,10 +91,8 @@
 						roundCap: true,
 						stack: 'a',
 						itemStyle: {
-							normal: {
-								color: "rgba(255, 255, 255, 0.2)",
-							}
-						},
+							color: "rgba(255, 255, 255, 0.2)"
+						}
 					}, {
 						type: 'bar',
 						data: [0, 0, 0, data.value], // 前面的0，累计还是0，这样径向轴上的对应的分区总数就是0，不会显示圆环
@@ -103,9 +101,7 @@
 						stack: 'a',
 						roundCap: true,
 						itemStyle: {
-							normal: {
-								color: color,
-							}
+							color: color
 						}
 					}]
 				}
@@ -126,7 +122,6 @@
 	.chart{
 		width: 100%;
 		height: 100%
-		/* height: calc(100% - 75px); */
 	}
 	p{
 		font-size: 1rem;
