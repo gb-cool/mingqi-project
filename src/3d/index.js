@@ -1,10 +1,13 @@
 import {
     pageOnload_3d,
+    tweenMoveView,
+    nowMoveView,
+    roadFlow,
+    smallRoomFloorPlane,
+    ////////////////////////////////
     backMainView,
     floorHide,
     outWallOpacity,
-    tweenMoveView,
-    nowMoveView,
     replaceSkyBoxIndex,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
@@ -19,7 +22,7 @@ export const mainView = () => {
     backMainView();
 };
 
-// 进入内部场景 参数  0 == 筛粉间   1 == 均化间  2 == 立磨间  3 == 碎石仓配料间  4 == 破碎间   5 == 堆石厂
+// 进入内部场景 参数  0 == 筛分间   1 == 均化间  2 == 立磨间  3 == 碎石配料间  4 == 破碎间   5 == 堆石场一
 export const intoRoom = (i) => {
     floorHide(i);
 };
@@ -52,4 +55,14 @@ export const momentMoveing = (point, look) => {
 */
 export const replaceSkyBox = (texture) => {
     replaceSkyBoxIndex(texture);
+};
+
+// 控制马路上流动线条显示隐藏   bool == true (显示)    bool == false (隐藏)
+export const roadFlow_3d = (bool) => {
+    roadFlow(bool);
+};
+
+// 小厂房内部黄色蓝色片显示隐藏   bool == true (显示)    bool == false (隐藏)
+export const smallRoomFloorPlane_3d = (bool) => {
+    smallRoomFloorPlane(bool);
 };
