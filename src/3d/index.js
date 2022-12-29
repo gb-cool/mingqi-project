@@ -4,7 +4,7 @@ import {
     nowMoveView,
     roadFlow,
     smallRoomFloorPlane,
-    ////////////////////////////////
+    fourColorDiagram,
     backMainView,
     floorHide,
     outWallOpacity,
@@ -57,12 +57,17 @@ export const replaceSkyBox = (texture) => {
     replaceSkyBoxIndex(texture);
 };
 
-// 控制马路上流动线条显示隐藏   bool == true (显示)    bool == false (隐藏)
-export const roadFlow_3d = (bool) => {
-    roadFlow(bool);
+// 控制马路上流动线条显示隐藏   bool == true (显示)    bool == false (隐藏)   speed = number
+export const roadFlow_3d = (bool, speed) => {
+    roadFlow(bool, speed);
 };
 
 // 小厂房内部黄色蓝色片显示隐藏   bool == true (显示)    bool == false (隐藏)
 export const smallRoomFloorPlane_3d = (bool) => {
     smallRoomFloorPlane(bool);
+};
+
+// 四色图显示隐藏并更改颜色     bool == true (显示)    bool == false (隐藏)    color两种传参形式  0xffffff  '#ffffff'
+export const fourColorDiagram_3d = (bool, color) => {
+    fourColorDiagram(bool, color);
 };
