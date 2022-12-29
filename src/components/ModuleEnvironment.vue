@@ -189,8 +189,10 @@
 			const device = new Device()
 			device.getBatchDevices((result) => {
 				const devices= result.data.devices
-				oxygenTableData = devices.filter((item) =>  item.deviceName.includes('氧'))
-				stiveTableData = devices.filter((item) => item.deviceName.includes('粉尘'))
+				// oxygenTableData = devices.filter((item) =>  item.deviceName.includes('氧'))
+				oxygenTableData = devices.filter((item) =>  item.productKey.includes('8814edb5acdf4cb4b28c790cd924ddc3'))	// 氧浓度数据
+				// stiveTableData = devices.filter((item) => item.deviceName.includes('粉尘'))
+				stiveTableData = devices.filter((item) => item.productKey.includes('2e30f382fc624a36af2ad7559ed8c5f9'))	//粉尘浓度数据
 				realTime()
 			})
 			// 实时监听

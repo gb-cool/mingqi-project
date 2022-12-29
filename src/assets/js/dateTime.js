@@ -72,4 +72,18 @@ export class DateTime{
 		};
 		return format;
 	}
+	/**
+	 * 改变日期
+	 */
+	getDateChange(num = 1, date = false) {
+	　　if (!date) {
+	　　　　date = new Date();//没有传入值时,默认是当前日期
+	　　　　date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+	　　}
+	　　date += " 00:00:00"; //设置为当天凌晨12点
+	　　date = Date.parse(new Date(date))/1000; //转换为时间戳
+	　　date += (86400) * num; //修改后的时间戳
+	　　let newDate = new Date(parseInt(date) * 1000); //转换为时间
+	　　return newDate.getFullYear() + '-' + (newDate.getMonth() + 1).toString().padStart(2, '0') + '-' + newDate.getDate().toString().padStart(2, '0') + " 00:00:00";
+	}
 }

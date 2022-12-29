@@ -35,7 +35,6 @@
 			const tableData = ref()
 			const device = new Device()
 			device.getBatchDevices((result) => {
-				console.log(result)
 				const devices= result.data.devices
 				tableData.value = devices
 				// tableData.value = devices.filter((item) => item.deviceName.includes('粉尘') || item.deviceName.includes('氧'))

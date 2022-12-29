@@ -52,8 +52,14 @@
 			// 减法
 			const minusEvent = () => {
 				if(isThreeDLoad.value != 1) return false
+				if(threeDModuleOpacity.value != opacity.value){
+					opacity.value = threeDModuleOpacity.value
+				}
+				if(opacity.value > 0.4){
+					opacity.value = 0.4
+				}
 				if(opacity.value > 0) {
-					opacity.value = parseFloat((opacity.value - 0.2).toFixed(1))
+					opacity.value = parseFloat((opacity.value - 0.1).toFixed(1))
 					opacityWidth.value = opacity.value * 100 +'%'
 					threeDModuleOpacity.value = opacity.value
 					outWallSetOpacity(opacity.value)
@@ -62,8 +68,14 @@
 			// 加法
 			const plusEvent = () => {
 				if(isThreeDLoad.value != 1) return false
+				if(threeDModuleOpacity.value != opacity.value){
+					opacity.value = threeDModuleOpacity.value
+				}
 				if(opacity.value < 1) {
-					opacity.value = parseFloat((opacity.value + 0.2).toFixed(1))
+					opacity.value = parseFloat((opacity.value + 0.1).toFixed(1))
+					if(opacity.value > 0.4){
+						opacity.value = 1
+					}
 					opacityWidth.value = opacity.value * 100 +'%'
 					threeDModuleOpacity.value = opacity.value
 					outWallSetOpacity(opacity.value)

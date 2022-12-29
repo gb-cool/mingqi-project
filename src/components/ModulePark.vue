@@ -139,42 +139,42 @@
 					return false
 				}
 				if(row.id != -1){
-					outWallSetOpacity(threeDModuleOpacity.value)
 					switch(row.id){
 						case 0: 
 							// momentMoveing([3,0,24], [31,12,63])
-							tweenMoveing([-9,-0,8], [27,19,57], 2000, (e) => {
-							})
+							// tweenMoveing([-9,-0,8], [27,19,57], 2000, (e) => {})
+							tweenMoveing([-3380,0,-3951], [-2429,515,-2848], 2000, (e) => {})
 							break;
 						case 1: 
 							// momentMoveing([25,0,-12], [27,27,97])
-							tweenMoveing([33,0,-96], [30,29,89], 2000, (e) => {
-							})
+							// tweenMoveing([33,0,-96], [30,29,89], 2000, (e) => {})
+							tweenMoveing([-2888,-0,-1448], [-1896,439,-573], 2000, (e) => {})
 							break;
 						case 2: 
 							// momentMoveing([9,0,19], [8,14,85])
-							// tweenMoveing([9,0,19], [8,14,85], 2000, (e) => {
-							// })
-							tweenMoveing([-59,-0,-7], [-61,15,89], 2000, (e) => {
-							})
+							// tweenMoveing([-59,-0,-7], [-61,15,89], 2000, (e) => {})
+							tweenMoveing([-3836,0,-1930], [-2681,506,-1039], 2000, (e) => {})
 							break;
 						case 3: 
 							// momentMoveing([14,0,1], [16,47,-89]) 
-							tweenMoveing([-2,-0,18], [-7,24,170], 2000, (e) => {
-							})
+							// tweenMoveing([-2,-0,18], [-7,24,170], 2000, (e) => {})
+							tweenMoveing([-3769,0,-2840], [-2115,724,-1564], 2000, (e) => {})
 							break;
 						case 4: 
 							// momentMoveing([0,0,-11], [-0,38,44]) 
-							tweenMoveing([1,-0,10], [-0,29,74], 2000, (e) => {
-							})
+							// tweenMoveing([1,-0,10], [-0,29,74], 2000, (e) => {})
+							tweenMoveing([-3447,-0,-4450], [-2404,555,-3456], 2000, (e) => {})
 							break;
 						case 5:
 							// momentMoveing([0,0,-11], [-0,38,44]) 
-							tweenMoveing([7,-0,32], [7,57,201], 2000, (e) => {
-							})
+							tweenMoveing([-2534,0,-3630], [-1186,717,-2345], 2000, (e) => {})
 							break;
 					}
 					intoRoom(row.id)
+					if(threeDModuleOpacity.value > 0.2){
+						threeDModuleOpacity.value = 0.2
+					}
+					outWallSetOpacity(threeDModuleOpacity.value)
 				}else{
 					alert(row.name + "模型正在建设！")
 				}

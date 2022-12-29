@@ -26,12 +26,12 @@
 			<el-table-column align="center" prop="deviceName" label="设备名称" />
 			<el-table-column align="center" prop="deviceName" label="位置">
 				<template #default="scope">
-					<span>{{getWorkShonInfo(scope.row.deviceName, 'workshop')}}</span>
+					<span>{{getWorkShonInfo(scope.row, 'workshop')}}</span>
 				</template>
 			</el-table-column>
 			<el-table-column align="center" prop="deviceName" label="描述">
 				<template #default="scope">
-					<span>{{getWorkShonInfo(scope.row.deviceName, 'describe')}}</span>
+					<span>{{getWorkShonInfo(scope.row, 'describe')}}</span>
 				</template>
 			</el-table-column>
 			<!-- <el-table-column align="center" prop="deviceUnique" label="唯一标识码"/> -->
@@ -86,8 +86,8 @@
 				return w
 			}
 			const device = new Device()
-			const getWorkShonInfo = (name, filed) => {
-				return device.getWorkshop(name)[filed]
+			const getWorkShonInfo = (row, filed) => {
+				return device.getWorkshop(row.deviceName, row.deviceKey)[filed]
 			}
 			return {
 				tableData,

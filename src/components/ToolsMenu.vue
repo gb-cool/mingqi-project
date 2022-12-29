@@ -10,6 +10,17 @@
 			</li>
 			<li>
 				<div class="rectangle" :class="[Object.is(rectangleActive, 'security')?'active':'']" @click="btnEvent('security')">智慧安防</div>
+				<div class="otherBox" v-show="isSecurityShow">
+					<div class="pipelineBox"  v-for="(item, index) in securityData" :key="item.type">
+						<el-tooltip :content="item.name" placement="top" effect="light">
+							<div 
+							:class="['pipeline', (item.type == securitySelect)?'active':'']"
+							@click="securityEvent(item)">
+								<img :src="require('../assets/img/'+ item.img)"/>
+							</div>
+						</el-tooltip>
+					</div>
+				</div>
 			</li>
 			<li>
 				<div class="rectangle" :class="[Object.is(rectangleActive, 'pipe')?'active':'']" @click="btnEvent('pipe')">园区管道</div>
@@ -35,7 +46,7 @@
 <script>
 	import { ref, inject } from 'vue'
 	import * as THREE from 'three'
-	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing} from "../3d/index"	// 三维
+	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, fourColorDiagram_3d} from "../3d/index"	// 三维
 	export default {
 		name: "ToolsMenu",
 		setup() {
@@ -103,30 +114,83 @@
 				pipelineSelect.value = item.type
 			}
 			
-			// 返回主场景事件
+			// 智慧安防
+			const isSecurityShow = ref(false)	// 是否显示安防图
+			const securitySelect = ref('1')
+			const securityData = [
+				{img: 'foot-10.png', type:'1', name: '四色图'},
+				{img: 'foot-8.png', type:'2', name: '疏散图'},
+			]
+			const securityEvent = (item) => {
+				securitySelect.value = item.type
+				roadFlow_3d(false)
+				smallRoomFloorPlane_3d(false)
+				fourColorDiagram_3d(false, "#FFFF00")
+				switch(item.type){
+					case "1":
+						smallRoomFloorPlane_3d(true)
+						fourColorDiagram_3d(true, "#FFFF00")
+						break;
+					case "2":
+						roadFlow_3d(true, 0.08)
+						break;
+				}
+			}
+			
+			// 返回主场景事件 园区总览
 			const returnEvent = () => {
 				if (isThreeDLoad.value == 1) {
-					tweenMoveing([126,-0,69], [296,96,218], 2000, (e) => {})
+					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					mainView()
 				}
 			};
+			
+			const timer = ref(0)
 			
 			// 按钮事件，按钮选中
 			const rectangleActive = ref('mainScene')
 			const btnEvent = (name) => {
 				rectangleActive.value = name
 				isPipelineShow.value = false
+				isSecurityShow.value = false
+				roadFlow_3d(false)
+				smallRoomFloorPlane_3d(false)
+				fourColorDiagram_3d(false, "#FFFF00")
+				window.clearInterval(timer.value);
 				switch(name){
 					case "mainScene":
 						returnEvent()	// 返回主场景
 						break;
 					case "security":	// 安防
+						isSecurityShow.value = true
+						smallRoomFloorPlane_3d(true)
+						fourColorDiagram_3d(true, "#FFFF00")
 						break;
 					case "roaming":	// 漫游
+						positioningMovement(0, [-1438.58,170.74,-2208.30], '地面一层', 1000)
+						tweenMoveing([-1682,-0,-2314], [-1292,717,-1519], 2000, (e) => {
+							timer.value = window.setInterval(setPositioningMovement, 4000)
+						})
 						break;
 					case "pipe":	//管道
 						isPipelineShow.value = true
 						break;
+				}
+			}
+			let pmnum = 0;
+			let pmList= [
+				[-1665.06,173.19,-2238.10],
+				[-1438.58,170.74,-2208.30],
+				[-1389.26,213.42,-2802.28],
+				[-1438.58,170.74,-2208.30],
+				[-1574.82,120.18,-1714.29],
+				[-1438.58,170.74,-2208.30]
+			]
+			function setPositioningMovement(){
+				positioningMovement(0, pmList[pmnum], '地面一层', 4000)
+				pmnum++
+				if(pmnum >= pmList.length){
+					pmnum = 0
 				}
 			}
 			
@@ -140,7 +204,11 @@
 				isPipelineShow,
 				pipelineEvent,
 				btnEvent,
-				rectangleActive
+				rectangleActive,
+				isSecurityShow,
+				securitySelect,
+				securityData,
+				securityEvent
 			}
 		}
 	}

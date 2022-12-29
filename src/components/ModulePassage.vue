@@ -26,7 +26,7 @@
 				label="出入" 
 				align="center">
 				<template #default="scope">
-					<span :style="Object.is(scope.row.isDirection, '0') ? chuColor : ruColor">{{ Object.is(scope.row.isDirection, '0')?"出":"入" }}</span>
+					<span :style="Object.is(scope.row.direction, '2') ? chuColor : ruColor">{{getDirection(scope.row)}}</span>
 				</template>
 				</el-table-column>
 			</el-table>
@@ -38,6 +38,7 @@
 	import { ref, onMounted } from 'vue'
 	import { Passage } from '../assets/js/passage.js'
 	import { DateTime } from '../assets/js/dateTime.js'
+	import { WareHouse } from '../assets/js/warehouse.js'
 	export default {
 		name: 'ModulePassage',
 		setup() {
@@ -57,7 +58,7 @@
 			// 	{time: '2022/11/06 17:50', plate: '渝A154677', type: '入'},
 			// 	{time: '2022/11/06 17:50', plate: '渝A154677', type: '入'},
 			// ]
-			
+			new WareHouse().getData()
 			const dataList = ref([])
 			
 			let contentHeight = ref(228)	// 内容盒子高度
@@ -66,14 +67,36 @@
 			}
 			new Passage().getData((result) => {
 				let list = result.data.data
-				let newList = []
-				if(list.length > 0){
-					for(let i = list.length-1; i>=0; i--){
-						newList.push(list[i])
+				// let newList = []
+				// if(list.length > 0){
+				// 	for(let i = list.length-1; i>=0; i--){
+				// 		newList.push(list[i])
+				// 	}
+				// }
+				dataList.value = list
+			})
+			
+			// 获取出入状态：direction：1进场、2出场。isDirection: 是否进出场，0否，1是
+			const getDirection = (row) => {
+				let direction = row.direction
+				let isDirection = row.isDirection
+				let str = ""
+				if(direction == 1){
+					if(isDirection == 0){
+						str = "未入"
+					}else{
+						str = "已入"
+					}
+				}else{
+					if(isDirection == 0){
+						str = "未出"
+					}else{
+						str = "已出"
 					}
 				}
-				dataList.value = newList
-			})
+				return str
+			}
+			
 			const changeTime = (time) => {
 				return time.substring(0,16)
 			} 
@@ -90,7 +113,8 @@
 				chuColor,
 				ruColor,
 				contentHeight,
-				changeTime
+				changeTime,
+				getDirection
 			}
 		}
 	}

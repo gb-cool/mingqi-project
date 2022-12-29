@@ -84,18 +84,20 @@
 			provide('popupRealData', popupRealData)
 			
 			// 返回主场景事件
-			const returnEvent = () => {
-				if (isThreeDLoad.value == 1) {
-					tweenMoveing([126,-0,69], [296,96,218], 2000, (e) => {})
-					mainView()
-				}
-			};
+			// const returnEvent = () => {
+			// 	if (isThreeDLoad.value == 1) {
+			// 		// tweenMoveing([126,-0,69], [296,96,218], 2000, (e) => {})
+			// 		tweenMoveing([-297,0,-173], [-171,89,17], 2000, (e) => {})
+			// 		mainView()
+			// 	}
+			// };
 			var tCanvas = ref(null),
 				container;
 			onMounted(() => {
 				container = tCanvas.value;
 				pageOnload(container, () => {
 					isThreeDLoad.value = 1
+					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					setSkyBoxFormWeather()
 				})
 			});
@@ -150,7 +152,6 @@
 			provide('stiveItem', stiveItem)
 			
 			return {
-				returnEvent,
 				tCanvas,
 				isShow,
 				popupIsShow,

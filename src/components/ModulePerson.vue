@@ -10,7 +10,7 @@
 </template>
 
 <script>
-	import { ref, inject } from 'vue'
+	import { ref, inject, onMounted, onDeactivated } from 'vue'
 	import ModulePersonInfo from './ModulePersonInfo.vue'
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	export default {
@@ -45,7 +45,7 @@
 			
 			// 触发弹窗点击事件
 			const intelligentWorkshopEvent = (row) => {
-				popupTitle.value = '危险区域人员详情'
+				popupTitle.value = '重点区域人员详情'
 				popupIsShow.value = true
 				popupContent.value = row
 				popupFileds.value = fileds
@@ -87,9 +87,13 @@
 					workunit: ""
 				}
 			]
+			const timer = ref(0)
 			let personData = ref([])
 			const joySuch = new JoySuch()
 			const getData = joySuch.getToken(() => {
+				realTime()
+			})
+			const realTime = () => {
 				joySuch.getRealTimeData((result) => {
 					if(result.code == 0){	//成功
 						personData.value = result.data.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
@@ -100,6 +104,12 @@
 						getData()
 					}
 				})
+			}
+			onMounted(()=>{ //组件挂载时的生命周期执行的方法
+				timer.value = window.setInterval(realTime, 60000)
+			})
+			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
+				window.clearInterval(timer.value);
 			})
 			return {
 				personData,

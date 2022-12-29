@@ -10,5 +10,8 @@ const urlConfig = {
 	"video": "http://10.12.3.98:31500/",
 	
 	// "passage": "http://10.12.67.2:8738/"
-	"passage": "http://localhost:8090/Passage/"
+	"passage": "http://localhost:8090/Passage/",
+	
+	// "warehouse": "http://10.12.67.2:8734/",
+	"warehouse": "http://localhost:8090/warehouse/"
 }

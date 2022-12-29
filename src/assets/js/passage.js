@@ -3,18 +3,22 @@
  */
 import axios from 'axios'
 import qs from 'qs'
+import { DateTime } from './dateTime.js'
 export class Passage {
-	url = 'http://10.12.67.2:8738'
+	url = 'http://10.12.67.2:8738/'
 	constructor() {
 		this.url = urlConfig.passage
 	}
 	getData(callback){
+		const dateTime = new DateTime()
+		let startTime = dateTime.getDateChange(-30)
+		let endTime = dateTime.get('YYYY-MM-DD hh:mm:ss')
 		const options = {
 			method: 'POST',
 			url: this.url + 'mesPurchaseBuyAccept/vehicleManagement',
 			data: {
-				// "startTime": '2021-1-12 00:00:00',
-				// "endTime": '2022-12-17 20:00:00'
+				"startTime": startTime,
+				"endTime": endTime
 			}
 		}
 		axios.request(options).then(function (response) {

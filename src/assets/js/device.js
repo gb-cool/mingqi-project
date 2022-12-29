@@ -53,12 +53,12 @@ export class Device {
 		}
 		const result = require('../json/device.json')
 		axios.request(options).then(function (response) {
-			if(response.code == 200){
+			if(response.data.code == 200){
 				if(callback) callback(response.data)
 			}else{
-				if(callback) callback(result)
+				// if(callback) callback(result)
+				console.log(response);
 			}
-			// console.log(response);
 		}).catch(function (error) {
 			console.log(error);
 		});
@@ -165,7 +165,7 @@ export class Device {
 	/**
 	 * 设备位置信息
 	 */
-	getWorkshop(name){
+	getWorkshop(name, deviceKey){
 		let json = {
 			workshop: "",	// 所属车间位置
 			describe: "",	// 描述
@@ -220,18 +220,53 @@ export class Device {
 			case "粉尘08":
 				json.workshop="碎石车间收尘器"; json.describe="碎石车间收尘器烟囱"; json.number="22060062";
 				break;
-				
-			case "氧浓度2":
-				json.workshop="均化仓顶"; json.describe="北均化仓顶--中部附近"; json.number="22060024";
+		}
+		//根据设备Key值取数
+		switch(deviceKey){
+			case "1672044802000f4cb7":
+				json.workshop="均化仓顶"; json.describe="西1"; json.number="";
 				break;
-			case "氧浓度4":
-				json.workshop="均化仓顶"; json.describe="北均化仓顶--中部附近"; json.number="22060023";
+			case "1672044706000f0cac":
+				json.workshop="均化仓底"; json.describe="北"; json.number="";
 				break;
-			case "氧浓度1":
-				json.workshop="均化仓顶"; json.describe="南均化仓顶--中部附近"; json.number="22060021";
+			case "1672044671000eef89":
+				json.workshop="均化仓顶"; json.describe="东1"; json.number="";
 				break;
-			case "氧浓度3":
-				json.workshop="均化仓顶"; json.describe="南均化仓顶--中部附近"; json.number="22060022";
+			case "16720446280007f861":
+				json.workshop="均化仓底"; json.describe="南"; json.number="";
+				break;
+			case "1672044593000648b1":
+				json.workshop="均化仓顶"; json.describe="东2"; json.number="";
+				break;
+			case "1672044874000df6f2":
+				json.workshop="均化仓顶"; json.describe="西3"; json.number="";
+				break;
+			case "167204484000069b09":
+				json.workshop="均化仓顶"; json.describe="西2"; json.number="";
+				break;
+			case "1672044743000692b7":
+				json.workshop="均化仓底"; json.describe="北"; json.number="";
+				break;
+			case "16720444700006b413":
+				json.workshop="均化仓底"; json.describe="南"; json.number="";
+				break;
+			case "167204493900077ff6":
+				json.workshop="均化仓顶"; json.describe="东3"; json.number="";
+				break;
+			case "1672044906000c039d":
+				json.workshop="均化仓顶"; json.describe="西4"; json.number="";
+				break;
+			case "16684025060004a1cb":
+				json.workshop="北均化仓顶"; json.describe="中部1"; json.number="";
+				break;
+			case "1668402506000090d6":
+				json.workshop="北均化仓顶"; json.describe="中部2"; json.number="";
+				break;
+			case "1668402506000a56b4":
+				json.workshop="南均化仓顶"; json.describe="中部4"; json.number="";
+				break;
+			case "1667871736000cf96b":
+				json.workshop="南均化仓顶"; json.describe="中部3"; json.number="";
 				break;
 		}
 		return json
