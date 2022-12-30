@@ -9,6 +9,7 @@ import {
     floorHide,
     outWallOpacity,
     replaceSkyBoxIndex,
+    outwallCondition,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -71,4 +72,9 @@ export const smallRoomFloorPlane_3d = (bool) => {
 // color 表示  四色图一般风险区域 颜色        color1  表示  四色图低风险区域  颜色
 export const fourColorDiagram_3d = (bool, color, color1) => {
     fourColorDiagram(bool, color, color1);
+};
+
+// 外墙和外楼顶透明度状态    number 0 - 1    0 == 完全消失   1 == 完全显示
+export const outwallCondition_3d = (number) => {
+    outwallCondition(number);
 };
