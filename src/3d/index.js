@@ -68,10 +68,10 @@ export const smallRoomFloorPlane_3d = (bool) => {
     smallRoomFloorPlane(bool);
 };
 
-// 四色图显示隐藏并更改颜色     bool == true (显示)    bool == false (隐藏)    color两种传参形式  0xffffff  '#ffffff'
+// 四色图显示隐藏并更改颜色     bool == true (显示)    bool == false (隐藏)    color两种传参形式  0xffffff  '#ffffff'  speed = number
 // color 表示  四色图一般风险区域 颜色        color1  表示  四色图低风险区域  颜色
-export const fourColorDiagram_3d = (bool, color, color1) => {
-    fourColorDiagram(bool, color, color1);
+export const fourColorDiagram_3d = (bool, color, color1, speed) => {
+    fourColorDiagram(bool, color, color1, speed);
 };
 
 // 外墙和外楼顶透明度状态    number 0 - 1    0 == 完全消失   1 == 完全显示
