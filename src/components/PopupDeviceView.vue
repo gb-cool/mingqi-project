@@ -68,7 +68,6 @@
 			_data.value = inject('popupContent')
 			const tableData = ref()
 			tableData.value = _data.value.value
-			
 			watch(_data.value, () => {
 				tableData.value = _data.value.value
 			})
@@ -89,6 +88,18 @@
 			const getWorkShonInfo = (row, filed) => {
 				return device.getWorkshop(row.deviceName, row.deviceKey)[filed]
 			}
+			// tableData.value = _data.value.value.filter((item) => {
+			// 	if(!Object.is(getWorkShonInfo(item, 'workshop'), "")){
+			// 		return item
+			// 	}
+			// })
+			// watch(_data.value, () => {
+			// 	tableData.value = _data.value.value.filter((item) => {
+			// 		if(!Object.is(getWorkShonInfo(item, 'workshop'), "")){
+			// 			return item
+			// 		}
+			// 	})
+			// })
 			return {
 				tableData,
 				moduleDeviceTaskSelect,

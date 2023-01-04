@@ -125,11 +125,11 @@
 				securitySelect.value = item.type
 				roadFlow_3d(false)
 				smallRoomFloorPlane_3d(false)
-				fourColorDiagram_3d(false, "#FFFF00")
+				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)
 				switch(item.type){
 					case "1":
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "#FFFF00")
+						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
 						break;
 					case "2":
 						roadFlow_3d(true, 0.08)
@@ -155,7 +155,7 @@
 				isSecurityShow.value = false
 				roadFlow_3d(false)
 				smallRoomFloorPlane_3d(false)
-				fourColorDiagram_3d(false, "#FFFF00")
+				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)
 				window.clearInterval(timer.value);
 				switch(name){
 					case "mainScene":
@@ -164,7 +164,7 @@
 					case "security":	// 安防
 						isSecurityShow.value = true
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "#FFFF00")
+						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
 						break;
 					case "roaming":	// 漫游
 						positioningMovement(0, [-1438.58,170.74,-2208.30], '地面一层', 1000)

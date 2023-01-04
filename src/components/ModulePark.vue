@@ -31,9 +31,10 @@
 					:data="robotData" 
 					style="width: 100%" 
 					:height="contentHeight" 
+					@row-click="robotEvent"
 					:show-header="true">
 						<el-table-column 
-						prop="robotSn" 
+						prop="robotControlIp" 
 						label="唯一编码" 
 						align="center">
 						</el-table-column>
@@ -101,6 +102,7 @@
 	import { ref, inject, watch, onMounted } from 'vue'
 	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity } from "../3d/index";	// 三维
 	import { JoySuch } from '../assets/js/positionPerson.js'
+	import { Robot } from '../assets/js/robot.js'
 	export default {
 		name: 'ModulePark',
 		setup() {
@@ -179,9 +181,15 @@
 					alert(row.name + "模型正在建设！")
 				}
 			}
+			// 弹窗
+			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
+			let popupTitle = inject('popupTitle')	// 弹出标题
+			let popupContent = inject('popupContent')	// 弹窗内容
+			let popupFileds = inject('popupFileds')	//弹出结构
+			let popupType = inject('popupType') // 弹窗内容类型
 			
 			// 巡检机器人数据
-			const robotData = [
+			const robotDataC = [
 				{
 					"robotId": "33",
 					"robotName": "T3C 测试样机",
@@ -207,6 +215,73 @@
 					"robotSn": "TC-004"
 				}
 			]
+			const robotData = ref([])
+			const robot = new Robot()
+			robot.getToken(() => {
+				robot.getSurfaceList((result) => {
+					if(result.code == 0){
+						robotData.value = result.robotList
+					}
+					console.log(result)
+				})
+			})
+			// 机器人状态结构
+			const robotReportInfoFileds	={
+				battery: "电池实体",
+				current: "电流，单位毫安",
+				quantity: "电量，单位百分比",
+				temp: "温度，单位摄氏度",
+				voltage: "电压，单位毫伏",
+				position: "机器人位置信息",
+				carAngle: "轮式机器人角度坐标",
+				carVelAngle: "轮式机器人角速度",
+				carVelX: "轮式机器人 vx 速度",
+				carVelY: "轮式机器人 vy 速度",
+				carX: "轮式机器人 x 坐标",
+				carY: "轮式机器人 y 坐标",
+				liftMotor: "升降位置",
+				matchDegree: "置信度",
+				pddMotor: "局放伸缩位置",
+				ptzPitchInfrared: "云台红外俯仰位置",
+				ptzPitchVisble: "云台可见光俯仰位置",
+				ptzYaw: "云台偏航位置",
+				robotId: "机器人编号",
+				transId: "时间戳",
+				pdd: "局放实体",
+				tev: "地波值(dB)",
+				wev: "超声波值(dB)",
+				runMode: "工作模式",
+				softStop: "软急停",
+				stopButton: "急停按钮状态",
+				env: "环境信息实体",
+				envTemp: "温度(℃)",
+				envHum: "湿度(%)",
+				smog: "烟雾模块",
+				pm2D5: "PM2.5(ug/m3)",
+				pm1D0: "PM1.0(ug/m3)",
+				pm10: "PM10(ug/m3)",
+				gas: "气体实体",
+				ch4: "甲烷(%)",
+				co: "一氧化碳(ppm)",
+				so2: "二氧化硫(ppm)",
+				sf6: "SF6(ppm)",
+				o2: "氧气(%)"
+			}
+			const robotEvent = (row) => {
+				robot.getRobotReportInfo(row.robotId, (result) => {
+					if(result.code == 0){
+						let curStatus = result.curStatus
+						
+						popupTitle.value = '机器人状态详情'
+						popupIsShow.value = true
+						popupContent.value = curStatus
+						popupFileds.value = robotReportInfoFileds
+						popupType.value = 'json'
+					}
+					console.log(result)
+				})
+				console.log(row)
+			}
 			
 			// 车辆数据
 			const carFileds = {
@@ -230,11 +305,6 @@
 			const carData = ref([])
 			
 			//人员
-			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
-			let popupTitle = inject('popupTitle')	// 弹出标题
-			let popupContent = inject('popupContent')	// 弹窗内容
-			let popupFileds = inject('popupFileds')	//弹出结构
-			let popupType = inject('popupType') // 弹窗内容类型
 			const personFileds = {
 				id: "人员ID",
 				postId: "岗位ID",
@@ -315,6 +385,7 @@
 				intelligentWorkshopData,
 				intelligentWorkshopEvent,
 				robotData,
+				robotEvent,
 				carData,
 				carEvent,
 				personData,

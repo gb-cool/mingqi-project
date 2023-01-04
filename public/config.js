@@ -13,5 +13,7 @@ const urlConfig = {
 	"passage": "http://localhost:8090/Passage/",
 	
 	// "warehouse": "http://10.12.67.2:8734/",
-	"warehouse": "http://localhost:8090/warehouse/"
+	"warehouse": "http://localhost:8090/warehouse/",
+	
+	"robot": "http://localhost:8090/robot/"
 }
