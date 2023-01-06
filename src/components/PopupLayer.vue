@@ -41,7 +41,7 @@
 		},
 		props: ['title', 'fileds', 'information', 'type'],
 		setup(props, context) {
-			// console.log(props)
+			// console.log(props.type)
 			// 获取表结构名称
 			const getFiled = (key) => {
 				if(props.fileds[key] == undefined){

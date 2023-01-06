@@ -39,6 +39,7 @@
 	import { Passage } from '../assets/js/passage.js'
 	import { DateTime } from '../assets/js/dateTime.js'
 	import { WareHouse } from '../assets/js/warehouse.js'
+	
 	export default {
 		name: 'ModulePassage',
 		setup() {
@@ -59,6 +60,7 @@
 			// 	{time: '2022/11/06 17:50', plate: '渝A154677', type: '入'},
 			// ]
 			new WareHouse().getData()
+			
 			const dataList = ref([])
 			
 			let contentHeight = ref(228)	// 内容盒子高度

@@ -187,12 +187,16 @@
 			 * 增加最高值记录，点击显示列表时，选中最高值的列
 			 */
 			const device = new Device()
+			const getWorkShonInfo = (row, filed) => {
+				return device.getWorkshop(row.deviceName, row.deviceKey)[filed]
+			}
 			device.getBatchDevices((result) => {
 				const devices= result.data.devices
 				// oxygenTableData = devices.filter((item) =>  item.deviceName.includes('氧'))
 				oxygenTableData = devices.filter((item) =>  item.productKey.includes('8814edb5acdf4cb4b28c790cd924ddc3'))	// 氧浓度数据
 				// stiveTableData = devices.filter((item) => item.deviceName.includes('粉尘'))
 				stiveTableData = devices.filter((item) => item.productKey.includes('2e30f382fc624a36af2ad7559ed8c5f9'))	//粉尘浓度数据
+				stiveTableData = stiveTableData.filter((item) => !Object.is(getWorkShonInfo(item, 'workshop'), ""))	// 过滤粉尘浓度数据位置为空的部分
 				realTime()
 			})
 			// 实时监听

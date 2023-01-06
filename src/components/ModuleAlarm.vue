@@ -7,7 +7,42 @@
 					
 				</el-tab-pane>
 				<el-tab-pane label="巡检机器人告警" name="second">
-					
+					<el-table
+					:data="robotData" 
+					style="width: 100%" 
+					:height="contentHeight" 
+					highlight-current-row
+					@row-click="robotAlarmEvent"
+					:show-header="true">
+						<el-table-column 
+						type="index"
+						label="序号"
+						:width="indexWidth"
+						align="center">
+							<template #default="scope">
+								<span>{{(scope.$index + 1).toString().padStart(2, '0')}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
+						prop="alarmTime" 
+						:width="timeWidth"
+						label="告警日期" 
+						align="center">
+							<template #default="scope">
+								<span>{{scope.row.alarmTime.split(" ")[0]}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
+						prop="itemName" 
+						label="告警位置" 
+						align="center">
+						</el-table-column>
+						<el-table-column
+						prop="itemTypeName" 
+						label="告警类别" 
+						align="center">
+						</el-table-column>
+					</el-table>
 				</el-tab-pane>
 				<el-tab-pane label="监控告警" name="third">
 					
@@ -60,6 +95,7 @@
 	import PopupLayer from './PopupLayer.vue'
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { DateTime } from '../assets/js/dateTime.js'
+	import { Robot } from '../assets/js/robot.js'
 	export default {
 		name: 'ModuleAlarm',
 		components: {
@@ -75,8 +111,9 @@
 			let popupType = inject('popupType') // 弹窗内容类型
 			
 			const activeName = 'fourth'	// 默认选中导航值
-			
+
 			const dateTime = new DateTime()
+			// 人员定位告警
 			const dataList = ref([])
 			const joySuch = new JoySuch()
 			const alarmListHandle = (result) => {
@@ -149,6 +186,42 @@
 			const indexMethod = (index) => {
 				return index + 1;
 			}
+			
+			
+			/**
+			 * 巡检机器人告警
+			 */
+			const robotData = ref([])
+			const robot = new Robot()
+			robot.getToken(() => {
+				robot.getAlarmList(4, (result) => {
+					robotData.value = result.records
+					// console.log(result)
+				})
+			})
+			const robotFiled = {
+				alarmId: "告警ID",
+				// itemId: "",
+				itemName: "告警内容",
+				alarmTime: "告警时间",
+				alarmPosition: "告警定位",
+				reason: "告警描述",
+				robotId: "机器人ID",
+				itemType: "告警类型",
+				itemTypeName: " 告警类型名称",
+				alarmValue: "告警值",
+				alarmPositionName: "告警位置名称",
+				itemLevel: "告警等级"
+			}
+			// 巡检机器人行点击事件
+			const robotAlarmEvent = (row, event, column) => {
+				popupTitle.value = '巡检机器人告警详情'
+				popupIsShow.value = true
+				popupContent.value = row
+				popupFileds.value = robotFiled
+				popupType.value = 'json'
+			}
+			
 			//改变盒子内容高度
 			let contentHeight = ref(190)	// 内容盒子高度
 			let indexWidth = ref(55)
@@ -184,7 +257,9 @@
 				indexWidth,
 				intelligentWorkshopEvent,
 				timeWidth,
-				handleClick
+				handleClick,
+				robotData,
+				robotAlarmEvent
 			}
 		}
 	}
