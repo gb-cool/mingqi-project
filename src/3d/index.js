@@ -10,6 +10,7 @@ import {
     outWallOpacity,
     replaceSkyBoxIndex,
     outwallCondition,
+    outRoomOpactiy,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -77,4 +78,9 @@ export const fourColorDiagram_3d = (bool, color, color1, speed) => {
 // 外墙和外楼顶透明度状态    number 0 - 1    0 == 完全消失   1 == 完全显示
 export const outwallCondition_3d = (number) => {
     outwallCondition(number);
+};
+
+// 除地面意外的所有其他物体设置透明度  number 0 - 1    0 == 完全消失   1 == 完全显示
+export const outRoomOpactiy_3d = (number) => {
+    outRoomOpactiy(number);
 };
