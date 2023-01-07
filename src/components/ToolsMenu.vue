@@ -46,7 +46,7 @@
 <script>
 	import { ref, inject } from 'vue'
 	import * as THREE from 'three'
-	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, fourColorDiagram_3d} from "../3d/index"	// 三维
+	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, fourColorDiagram_3d, outRoomOpactiy_3d} from "../3d/index"	// 三维
 	export default {
 		name: "ToolsMenu",
 		setup() {
@@ -126,13 +126,15 @@
 				roadFlow_3d(false)
 				smallRoomFloorPlane_3d(false)
 				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)
+				outRoomOpactiy_3d(1)
 				switch(item.type){
 					case "1":
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
+						fourColorDiagram_3d(true, "0x0000FF80", "#fedf7c", 0.1)
 						break;
 					case "2":
 						roadFlow_3d(true, 0.08)
+						outRoomOpactiy_3d(0.1)
 						break;
 				}
 			}
@@ -156,6 +158,7 @@
 				roadFlow_3d(false)
 				smallRoomFloorPlane_3d(false)
 				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)
+				outRoomOpactiy_3d(1)
 				window.clearInterval(timer.value);
 				switch(name){
 					case "mainScene":
@@ -164,7 +167,7 @@
 					case "security":	// 安防
 						isSecurityShow.value = true
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
+						fourColorDiagram_3d(true, "#0000FF", "#fedf7c", 0.1)
 						break;
 					case "roaming":	// 漫游
 						positioningMovement(0, [-1438.58,170.74,-2208.30], '地面一层', 1000)
