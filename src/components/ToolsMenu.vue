@@ -75,29 +75,8 @@
 			 */
 			const threeDModuleOpacity = inject('threeDModuleOpacity') // 三维模型不透明度 0-1
 			const opacity = ref(threeDModuleOpacity.value)	//不透明度
-			const opacityWidth = ref('20%')
-			opacityWidth.value = opacity.value * 100 +'%'
 			
-			// 减法
-			const minusEvent = () => {
-				if(isThreeDLoad.value != 1) return false
-				if(opacity.value > 0) {
-					opacity.value = parseFloat((opacity.value - 0.1).toFixed(1))
-					opacityWidth.value = opacity.value * 100 +'%'
-					threeDModuleOpacity.value = opacity.value
-					outWallSetOpacity(opacity.value)
-				}
-			}
-			// 加法
-			const plusEvent = () => {
-				if(isThreeDLoad.value != 1) return false
-				if(opacity.value < 1) {
-					opacity.value = parseFloat((opacity.value + 0.1).toFixed(1))
-					opacityWidth.value = opacity.value * 100 +'%'
-					threeDModuleOpacity.value = opacity.value
-					outWallSetOpacity(opacity.value)
-				}				
-			}
+			
 			// 管道事件
 			// 压缩空气管道、氮气管道、粉料输送管道、循环水管道、罗茨风机管道、磁悬浮风机管道
 			const isPipelineShow = ref(false)	// 是否显示管道
@@ -130,11 +109,14 @@
 				switch(item.type){
 					case "1":
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "0x0000FF80", "#fedf7c", 0.1)
+						fourColorDiagram_3d(true, "0x0000FF80", "#FFFF00", 0.1)
 						break;
 					case "2":
 						roadFlow_3d(true, 0.08)
-						outRoomOpactiy_3d(0.1)
+						// outRoomOpactiy_3d(0.1)
+						opacity.value = 0.1
+						threeDModuleOpacity.value = opacity.value
+						outRoomOpactiy_3d(opacity.value)
 						break;
 				}
 			}
@@ -167,7 +149,7 @@
 					case "security":	// 安防
 						isSecurityShow.value = true
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "#0000FF", "#fedf7c", 0.1)
+						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
 						break;
 					case "roaming":	// 漫游
 						positioningMovement(0, [-1438.58,170.74,-2208.30], '地面一层', 1000)
@@ -199,9 +181,6 @@
 			
 			return {
 				changeSky,
-				opacityWidth,
-				minusEvent,
-				plusEvent,
 				pipelineData,
 				pipelineSelect,
 				isPipelineShow,

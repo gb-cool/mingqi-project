@@ -17,7 +17,7 @@
 <script>
 	import { ref, inject } from 'vue'
 	import * as THREE from 'three'
-	import { replaceSkyBox, outWallSetOpacity } from "../3d/index"	// 三维
+	import { replaceSkyBox, outWallSetOpacity, outRoomOpactiy_3d } from "../3d/index"	// 三维
 	export default {
 		name: "ToolsMenu",
 		setup() {
@@ -63,6 +63,7 @@
 					opacityWidth.value = opacity.value * 100 +'%'
 					threeDModuleOpacity.value = opacity.value
 					outWallSetOpacity(opacity.value)
+					outRoomOpactiy_3d(opacity.value)
 				}
 			}
 			// 加法
@@ -79,6 +80,7 @@
 					opacityWidth.value = opacity.value * 100 +'%'
 					threeDModuleOpacity.value = opacity.value
 					outWallSetOpacity(opacity.value)
+					outRoomOpactiy_3d(opacity.value)
 				}				
 			}
 			return {
