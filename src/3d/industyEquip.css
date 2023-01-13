@@ -95,6 +95,18 @@
     line-height: 70px;
 }
 
+.limoKey1 {
+    float: left;
+    width: 444px;
+    margin-right: 41px;
+    text-align: right;
+    font-size: 38px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: 400;
+    color: #92a6cb;
+    line-height: 60px;
+}
+
 .limoValue {
     float: left;
     font-size: 38px;
@@ -102,6 +114,15 @@
     font-weight: 400;
     color: #ffffff;
     line-height: 70px;
+}
+
+.limoValue1 {
+    float: left;
+    font-size: 38px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 60px;
 }
 
 .limoDeviceWeibao {
