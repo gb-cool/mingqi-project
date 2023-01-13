@@ -100,7 +100,7 @@
 
 <script>
 	import { ref, inject, watch, onMounted } from 'vue'
-	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity } from "../3d/index";	// 三维
+	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity, mainView, outRoomOpactiy_3d } from "../3d/index";	// 三维
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
 	export default {
@@ -134,12 +134,16 @@
 					{id: 1, name: '均化车间'},
 				]
 			// 智能车间点击事件
+			const usagePattern = inject('usagePattern') // 使用模式，1车间，2安防
 			const threeDModuleOpacity = inject('threeDModuleOpacity') // 三维模型不透明度 0-1
 			const intelligentWorkshopEvent = (row, event, column) => {
 				if(isThreeDLoad.value != 1){
 					console.log("三维未加载完成")
 					return false
 				}
+				usagePattern.value = 1
+				outRoomOpactiy_3d(1)	// 整体外墙透明度
+				
 				if(row.id != -1){
 					switch(row.id){
 						case 0: 

@@ -22,6 +22,7 @@
 		name: "ToolsMenu",
 		setup() {
 			const isThreeDLoad = inject('isThreeDLoad')	// 获取三维加载状态，1表示已初始完成可以执行事件
+			const usagePattern = inject('usagePattern') // 使用模式，1车间，2安防
 			/**
 			 * 改变天空盒子
 			 */
@@ -62,8 +63,11 @@
 					opacity.value = parseFloat((opacity.value - 0.1).toFixed(1))
 					opacityWidth.value = opacity.value * 100 +'%'
 					threeDModuleOpacity.value = opacity.value
-					outWallSetOpacity(opacity.value)
-					outRoomOpactiy_3d(opacity.value)
+					if(usagePattern.value == 1){
+						outWallSetOpacity(opacity.value)
+					}else if(usagePattern.value == 2){
+						outRoomOpactiy_3d(opacity.value)
+					}
 				}
 			}
 			// 加法
@@ -79,8 +83,13 @@
 					}
 					opacityWidth.value = opacity.value * 100 +'%'
 					threeDModuleOpacity.value = opacity.value
-					outWallSetOpacity(opacity.value)
-					outRoomOpactiy_3d(opacity.value)
+					// outWallSetOpacity(opacity.value)
+					// outRoomOpactiy_3d(opacity.value)
+					if(usagePattern.value == 1){
+						outWallSetOpacity(opacity.value)
+					}else if(usagePattern.value == 2){
+						outRoomOpactiy_3d(opacity.value)
+					}
 				}				
 			}
 			return {
