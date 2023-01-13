@@ -227,50 +227,80 @@
 			})
 			// 机器人状态结构
 			const robotReportInfoFileds	={
-				battery: "电池实体",
-				current: "电流，单位毫安",
-				quantity: "电量，单位百分比",
-				temp: "温度，单位摄氏度",
-				voltage: "电压，单位毫伏",
-				position: "机器人位置信息",
-				carAngle: "轮式机器人角度坐标",
-				carVelAngle: "轮式机器人角速度",
-				carVelX: "轮式机器人 vx 速度",
-				carVelY: "轮式机器人 vy 速度",
-				carX: "轮式机器人 x 坐标",
-				carY: "轮式机器人 y 坐标",
-				liftMotor: "升降位置",
-				matchDegree: "置信度",
-				pddMotor: "局放伸缩位置",
-				ptzPitchInfrared: "云台红外俯仰位置",
-				ptzPitchVisble: "云台可见光俯仰位置",
-				ptzYaw: "云台偏航位置",
-				robotId: "机器人编号",
-				transId: "时间戳",
-				pdd: "局放实体",
-				tev: "地波值(dB)",
-				wev: "超声波值(dB)",
+				ssoftVersion: "下位机版本号",
+				nrobotId: "机器人id",
 				runMode: "工作模式",
-				softStop: "软急停",
-				stopButton: "急停按钮状态",
-				env: "环境信息实体",
-				envTemp: "温度(℃)",
-				envHum: "湿度(%)",
-				smog: "烟雾模块",
-				pm2D5: "PM2.5(ug/m3)",
-				pm1D0: "PM1.0(ug/m3)",
-				pm10: "PM10(ug/m3)",
-				gas: "气体实体",
-				ch4: "甲烷(%)",
-				co: "一氧化碳(ppm)",
-				so2: "二氧化硫(ppm)",
-				sf6: "SF6(ppm)",
-				o2: "氧气(%)"
+				ntaskId: "任务id",
+				nexecId: "任务执行id",
+				ntaskType: "任务类型",
+				nviewPointId: "巡检点id",
+				fmaxTemp: "保留字段",
+				ntransId: "时间戳",
+				
+				motor: "电机信息",
+				nDisplayRFID: "当前机器人经过RFID",
+				blockx: "障碍物x轴坐标（mm）",
+				fAngleCurrentPosition: "机器人角度（°）",
+				farmPosition: "升降臂位置（mm）",
+				blocky: "障碍物y轴坐标（mm）",
+				nPddDis: "局放电机距离（m）",
+				fMoveCurrent: "行走电机电流（mA）",
+				fMoveTemp: "行走电机温度（℃）",
+				fYCurrentPosition: "Y轴的位置（mm）",
+				fYSpeed: "Y轴速度（m/s）",
+				fLiftCurrent: "升降电机电流（mA）",
+				fspeed: "当前速度（m/s）",
+				fArmTemp: "升降电机温度（℃）",
+				nstatus: "机器状态",
+				durtime: "障碍计时",
+				nPddStatus: "局放电机状态",
+				fcurrentPosition: "x轴当前位置（mm）",
+				
+				env: "环境信息",
+				fhumidity: "环境湿度（%）",
+				ftemperature: "环境温度（℃）",
+				
+				battery: "电池电流信息",
+				fcurrent: "电池电流（A）" ,
+				fvoltage: "电池电压（V）",
+				nchargestatus: "电池状态",
+				ftemperature: "电池温度（℃）",
+				fquantity: "电池电量（%）",
+				
+				gas: "气体信息",
+				fch4: "甲烷（%）",
+				fco: "一氧化碳（ppm）",
+				fo2: "氧气（%）",
+				fH2S: "硫化氢（ppm）",
+				fsmog: "烟雾",
+				
+				radar: "障碍物信息",
+				fforwarddistance: "前障碍物距离（m）",
+				fbackdistance: "后障碍物距离（m）",
+				ffDownDistance: "下障碍物距离（m）",
+				
+				pllt: "PM值信息",
+				fpm10: "PM10（ug/m3）",
+				fpm1_0: "PM1.0（ug/m3）",
+				fpm2_5: "PM2.5（ug/m3）",
+				fsf6: "SF6（ppm）",
+				
+				pdd: "局放实体",
+				fTev: "地波值（dB）",
+				fUw: "超声波值（dB）"
 			}
 			const robotEvent = (row) => {
 				robot.getRobotReportInfo(row.robotId, (result) => {
 					if(result.code == 0){
 						let curStatus = result.curStatus
+						console.log(curStatus.motor)
+						curStatus.motor = getChildData(curStatus.motor)
+						curStatus.env = getChildData(curStatus.env)
+						curStatus.battery = getChildData(curStatus.battery)
+						curStatus.gas = getChildData(curStatus.gas)
+						curStatus.radar = getChildData(curStatus.radar)
+						curStatus.pllt = getChildData(curStatus.pllt)
+						curStatus.pdd = getChildData(curStatus.pdd)
 						
 						popupTitle.value = '机器人状态详情'
 						popupIsShow.value = true
@@ -280,9 +310,18 @@
 					}
 					console.log(result)
 				})
-				console.log(row)
 			}
-			
+			function getChildData(json){
+				let str = ""
+				for( var key in json ){
+					let filedname = robotReportInfoFileds[key]
+					if(filedname == undefined){
+						filedname = key
+					}
+					str += "</br>&nbsp;&nbsp;&nbsp;&nbsp;" + filedname + ": " + json[key]
+				}
+				return str
+			}
 			// 车辆数据
 			const carFileds = {
 				deviceNo: '穿戴设备编号（Mac地址）',

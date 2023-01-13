@@ -8,6 +8,7 @@ const urlConfig = {
 	"device": "http://localhost:8090/dev/",
 	
 	"video": "http://10.12.3.98:31500/",
+	"videoAlarm": "http://localhost:8090/videoAlarm/",
 	
 	// "passage": "http://10.12.67.2:8738/"
 	"passage": "http://localhost:8090/Passage/",

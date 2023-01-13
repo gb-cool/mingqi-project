@@ -57,8 +57,8 @@ export class Device {
 				if(callback) callback(response.data)
 			}else{
 				// if(callback) callback(result)
-				console.log(response);
 			}
+			// console.log(response);
 		}).catch(function (error) {
 			console.log(error);
 		});

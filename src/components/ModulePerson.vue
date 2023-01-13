@@ -95,11 +95,13 @@
 			})
 			const realTime = () => {
 				joySuch.getRealTimeData((result) => {
+					
 					if(result.code == 0){	//成功
 						personData.value = result.data.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
 						if(personData.value == ""){
 							personData.value = pList
 						}
+						// console.log(result)
 					}else if(result.code == 1002){  // token失效
 						getData()
 					}

@@ -45,7 +45,42 @@
 					</el-table>
 				</el-tab-pane>
 				<el-tab-pane label="监控告警" name="third">
-					
+					<el-table
+					:data="videoData" 
+					style="width: 100%" 
+					:height="contentHeight" 
+					highlight-current-row
+					@row-click="videoAlarmEvent"
+					:show-header="true">
+						<el-table-column 
+						type="index"
+						label="序号"
+						:width="indexWidth"
+						align="center">
+							<template #default="scope">
+								<span>{{(scope.$index + 1).toString().padStart(2, '0')}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
+						prop="dateTime" 
+						:width="timeWidth * 2"
+						label="触发时间" 
+						align="center">
+							<template #default="scope">
+								<span>{{scope.row.dateTime}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
+						prop="ipAddress" 
+						label="IP" 
+						align="center">
+						</el-table-column>
+						<el-table-column
+						prop="eventType" 
+						label="事件类型" 
+						align="center">
+						</el-table-column>
+					</el-table>
 				</el-tab-pane>
 				<el-tab-pane label="定位告警" name="fourth">
 					<el-table
@@ -96,6 +131,7 @@
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { DateTime } from '../assets/js/dateTime.js'
 	import { Robot } from '../assets/js/robot.js'
+	import { Video } from '../assets/js/video.js'
 	export default {
 		name: 'ModuleAlarm',
 		components: {
@@ -159,9 +195,7 @@
 				}
 			}
 			joySuch.getToken(() => joySuch.getAlarmList((result) => alarmListHandle(result)))
-			const realTime = () => {
-				joySuch.getAlarmList((result) => alarmListHandle(result))
-			}
+			
 			const timer = ref(0)
 			
 			const fileds = {
@@ -222,6 +256,34 @@
 				popupType.value = 'json'
 			}
 			
+			/**
+			 * 视频监控告警信息
+			 */
+			const videoData = ref([])
+			const video = new Video()
+			video.getQueryLatestISAPIAlarmInfo((result) => {
+				videoData.value = [result]
+			})
+			const videoFiled = {
+				activePostCount: "告警ID",
+				channelId: "报警通道ID",
+				channelName: "报警通道名称",
+				dateTime: "报警触发时间",
+				eventDescription: "报警事件描述",
+				eventState: "报警事件状态",
+				eventType: "报警事件类型",
+				ipAddress: "报警设备ip",
+				macAddress: "报警设备mac地址",
+				protocol: "报警上传协议"
+			}
+			const videoAlarmEvent = (row, event, column) => {
+				popupTitle.value = '巡检机器人告警详情'
+				popupIsShow.value = true
+				popupContent.value = row
+				popupFileds.value = videoFiled
+				popupType.value = 'json'
+			}
+			
 			//改变盒子内容高度
 			let contentHeight = ref(190)	// 内容盒子高度
 			let indexWidth = ref(55)
@@ -231,6 +293,13 @@
 				timeWidth.value = 114/1920*window.innerWidth
 				let h = 36/1080*window.innerHeight
 				contentHeight.value = elTabs.value.offsetHeight - h - 15
+			}
+			
+			const realTime = () => {
+				joySuch.getAlarmList((result) => alarmListHandle(result))
+				video.getQueryLatestISAPIAlarmInfo((result) => {
+					videoData.value = [result]
+				})
 			}
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
 				timer.value = window.setInterval(realTime, 100000)
@@ -242,6 +311,7 @@
 			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
 				window.clearInterval(timer.value);
 			})
+			
 			
 			// 导航切换
 			const handleClick = () => {
@@ -259,7 +329,10 @@
 				timeWidth,
 				handleClick,
 				robotData,
-				robotAlarmEvent
+				robotAlarmEvent,
+				videoData,
+				videoFiled,
+				videoAlarmEvent
 			}
 		}
 	}
