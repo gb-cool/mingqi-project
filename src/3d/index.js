@@ -13,6 +13,7 @@ import {
     outRoomOpactiy,
     limoRobotAnimation,
     clickLMJtoChangeColor,
+    limoPDanimation,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -87,12 +88,17 @@ export const outRoomOpactiy_3d = (number) => {
     outRoomOpactiy(number);
 };
 
-// 立磨巡检机器人动画  id为位置信息目前位置点位有 1 - 20      speed 为速度    bool为开启或者关闭
+// 立磨巡检机器人动画  id为位置信息目前位置点位有 1 - 20      speed 为速度 （值越大越慢，越小越快）    bool为开启或者关闭
 export const limoRobotAnimation_3d = (id, speed, bool) => {
     limoRobotAnimation(id, speed, bool);
 };
 
-// 立磨机点击时，修改管道颜色
-export const clickLMJtoChangeColor_3d = (color) => {
-    clickLMJtoChangeColor(color);
+// 立磨机点击时，修改管道颜色  修改圆盘转速（默认0.03） 越大越快    修改管道流动速度（默认0.03） 越大越快 但是值区间是小于1 , 0.99为最快
+export const clickLMJtoChangeColor_3d = (color, speed, guandaoSpeed) => {
+    clickLMJtoChangeColor(color, speed, guandaoSpeed);
+};
+
+// 立磨机皮带动画   speed 控制皮带速度 越大越快     bool 控制皮带动画是否开启
+export const limoPDanimation_3d = (speed, bool) => {
+    limoPDanimation(speed, bool);
 };

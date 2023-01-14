@@ -78,5 +78,5 @@ export const deviceShadow = (deviceKey, projectId, callback) => {
  */
 export const deviceClickEvent = () => {
     // 设置动画贴图的颜色
-    clickLMJtoChangeColor_3d("#ff0000");
+    clickLMJtoChangeColor_3d("#ff0000", 0.9, 0.9);
 };
