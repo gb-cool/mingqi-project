@@ -49,7 +49,7 @@
 	import * as THREE from 'three'
 	import axios from 'axios'
 	// 3d part
-	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox } from "../3d/index";
+	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d } from "../3d/index";
 	export default {
 		name: "app",
 		components: {
@@ -102,8 +102,23 @@
 					isThreeDLoad.value = 1
 					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					setSkyBoxFormWeather()
+					robotMove()
 				})
 			});
+			//巡检机器人动画
+			function robotMove(){
+				let pid = 1
+				limoRobotAnimation_3d(20, 100, true)
+				setInterval(() => {
+					if(pid == 1){
+						limoRobotAnimation_3d(1, 100, true)
+						pid = 0
+					}else{
+						limoRobotAnimation_3d(20, 100, true)
+						pid = 1
+					}
+				}, 1000 * 180)
+			}
 			
 			// 根据天气设置天空盒子
 			const setSkyBoxFormWeather = () => {
