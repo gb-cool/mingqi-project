@@ -1,4 +1,5 @@
-import { Device } from '../assets/js/device.js'
+import { Device } from "../assets/js/device.js";
+import { clickLMJtoChangeColor_3d } from "./index";
 /**
  * 查询立磨列表数据
  * callback： 回调方法
@@ -23,19 +24,21 @@ import { Device } from '../assets/js/device.js'
  ]
  */
 export const batchDevices = (callback) => {
-    const device = new Device()
-	device.getBatchDevices((result) => {
-		const devices= result.data.devices
-		let verticalData = devices.filter((item) => item.productKey.includes('6cdd4ae792cb43588904cdd14f70f3d8'))	//立磨列表数据
-		if(callback){
-			callback(verticalData)
-		}
-	})
-}
+    const device = new Device();
+    device.getBatchDevices((result) => {
+        const devices = result.data.devices;
+        let verticalData = devices.filter((item) =>
+            item.productKey.includes("6cdd4ae792cb43588904cdd14f70f3d8")
+        ); //立磨列表数据
+        if (callback) {
+            callback(verticalData);
+        }
+    });
+};
 
 /**
  * 根据设备KEY值，项目ID值获取磨机数据。
- * deviceKey：设备KEY， projectId： 项目I	
+ * deviceKey：设备KEY， projectId： 项目I
  */
 /**
  * 数据说明
@@ -62,17 +65,18 @@ export const batchDevices = (callback) => {
 	}
  */
 export const deviceShadow = (deviceKey, projectId, callback) => {
-	const device = new Device()
-	device.getQueryDeviceShadow(deviceKey, projectId,  (result) => {
-		if(result.code == "200"){
-			callback(result.data)
-		}
-	})
-}
+    const device = new Device();
+    device.getQueryDeviceShadow(deviceKey, projectId, (result) => {
+        if (result.code == "200") {
+            callback(result.data);
+        }
+    });
+};
 
 /**
  * 磨机点击事件
  */
 export const deviceClickEvent = () => {
-	// 设置动画贴图的颜色
-}
+    // 设置动画贴图的颜色
+    clickLMJtoChangeColor_3d("#ff0000");
+};

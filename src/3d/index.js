@@ -12,6 +12,7 @@ import {
     outwallCondition,
     outRoomOpactiy,
     limoRobotAnimation,
+    clickLMJtoChangeColor,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -89,4 +90,9 @@ export const outRoomOpactiy_3d = (number) => {
 // 立磨巡检机器人动画  id为位置信息目前位置点位有 1 - 20      speed 为速度    bool为开启或者关闭
 export const limoRobotAnimation_3d = (id, speed, bool) => {
     limoRobotAnimation(id, speed, bool);
+};
+
+// 立磨机点击时，修改管道颜色
+export const clickLMJtoChangeColor_3d = (color) => {
+    clickLMJtoChangeColor(color);
 };
