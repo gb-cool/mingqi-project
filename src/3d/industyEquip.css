@@ -8,14 +8,36 @@
     pointer-events: visible;
 }
 
-.limojiBG {
+/* .limojiBG {
     width: 1032px;
-    height: auto;   /*  1326 */
+    height: auto;
     background-image: url(../../public/3dModel/3d/device/LMCJ/弹窗.png);
     background-repeat: no-repeat;
-    /* background-size: 100% 100%; */
-    transform: scale(0.3);
+    transform: scale(0.4);
     overflow: hidden;
+} */
+
+@media (min-width: 1921px) {
+    .limojiBG {
+        width: 1032px;
+        height: auto; /*  1326 */
+        background-image: url(../../public/3dModel/3d/device/LMCJ/弹窗.png);
+        background-repeat: no-repeat;
+        /* background-size: 100% 100%; */
+        transform: scale(1);
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 1920px) {
+    .limojiBG {
+        width: 1032px;
+        height: auto; /*  1326 */
+        background-image: url(../../public/3dModel/3d/device/LMCJ/弹窗.png);
+        background-repeat: no-repeat;
+        transform: scale(0.4);
+        overflow: hidden;
+    }
 }
 
 .limoTitle {
