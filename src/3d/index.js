@@ -11,6 +11,7 @@ import {
     replaceSkyBoxIndex,
     outwallCondition,
     outRoomOpactiy,
+    limoRobotAnimation,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -83,4 +84,9 @@ export const outwallCondition_3d = (number) => {
 // 除地面意外的所有其他物体设置透明度  number 0 - 1    0 == 完全消失   1 == 完全显示
 export const outRoomOpactiy_3d = (number) => {
     outRoomOpactiy(number);
+};
+
+// 立磨巡检机器人动画  id为位置信息目前位置点位有 1 - 20      speed 为速度    bool为开启或者关闭
+export const limoRobotAnimation_3d = (id, speed, bool) => {
+    limoRobotAnimation(id, speed, bool);
 };
