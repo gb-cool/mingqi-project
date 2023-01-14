@@ -51,6 +51,7 @@
 		name: "ToolsMenu",
 		setup() {
 			const isThreeDLoad = inject('isThreeDLoad')	// 获取三维加载状态，1表示已初始完成可以执行事件
+			const usagePattern = inject('usagePattern') // 使用模式，1车间，2安防
 			/**
 			 * 改变天空盒子
 			 */
@@ -142,12 +143,16 @@
 				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)
 				outRoomOpactiy_3d(1)
 				window.clearInterval(timer.value);
+				
+				usagePattern.value = 1	// 使用模式
+				
 				switch(name){
 					case "mainScene":
 						returnEvent()	// 返回主场景
 						break;
 					case "security":	// 安防
 						isSecurityShow.value = true
+						usagePattern.value = 2
 						smallRoomFloorPlane_3d(true)
 						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
 						break;
@@ -161,6 +166,7 @@
 						isPipelineShow.value = true
 						break;
 				}
+				console.log(usagePattern.value)
 			}
 			let pmnum = 0;
 			let pmList= [

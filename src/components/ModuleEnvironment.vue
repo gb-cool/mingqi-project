@@ -190,6 +190,7 @@
 			const getWorkShonInfo = (row, filed) => {
 				return device.getWorkshop(row.deviceName, row.deviceKey)[filed]
 			}
+			let verticalData = []	//立磨数据
 			device.getBatchDevices((result) => {
 				const devices= result.data.devices
 				// oxygenTableData = devices.filter((item) =>  item.deviceName.includes('氧'))
@@ -197,6 +198,9 @@
 				// stiveTableData = devices.filter((item) => item.deviceName.includes('粉尘'))
 				stiveTableData = devices.filter((item) => item.productKey.includes('2e30f382fc624a36af2ad7559ed8c5f9'))	//粉尘浓度数据
 				stiveTableData = stiveTableData.filter((item) => !Object.is(getWorkShonInfo(item, 'workshop'), ""))	// 过滤粉尘浓度数据位置为空的部分
+				
+				// verticalData = devices.filter((item) => item.productKey.includes('6cdd4ae792cb43588904cdd14f70f3d8'))	//立磨数据
+				// console.log(verticalData) 
 				realTime()
 			})
 			// 实时监听

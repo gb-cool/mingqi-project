@@ -66,6 +66,9 @@
 			const ThreeModuleOpacity = ref(1) // 三维模型不透明度 0-1
 			provide('threeDModuleOpacity', ThreeModuleOpacity)
 			
+			const usagePattern = ref(1) // 使用模式，1车间，2安防
+			provide('usagePattern', usagePattern)
+			
 			const isShow = ref(true)	// 面板是否显示
 			provide('isShow', isShow)
 			

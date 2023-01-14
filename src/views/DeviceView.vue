@@ -30,6 +30,7 @@
 <script>
 	import { ref } from 'vue'
 	import { Device } from '../assets/js/device.js'
+	import { batchDevices, deviceShadow } from "../3d/deviceInterfase"
 	export default{
 		setup() {
 			const tableData = ref()
@@ -39,7 +40,13 @@
 				tableData.value = devices
 				// tableData.value = devices.filter((item) => item.deviceName.includes('粉尘') || item.deviceName.includes('氧'))
 			})
-			
+			batchDevices((result) => {
+				console.log(result)
+			})
+			deviceShadow("167282577000043b38", "4351421399475294208", (result) => {
+				console.log(result)
+			})
+			batchDevices
 			return {
 				tableData
 			}

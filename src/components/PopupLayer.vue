@@ -11,7 +11,7 @@
 					<div class="jsonBox" v-if="Object.is(type, 'json')" >
 						<el-descriptions class="margin-top" title="" :column="1">
 							<el-descriptions-item v-for="(item, key) of information" :label="getFiled(key)" :key="key">
-								{{item}}
+								<span v-html="item"></span>
 							</el-descriptions-item>
 						</el-descriptions>
 					</div>
@@ -49,9 +49,15 @@
 				}
 				return props.fileds[key] + "： "
 			}
+			
+			const getInfo = (item) => {
+				return 
+				console.log(item)
+			}
 			//关闭事件
 			return {
-				getFiled
+				getFiled,
+				getInfo
 			}
 		}
 	}
