@@ -100,7 +100,7 @@
 
 <script>
 	import { ref, inject, watch, onMounted } from 'vue'
-	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity, mainView, outRoomOpactiy_3d } from "../3d/index";	// 三维
+	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity, mainView, outRoomOpactiy_3d, limoRobotAnimation_3d } from "../3d/index";	// 三维
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
 	export default {
@@ -315,6 +315,7 @@
 					console.log(result)
 				})
 			}
+			
 			function getChildData(json){
 				let str = ""
 				for( var key in json ){
@@ -419,6 +420,7 @@
 				popupFileds.value = carFileds
 				popupType.value = 'json'
 			}
+			
 			// >> 人员
 			return {
 				elTabs,
