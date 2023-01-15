@@ -49,7 +49,7 @@
 	import * as THREE from 'three'
 	import axios from 'axios'
 	// 3d part
-	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d } from "../3d/index";
+	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, limoPDanimation_3d } from "../3d/index";
 	export default {
 		name: "app",
 		components: {
@@ -103,6 +103,7 @@
 					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					setSkyBoxFormWeather()
 					robotMove()
+					limoPDanimation_3d(0.1, true)
 				})
 			});
 			//巡检机器人动画
