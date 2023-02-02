@@ -1,4 +1,5 @@
 import { Device } from "../assets/js/device.js";
+import { WareHouse } from "../assets/js/warehouse.js"
 import { clickLMJtoChangeColor_3d } from "./index";
 /**
  * 查询立磨列表数据
@@ -78,5 +79,28 @@ export const deviceShadow = (deviceKey, projectId, callback) => {
  */
 export const deviceClickEvent = () => {
     // 设置动画贴图的颜色
-	clickLMJtoChangeColor_3d("#00b7ff", 0.9, 0.9);
+	clickLMJtoChangeColor_3d("#ff0000", 0.99, 0.8);
+}
+
+/**
+ * 仓储堆场数据
+ * result.data = [
+	{
+		currStock: 0,					// 当前库存量
+		materialShortName: "",			// 简称
+		maxStock: 100,					// 最大库存量
+		minStock: 0,					// 最小库存量
+		stockPlaceCode: "tzdc-3-3",		// 库位编码
+		stockPlaceName: "3#庹展堆场-3#"	// 库位名称
+	}
+	...
+ ]
+ */
+export const wareHouseYard = (callback) => {
+	const warehouse = new WareHouse()
+	warehouse.getData((result) => {
+		if (result.code == "200") {
+		    callback(result.data)
+		}
+	})
 }

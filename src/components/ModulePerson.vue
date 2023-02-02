@@ -1,18 +1,20 @@
 <!-- 危险区域人员 -->
 <template>
 	<div class="ModulePerson">
-		<ul>
-			<li v-for="(item, index) in personData" :key="index" @click="intelligentWorkshopEvent(item)">
-				<ModulePersonInfo :name='item.empName' :serial='item.deviceNo' :area='item.electric'/>
-			</li>
-		</ul>
+		<el-scrollbar>
+			<ul>
+				<li v-for="(item, index) in personData" :key="index" @click="intelligentWorkshopEvent(item)">
+					<ModulePersonInfo :name='item.empName' :serial='item.deviceNo' :area='item.electric'/>
+				</li>
+			</ul>
+		</el-scrollbar>
 	</div>
 </template>
 
 <script>
 	import { ref, inject, onMounted, onDeactivated } from 'vue'
 	import ModulePersonInfo from './ModulePersonInfo.vue'
-	import { JoySuch } from '../assets/js/positionPerson.js'
+	import { JoySuch, Seekey } from '../assets/js/positionPerson.js'
 	export default {
 		name: 'ModulePerson',
 		components: {
@@ -93,20 +95,57 @@
 			const getData = joySuch.getToken(() => {
 				realTime()
 			})
+			const seekey = new Seekey()
+			seekey.getSeekeyAccessToken()
+			let timerCount = 0;
 			const realTime = () => {
+				if(timerCount % 60 == 0) {
+					// 执行1个小时更新获取相对位置Token值
+					seekey.getSeekeyAccessToken()
+				}
 				joySuch.getRealTimeData((result) => {
-					
 					if(result.code == 0){	//成功
-						personData.value = result.data.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
+						let pData = result.data.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
+						// 查询想对位置token值，并获取相对位置数据
+						let _seekD = []
+						seekey.getBlts((seekData) => {
+							if(seekData.errorCode == 0) _seekD = seekData.data.data
+							mergePositionData(pData, _seekD)	// 合并人员实时位置信息
+							console.log(pData)
+						})
+						personData.value = pData
 						if(personData.value == ""){
 							personData.value = pList
 						}
-						// console.log(result)
 					}else if(result.code == 1002){  // token失效
 						getData()
 					}
 				})
+				timerCount++
 			}
+			/**
+			 * 合并人员实时位置数据
+			 * 根据mac字段值匹配
+			 * @param {Object} joySuchData	// 人员实时位置信息
+			 * @param {Object} seekeyData	// 相对位置信息
+			 * @return {type}	// 返回人员实时位置信息
+			 */
+			function mergePositionData(joySuchData, seekeyData){
+				for(let i=0; i < joySuchData.length; i++){
+					let _joyItem = joySuchData[i]
+					let deviceNo = _joyItem.deviceNo	// 穿戴设备编号（Mac地址）
+					for(let j = 0; j < seekeyData.length; j++){
+						let _seeItem = seekeyData[j]
+						let mac = _seeItem.mac
+						if(Object.is(deviceNo, mac)){
+							_joyItem.x = _seeItem.x
+							_joyItem.y = _seeItem.y
+						}
+					}
+				}
+				return joySuchData
+			}
+			
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
 				timer.value = window.setInterval(realTime, 60000)
 			})

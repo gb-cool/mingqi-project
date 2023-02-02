@@ -63,11 +63,10 @@
 						</el-table-column>
 						<el-table-column
 						prop="dateTime" 
-						:width="timeWidth * 2"
 						label="触发时间" 
 						align="center">
 							<template #default="scope">
-								<span>{{scope.row.dateTime}}</span>
+								<span>{{videoChangeTime(scope.row.dateTime)}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column
@@ -261,9 +260,16 @@
 			 */
 			const videoData = ref([])
 			const video = new Video()
-			video.getQueryLatestISAPIAlarmInfo((result) => {
-				videoData.value = [result]
-			})
+			const videoISAPIAlarm = () => {
+				// video.getQueryLatestISAPIAlarmInfo((result) => {
+				// 	videoData.value = [result]
+				// })
+				video.getQueryISAPIAlarmInfo((result) => videoData.value = result)
+			}
+			const videoChangeTime = (time) => {
+				return time.split(" ")[0]
+			} 
+			videoISAPIAlarm()
 			const videoFiled = {
 				activePostCount: "告警ID",
 				channelId: "报警通道ID",
@@ -274,10 +280,11 @@
 				eventType: "报警事件类型",
 				ipAddress: "报警设备ip",
 				macAddress: "报警设备mac地址",
-				protocol: "报警上传协议"
+				protocol: "报警上传协议",
+				addTime: "创建时间"
 			}
 			const videoAlarmEvent = (row, event, column) => {
-				popupTitle.value = '巡检机器人告警详情'
+				popupTitle.value = '视频监控告警详情'
 				popupIsShow.value = true
 				popupContent.value = row
 				popupFileds.value = videoFiled
@@ -297,9 +304,7 @@
 			
 			const realTime = () => {
 				joySuch.getAlarmList((result) => alarmListHandle(result))
-				video.getQueryLatestISAPIAlarmInfo((result) => {
-					videoData.value = [result]
-				})
+				videoISAPIAlarm()
 			}
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
 				timer.value = window.setInterval(realTime, 100000)
@@ -332,7 +337,8 @@
 				robotAlarmEvent,
 				videoData,
 				videoFiled,
-				videoAlarmEvent
+				videoAlarmEvent,
+				videoChangeTime
 			}
 		}
 	}

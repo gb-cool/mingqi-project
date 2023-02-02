@@ -62,8 +62,19 @@ export class Video{
 	/**
 	 * 按条件查询ISAPI报警协议信息
 	 */
-	getQueryISAPIAlarmInfo(){
+	getQueryISAPIAlarmInfo(callback){
+		const options = {
+		  method: 'POST',
+		  url: this.alarmUrl + 'hikvision/queryISAPIAlarmInfo',
+		  // headers: {'content-type': 'application/json'},
+		  data: {}
+		};
 		
+		axios.request(options).then(function (response) {
+			if(response.code = '200') callback(response.data.data)
+		}).catch(function (error) {
+			console.error(error);
+		});
 	}
 	/**
 	 * 查询最新的ISAPI报警协议信息

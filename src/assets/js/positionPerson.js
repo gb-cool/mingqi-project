@@ -5,7 +5,7 @@ class PositionPerson{
 	Seekey = {	// 寻息@位置物联网开放平台
 		// 接口请求方式式为POST，请求数据格式为json，返回数据格式为json，统一编码为UTF-8，
 		// url: 'http://10.12.67.17:46000',
-		url: 'http://10.12.67.17:46000',
+		url: 'http://10.12.67.17:46000/',
 		name: 'client',
 		licence: 'd63a6557aa5fe703cefc5cc50f846895',
 		Headers: {
@@ -326,10 +326,59 @@ export class JoySuch extends PositionPerson{
 export class Seekey extends PositionPerson{
 	constructor () {
 		super()
-		console.log(this)
+	}
+	/**
+	 * 通过Licence获取accessToken和signId（accessToken有效期：2小时），当accessToken失效需要调口
+	   接口重新获取，accessToken获取后进行缓存方便使用。
+	 */
+	getSeekeyAccessToken(callback){
+		const options = {
+			method: 'POST',
+			url: this.Seekey.url + 'api/v3/getAccessToken',
+			data: {licence: 'd63a6557aa5fe703cefc5cc50f846895'}
+		};
+		let that = this
+		axios.request(options).then(function (response) {
+			if(response.data.errorCode == 0){
+				let da = response.data.data
+				that.Seekey.Headers['X-SignId'] = da.signId
+				that.Seekey.Headers['X-Token'] = that.getXToken(da.accessToken, da.signId, that.Seekey.Headers['X-Timestamp'])
+				if(callback){
+					callback()
+				}
+			}
+			// console.log(response)
+		}).catch(function (error) {
+			console.error(error)
+		});
+	}
+	/**
+	 * 签名算法
+	 * @param {Object} accessToken	用户凭证，获取accessToken接口获取到accessToken
+	 * @param {Object} signId		签名ID
+	 * @param {Object} timestamp	当前请求的时间戳（毫秒）
+	 */
+	getXToken(accessToken, signId, timestamp){
+		return CryptoJS.MD5(accessToken + CryptoJS.MD5(signId + CryptoJS.MD5(accessToken)).toString().toLowerCase()+ timestamp).toString().toLowerCase();
 	}
 	
-	getXToken(){
-		
+	/**
+	 * 通过建筑ID获取该建筑下标签列表信息。查询结果支持分页
+	 */
+	getBlts(callback){
+		const options = {
+			method: 'POST',
+			url: this.Seekey.url + 'api/v4/device/blts',
+			headers: this.Seekey.Headers,
+			data: {pageNum: 1, pageSize: 100}
+		};
+		axios.request(options).then(function (response) {
+			if(callback){
+				callback(response.data)
+			}
+			// console.log(response)
+		}).catch(function (error) {
+			console.error(error)
+		});
 	}
 }

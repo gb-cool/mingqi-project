@@ -1,5 +1,5 @@
 const urlConfig = {
-	"Seekey": "http://10.12.67.17:46000",
+	"Seekey": "http://10.12.67.17:46000/",
 	
 	// "JoySuch": "http://10.12.67.17:9999/",
 	"JoySuch": "http://localhost:8090/JoySuch/",

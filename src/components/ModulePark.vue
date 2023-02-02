@@ -31,6 +31,7 @@
 					:data="robotData" 
 					style="width: 100%" 
 					:height="contentHeight" 
+					highlight-current-row
 					@row-click="robotEvent"
 					:show-header="true">
 						<el-table-column 
@@ -54,7 +55,8 @@
 					<el-table
 					:data="carData" 
 					style="width: 100%" 
-					:height="contentHeight" 
+					:height="contentHeight"
+					highlight-current-row
 					@row-click="carEvent"
 					:show-header="true">
 						<el-table-column 
@@ -74,6 +76,7 @@
 					:data="personData" 
 					style="width: 100%" 
 					:height="contentHeight"
+					highlight-current-row
 					@row-click="personEvent"
 					:show-header="true">
 						<el-table-column 
@@ -99,7 +102,7 @@
 </template>
 
 <script>
-	import { ref, inject, watch, onMounted } from 'vue'
+	import { ref, inject, watch, onMounted, onDeactivated } from 'vue'
 	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity, mainView, outRoomOpactiy_3d, limoRobotAnimation_3d } from "../3d/index";	// 三维
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
@@ -115,12 +118,7 @@
 				let h = 36/1080*window.innerHeight
 				contentHeight.value = elTabs.value.offsetHeight - h - 15
 			}
-			onMounted(() => {
-				initObj()
-				window.addEventListener("resize", function () {
-					initObj()
-				})
-			})
+			
 			// 智能车间
 			const intelligentWorkshopIndex = 0
 			// 参数  0 == 筛粉间   1 == 均化间  2 == 立磨间  3 == 碎石仓配料间  4 == 破碎间
@@ -221,12 +219,16 @@
 			]
 			const robotData = ref([])
 			const robot = new Robot()
+			const isRobotMove = inject('isRobotMove')	// 监听巡检机器人动画是否启动 0不启动，1启动 2充电暂停 3运行
 			robot.getToken(() => {
 				robot.getSurfaceList((result) => {
 					if(result.code == 0){
 						robotData.value = result.robotList
 					}
-					console.log(result)
+					if(robotData.value.length > 0){
+						isRobotMove.value = 1
+						realTime()
+					}
 				})
 			})
 			// 机器人状态结构
@@ -297,7 +299,6 @@
 				robot.getRobotReportInfo(row.robotId, (result) => {
 					if(result.code == 0){
 						let curStatus = result.curStatus
-						console.log(curStatus.motor)
 						curStatus.motor = getChildData(curStatus.motor)
 						curStatus.env = getChildData(curStatus.env)
 						curStatus.battery = getChildData(curStatus.battery)
@@ -311,9 +312,27 @@
 						popupContent.value = curStatus
 						popupFileds.value = robotReportInfoFileds
 						popupType.value = 'json'
+						// isRobotMove.value = 3	// 启动
 					}
 					console.log(result)
 				})
+			}
+			const timer = ref(0)
+			function realTime(){
+				//获取机器人详情
+				if(robotData.value.length > 0){
+					let row = robotData.value[0]
+					robot.getRobotReportInfo(row.robotId, (result) => {
+						console.log(result)
+						let ntaskType = result.curStatus.ntaskType
+						// 巡检机器人处于充电状态
+						if(ntaskType == -1 || ntaskType == 0 || ntaskType == 1 || ntaskType == 2){
+							isRobotMove.value = 2	// 充电暂停
+						}else{
+							isRobotMove.value = 3	// 启动
+						}
+					})
+				}				
 			}
 			
 			function getChildData(json){
@@ -420,6 +439,17 @@
 				popupFileds.value = carFileds
 				popupType.value = 'json'
 			}
+			
+			onMounted(()=>{ //组件挂载时的生命周期执行的方法
+				timer.value = window.setInterval(realTime, 100000)
+				initObj()
+				window.addEventListener("resize", function () {
+					initObj()
+				})
+			})
+			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
+				window.clearInterval(timer.value);
+			})
 			
 			// >> 人员
 			return {

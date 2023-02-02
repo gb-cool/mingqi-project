@@ -36,9 +36,9 @@
 	import {
 		ref,
 		onMounted,
-		provide
+		provide,
+		watch
 	} from "vue";
-	
 	
 	import TopSide from "../components/TopSide.vue"
 	import LeftSide from "../components/LeftSide.vue"
@@ -50,6 +50,7 @@
 	import axios from 'axios'
 	// 3d part
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, limoPDanimation_3d } from "../3d/index";
+	import { wareHouseYard } from "../3d/deviceInterfase.js"
 	export default {
 		name: "app",
 		components: {
@@ -61,6 +62,9 @@
 			ToolsMenuLeft
 		},
 		setup(context) {
+			// wareHouseYard((data) => {
+			// 	console.log(data)
+			// })
 			const isThreeDLoad = ref(0) // 三维是否初始化完成，1表示已初始化
 			provide('isThreeDLoad', isThreeDLoad)
 			const ThreeModuleOpacity = ref(1) // 三维模型不透明度 0-1
@@ -94,6 +98,8 @@
 			// 		mainView()
 			// 	}
 			// };
+			let isRobotMove = ref(0)	// 监听巡检机器人动画是否启动 0不启动，1启动 2充电暂停 3运行
+			provide('isRobotMove', isRobotMove)
 			var tCanvas = ref(null),
 				container;
 			onMounted(() => {
@@ -102,24 +108,56 @@
 					isThreeDLoad.value = 1
 					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					setSkyBoxFormWeather()
-					robotMove()
+					if(isRobotMove.value == 1){	// 启动
+						robotMove()
+					}
 					limoPDanimation_3d(0.1, true)
 				})
 			});
+			
 			//巡检机器人动画
+			let pid = 1	// 1正向行驶，0返回
 			function robotMove(){
-				let pid = 1
-				limoRobotAnimation_3d(20, 100, true)
+				limoRobotAnimation_3d(20, 3700, true)
 				setInterval(() => {
 					if(pid == 1){
-						limoRobotAnimation_3d(1, 100, true)
+						if(isRobotMove.value == 2){
+							limoRobotAnimation_3d(1, 3700, false)
+						}else{
+							limoRobotAnimation_3d(1, 3700, true)
+						}
 						pid = 0
 					}else{
-						limoRobotAnimation_3d(20, 100, true)
+						if(isRobotMove.value == 2){
+							limoRobotAnimation_3d(20, 3700, false)
+						}else{
+							limoRobotAnimation_3d(20, 3700, true)
+						}
 						pid = 1
 					}
-				}, 1000 * 180)
+				}, 1000 * 7200)
 			}
+			// 监听巡检机器人状态
+			watch(isRobotMove, () => {
+				if(isThreeDLoad.value != 1){
+					return false
+				}
+				if(isRobotMove.value == 1){	// 启动
+					robotMove()
+				}else if(isRobotMove.value == 2){
+					if(pid == 0){
+						limoRobotAnimation_3d(1, 3700, false)
+					}else{
+						limoRobotAnimation_3d(20, 3700, false)
+					}
+				}else if(isRobotMove.value == 3){
+					if(pid == 0){
+						limoRobotAnimation_3d(1, 3700, true)
+					}else{
+						limoRobotAnimation_3d(20, 3700, true)
+					}
+				}
+			})
 			
 			// 根据天气设置天空盒子
 			const setSkyBoxFormWeather = () => {
@@ -177,7 +215,8 @@
 				popupTitle,
 				popupContent,
 				popupFileds,
-				popupType
+				popupType,
+				isRobotMove
 			};
 		}
 	};

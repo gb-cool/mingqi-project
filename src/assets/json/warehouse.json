@@ -1,0 +1,150 @@
+{
+	"data": [
+		{
+			"stockPlaceName": "庹展堆场虚拟库位",
+			"stockPlaceCode": "tzdc-v",
+			"minStock": 0,
+			"maxStock": 999999999,
+			"currStock": 12716,
+			"materialShortName": "操作手柄\\BXM(D)8030-S-5KExdIICT4防爆检修箱"
+		},
+		{
+			"stockPlaceName": "3#庹展堆场-3#",
+			"stockPlaceCode": "tzdc-3-3",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "3#庹展堆场-1#",
+			"stockPlaceCode": "tzdc-3-1",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "3#庹展堆场-2#",
+			"stockPlaceCode": "tzdc-3-2",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "3#庹展堆场-4#",
+			"stockPlaceCode": "tzdc-3-4",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "3#庹展堆场-5#",
+			"stockPlaceCode": "tzdc-3-5",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "3#庹展堆场-6#",
+			"stockPlaceCode": "tzdc-3-6",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "3#庹展堆场-7#",
+			"stockPlaceCode": "tzdc-3-7",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "3#庹展堆场-8#",
+			"stockPlaceCode": "tzdc-3-8",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "4#庹展堆场-9#",
+			"stockPlaceCode": "tzdc-4-9",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "4#庹展堆场-10#",
+			"stockPlaceCode": "tzdc-4-10",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "4#庹展堆场-11#",
+			"stockPlaceCode": "tzdc-4-11",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "4#庹展堆场-12#",
+			"stockPlaceCode": "tzdc-4-12",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "4#庹展堆场-13#",
+			"stockPlaceCode": "tzdc-4-13",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "4#庹展堆场-14#",
+			"stockPlaceCode": "tzdc-4-14",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "4#庹展堆场-15#",
+			"stockPlaceCode": "tzdc-4-15",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "4#庹展堆场-16#",
+			"stockPlaceCode": "tzdc-4-16",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		},
+		{
+			"stockPlaceName": "4#庹展堆场-17#",
+			"stockPlaceCode": "tzdc-4-17",
+			"minStock": 0,
+			"maxStock": 100,
+			"currStock": 0,
+			"materialShortName": ""
+		}
+	],
+	"code": 200,
+	"msg": "请求成功"
+}
