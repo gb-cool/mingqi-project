@@ -14,6 +14,12 @@ import {
     limoRobotAnimation,
     clickLMJtoChangeColor,
     limoPDanimation,
+    initalizeCar,
+    realtimeMotionCar,
+    initalizeMan,
+    realtimeMotionMan,
+    limoRobotInitalize,
+    limoRobotLighting,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -101,4 +107,57 @@ export const clickLMJtoChangeColor_3d = (color, speed, guandaoSpeed) => {
 // 立磨机皮带动画   speed 控制皮带速度 越大越快     bool 控制皮带动画是否开启
 export const limoPDanimation_3d = (speed, bool) => {
     limoPDanimation(speed, bool);
+};
+
+/*
+    在场景加载完成后调用此方法，初始化加载车辆信息以及初始化定位信息   data基本数据格式如下
+    data = [
+        {
+            id: xxxx,
+            x: xxxx,
+            y: xxxx,
+        },
+        ......
+    ]
+    因为车辆只能在陆地上行驶，因此默认使用的是 地面一层 的模型数据
+*/
+export const initalizeCar_3d = (data) => {
+    initalizeCar(data);
+};
+
+// 实时数据驱动车辆动画    id=车辆id    points=[x,y]   times=毫秒值时间  td=动画执行完的回调函数
+export const realtimeMotionCar_3d = (id, point, times, td) => {
+    realtimeMotionCar(id, point, times, td);
+};
+
+/*
+    在场景加载完成后调用此方法，初始化加载人员信息以及初始化定位信息   data基本数据格式如下
+    data = [
+        {
+            id: xxxx,
+            floor: xxxx,
+            x: xxxx,
+            y: xxxx,
+        },
+        ......
+    ]
+    td 人员加载完成后的回调函数
+*/
+export const initalizeMan_3d = (data, td) => {
+    initalizeMan(data, td);
+};
+
+// 实时数据驱动人员动画    id=人员id    points=[x,y]   floor=当前行走的地面  times=毫秒值时间  td=动画执行完的回调函数
+export const realtimeMotionMan_3d = (id, point, floor, times, td) => {
+    realtimeMotionMan(id, point, floor, times, td);
+};
+
+// 立磨巡检机器人恢复到初始状态 位置为1
+export const limoRobotInitalize_3d = () => {
+    limoRobotInitalize();
+};
+
+// 立磨巡检机器人充电状态  bool = true（打开）  false （关闭）
+export const limoRobotLighting_3d = (bool) => {
+    limoRobotLighting(bool);
 };
