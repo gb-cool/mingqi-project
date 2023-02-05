@@ -8,36 +8,61 @@
     pointer-events: visible;
 }
 
-/* .limojiBG {
-    width: 1032px;
+.deviceCameraModelFull {
+    width: auto;
     height: auto;
+    pointer-events: none !important;
+}
+
+.deviceCameraModelFull > .popup-close {
+    pointer-events: visible;
+}
+
+.limojiBG {
+    width: 1032px;
+    height: auto; /*  1326 */
     background-image: url(../../public/3dModel/3d/device/LMCJ/弹窗.png);
     background-repeat: no-repeat;
-    transform: scale(0.4);
+    /* background-size: 100% 100%; */
     overflow: hidden;
-} */
+}
 
 @media (min-width: 1921px) {
-    .limojiBG {
-        width: 1032px;
-        height: auto; /*  1326 */
-        background-image: url(../../public/3dModel/3d/device/LMCJ/弹窗.png);
-        background-repeat: no-repeat;
-        /* background-size: 100% 100%; */
+    .deviceBoxParent {
         transform: scale(1);
-        overflow: hidden;
+    }
+    .deviceCameraBoxParent {
+        transform: scale(1);
     }
 }
 
 @media (max-width: 1920px) {
-    .limojiBG {
-        width: 1032px;
-        height: auto; /*  1326 */
-        background-image: url(../../public/3dModel/3d/device/LMCJ/弹窗.png);
-        background-repeat: no-repeat;
+    .deviceBoxParent {
         transform: scale(0.3);
-        overflow: hidden;
     }
+    .deviceCameraBoxParent {
+        transform: scale(0.3);
+    }
+}
+
+.deviceBox-close {
+    right: 20px !important;
+    top: 30px !important;
+    font-size: 50px !important;
+    height: 50px !important;
+    width: 50px !important;
+    cursor: pointer !important;
+    pointer-events: visible !important;
+}
+
+.deviceCameraBox-close {
+    right: 20px ;
+    top: 30px ;
+    font-size: 50px ;
+    height: 50px ;
+    width: 50px ;
+    cursor: pointer !important;
+    pointer-events: visible !important;
 }
 
 .limoTitle {
@@ -158,4 +183,14 @@
 
 .clear {
     clear: both;
+}
+
+.duichangLEDplaneBox {
+    width: 90px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    background-color: black;
+    color: #ff0000;
+    position: absolute;
 }

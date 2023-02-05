@@ -1,5 +1,5 @@
 import { Device } from "../assets/js/device.js";
-import { WareHouse } from "../assets/js/warehouse.js"
+import { WareHouse } from "../assets/js/warehouse.js";
 import { clickLMJtoChangeColor_3d } from "./index";
 /**
  * 查询立磨列表数据
@@ -79,8 +79,8 @@ export const deviceShadow = (deviceKey, projectId, callback) => {
  */
 export const deviceClickEvent = () => {
     // 设置动画贴图的颜色
-	clickLMJtoChangeColor_3d("#ff0000", 0.99, 0.8);
-}
+    clickLMJtoChangeColor_3d("#ff0000", 0.99, 0.8);
+};
 
 /**
  * 仓储堆场数据
@@ -97,10 +97,28 @@ export const deviceClickEvent = () => {
  ]
  */
 export const wareHouseYard = (callback) => {
-	const warehouse = new WareHouse()
-	warehouse.getData((result) => {
-		if (result.code == "200") {
-		    callback(result.data)
-		}
-	})
-}
+    const warehouse = new WareHouse();
+    warehouse.getData((result) => {
+        if (result.code == "200") {
+            callback(result.data);
+        }
+    });
+};
+
+/*
+	点击重点区域摄像头后，返回当前用户点击的摄像头id信息
+	拿到id后，去找 class 为 deviceCameraModelBox 的元素往内部添加监控摄像头的样式。
+	右侧顶部关闭按钮 class名称为 deviceCameraBox-close，样式文件在 ./industyEquip.css 内部，按照需求调整关闭按钮样式。
+*/
+export const focusCameraDeviceBackId = (id) => {
+    console.log("摄像头ID", id);
+};
+
+/*
+	点击粉尘浓度后，返回当前用户点击的粉尘浓度设备id信息
+	拿到id后，去找 class 为 deviceCameraModelBox 的元素往内部添加粉尘浓度的样式。
+	右侧顶部关闭按钮 class名称为 deviceCameraBox-close，样式文件在 ./industyEquip.css 内部，按照需求调整关闭按钮样式。
+*/
+export const focusFenCenDeviceBackId = (id) => {
+    console.log("粉尘浓度ID", id);
+};

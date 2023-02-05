@@ -20,6 +20,10 @@ import {
     realtimeMotionMan,
     limoRobotInitalize,
     limoRobotLighting,
+    updateLEDPlane,
+    focusduishiLED,
+    focusCameraImport,
+    focusFenChengImport,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -160,4 +164,35 @@ export const limoRobotInitalize_3d = () => {
 // 立磨巡检机器人充电状态  bool = true（打开）  false （关闭）
 export const limoRobotLighting_3d = (bool) => {
     limoRobotLighting(bool);
+};
+
+/*
+    更新堆石车间led屏幕信息
+    data = [
+        {
+            stockPlaceCode: xxxx,
+            materialShortName: xxxx,
+            currStock: xxxx,
+            maxStock: xxxx,
+        },
+        ......
+    ]
+*/
+export const updateLEDPlane_3d = (data) => {
+    updateLEDPlane(data);
+};
+
+// 堆石车间LED屏幕聚焦  id = id  times = 时间（毫秒值）  td = 回调函数
+export const focusduishiLED_3d = (id, times, td) => {
+    focusduishiLED(id, times, td);
+};
+
+// 摄像头重点区域聚焦  id = id  times = 时间（毫秒值）  td = 回调函数
+export const focusCameraImport_3d = (id, times, td) => {
+    focusCameraImport(id, times, td);
+};
+
+// 粉尘浓度聚焦  id = id  times = 时间（毫秒值）  td = 回调函数
+export const focusFenChengImport_3d = (id, times, td) => {
+    focusFenChengImport(id, times, td);
 };
