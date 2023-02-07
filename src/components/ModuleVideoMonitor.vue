@@ -7,6 +7,7 @@
 
 <script>
 	import { ref, inject, onBeforeUnmount, watch, onMounted } from 'vue'
+	import { focusCameraImport_3d } from "../3d/index";
 	export default {
 		name: 'ModuleVideoMonitor',
 		props: ['list'],
@@ -72,7 +73,21 @@
 			
 			// 推送消息
 			function cbIntegrationCallBack(oData) {
-				// console.log(oData)
+				let responseMsg = oData.responseMsg
+				let type = responseMsg.type
+				if(type == 1){
+					let cameraIndexCode = responseMsg.msg.cameraIndexCode
+					if(cameraIndexCode != ""){
+						// 摄像头聚焦
+						focusCameraImport_3d(cameraIndexCode, 2000, () => {
+							oWebControl.JS_RequestInterface({
+								funcName: "setFullScreen"
+							}).then(function (e) {
+								console.log(e)
+							})
+						})
+					}
+				}
 			    // showCBInfo(JSON.stringify(oData.responseMsg));
 			}
 			//初始化

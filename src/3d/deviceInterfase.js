@@ -112,6 +112,9 @@ export const wareHouseYard = (callback) => {
 */
 export const focusCameraDeviceBackId = (id) => {
     console.log("摄像头ID", id);
+	let el = document.getElementsByClassName("deviceCameraModelBox")[0]
+	console.log(el)
+	// el.appendChild("<div style='width:254px;height:230px'></div>")
 };
 
 /*
@@ -121,4 +124,11 @@ export const focusCameraDeviceBackId = (id) => {
 */
 export const focusFenCenDeviceBackId = (id) => {
     console.log("粉尘浓度ID", id);
+	let el = document.getElementsByClassName("deviceCameraModelBox")[0]
+	el.setAttribute('style', 'background:rgba(1, 0, 55, 0.7);paddind:20px;border-radius:4px;')
+	let _div = document.createElement("div")
+	_div.setAttribute('style', 'font-size:36px;color:#fff;');
+	_div.innerHTML = id
+	el.appendChild(_div)
+	console.log(el)
 };

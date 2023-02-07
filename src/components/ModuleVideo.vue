@@ -41,7 +41,7 @@
 				video.getCameras((cameras) => {
 					let dataList = cameras.data.list
 					urls.value = dataList.filter((item) => Object.is(item.regionIndexCode, regionIndexCode))
-					// console.log(urls.value)
+					console.log(urls.value)
 				})
 			})
 			// video.getPreviewURLs('36fd26f851ff4f97b09a73549ad78f29', (result) => {

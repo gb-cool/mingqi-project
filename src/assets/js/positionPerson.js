@@ -319,6 +319,31 @@ export class JoySuch extends PositionPerson{
 			console.log(error);
 		})
 	}
+	// 根据楼层数，获取模型名称
+	getLayerToName(layer){
+		let name = "地面一层"
+		switch(layer){
+			case "1": 
+				name = "地面一层"
+				break;
+			case "2":
+				name = "地面二层"
+				break;
+			case "3":
+				name = "地面三层"
+				break;
+			case "4":
+				name = "地面四层"
+				break;
+			case "5":
+				name = "地面五层"
+				break;
+			case "-1":
+				name = "地面负一层"
+				break;
+		}
+		return name
+	}
 }
 /**
  * 寻息 位置物联网开放平台 接口类
@@ -349,7 +374,7 @@ export class Seekey extends PositionPerson{
 			}
 			// console.log(response)
 		}).catch(function (error) {
-			console.error(error)
+			console.log(error)
 		});
 	}
 	/**
@@ -378,7 +403,7 @@ export class Seekey extends PositionPerson{
 			}
 			// console.log(response)
 		}).catch(function (error) {
-			console.error(error)
+			console.log(error)
 		});
 	}
 }

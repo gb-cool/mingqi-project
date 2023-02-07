@@ -15,12 +15,14 @@
 	import { ref, inject, onMounted, onDeactivated } from 'vue'
 	import ModulePersonInfo from './ModulePersonInfo.vue'
 	import { JoySuch, Seekey } from '../assets/js/positionPerson.js'
+	import { initalizeMan_3d, realtimeMotionMan_3d } from "../3d/index";
 	export default {
 		name: 'ModulePerson',
 		components: {
 			ModulePersonInfo
 		},
 		setup() {
+			const isThreeDLoad = inject('isThreeDLoad')	// 获取三维加载状态，1表示已初始完成可以执行事件
 			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
 			let popupTitle = inject('popupTitle')	// 弹出标题
 			let popupContent = inject('popupContent')	// 弹窗内容
@@ -111,7 +113,7 @@
 						seekey.getBlts((seekData) => {
 							if(seekData.errorCode == 0) _seekD = seekData.data.data
 							mergePositionData(pData, _seekD)	// 合并人员实时位置信息
-							console.log(pData)
+							// console.log(pData)
 						})
 						personData.value = pData
 						if(personData.value == ""){
@@ -143,9 +145,23 @@
 						}
 					}
 				}
-				return joySuchData
+				// setPersonMove(joySuchData)	// 设置人员动画
 			}
-			
+			/**
+			 * 设置人员动画
+			 */
+			function setPersonMove(data){
+				// console.log(data)
+				if(isThreeDLoad.value != 1){
+					return false
+				}
+				for(let i = 0; i < data.length; i++){
+					let p = data[i]
+					let point = [p.x, p.y]
+					let layer = joySuch.getLayerToName(p.layer)
+					realtimeMotionMan_3d(p.deviceNo, point, layer, 5000, (result) => {})
+				}
+			}
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
 				timer.value = window.setInterval(realTime, 60000)
 			})

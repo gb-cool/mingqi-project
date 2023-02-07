@@ -96,6 +96,9 @@
 						</el-table-column>
 					</el-table>
 				</el-tab-pane>
+				<el-tab-pane label="检修清单" name="five">
+					
+				</el-tab-pane>
 			</el-tabs>
 		</div>
 	</div>

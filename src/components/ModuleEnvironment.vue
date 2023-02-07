@@ -195,12 +195,15 @@
 				const devices= result.data.devices
 				// oxygenTableData = devices.filter((item) =>  item.deviceName.includes('氧'))
 				oxygenTableData = devices.filter((item) =>  item.productKey.includes('8814edb5acdf4cb4b28c790cd924ddc3'))	// 氧浓度数据
+				oxygenTableData.forEach((item,index,self) => item._code = getWorkShonInfo(item, 'number'))	// 关联设备编号
+				console.log(oxygenTableData)
+				
 				// stiveTableData = devices.filter((item) => item.deviceName.includes('粉尘'))
 				stiveTableData = devices.filter((item) => item.productKey.includes('2e30f382fc624a36af2ad7559ed8c5f9'))	//粉尘浓度数据
 				stiveTableData = stiveTableData.filter((item) => !Object.is(getWorkShonInfo(item, 'workshop'), ""))	// 过滤粉尘浓度数据位置为空的部分
-				
+				stiveTableData.forEach((item,index,self) => item._code = getWorkShonInfo(item, 'number'))	// 关联设备编号
+				console.log(stiveTableData)
 				// verticalData = devices.filter((item) => item.productKey.includes('6cdd4ae792cb43588904cdd14f70f3d8'))	//立磨数据
-				// console.log(verticalData) 
 				realTime()
 			})
 			// 实时监听

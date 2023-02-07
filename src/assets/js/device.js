@@ -224,49 +224,49 @@ export class Device {
 		//根据设备Key值取数
 		switch(deviceKey){
 			case "1672044802000f4cb7":
-				json.workshop="均化仓顶"; json.describe="西1"; json.number="";
+				json.workshop="均化仓顶"; json.describe="西1"; json.number="ARRH-1243";
 				break;
 			case "1672044706000f0cac":
-				json.workshop="均化仓底"; json.describe="北"; json.number="";
+				json.workshop="均化仓底"; json.describe="北"; json.number="ARRJ-0090";
 				break;
 			case "1672044671000eef89":
-				json.workshop="均化仓顶"; json.describe="东1"; json.number="";
+				json.workshop="均化仓顶"; json.describe="东1"; json.number="ARRJ-0102";
 				break;
 			case "16720446280007f861":
-				json.workshop="均化仓底"; json.describe="南"; json.number="";
+				json.workshop="均化仓底"; json.describe="南"; json.number="ARRJ-0087";
 				break;
 			case "1672044593000648b1":
-				json.workshop="均化仓顶"; json.describe="东2"; json.number="";
+				json.workshop="均化仓顶"; json.describe="东2"; json.number="ARRJ-0112";
 				break;
 			case "1672044874000df6f2":
-				json.workshop="均化仓顶"; json.describe="西3"; json.number="";
+				json.workshop="均化仓顶"; json.describe="西3"; json.number="ARRJ-0244";
 				break;
 			case "167204484000069b09":
-				json.workshop="均化仓顶"; json.describe="西2"; json.number="";
+				json.workshop="均化仓顶"; json.describe="西2"; json.number="ARRJ-0086";
 				break;
 			case "1672044743000692b7":
-				json.workshop="均化仓底"; json.describe="北"; json.number="";
+				json.workshop="均化仓底"; json.describe="北"; json.number="ARRH-0282";
 				break;
 			case "16720444700006b413":
-				json.workshop="均化仓底"; json.describe="南"; json.number="";
+				json.workshop="均化仓底"; json.describe="南"; json.number="ARRH-1242";
 				break;
 			case "167204493900077ff6":
-				json.workshop="均化仓顶"; json.describe="东3"; json.number="";
+				json.workshop="均化仓顶"; json.describe="东3"; json.number="ARRJ-0228";
 				break;
 			case "1672044906000c039d":
-				json.workshop="均化仓顶"; json.describe="西4"; json.number="";
+				json.workshop="均化仓顶"; json.describe="西4"; json.number="ARRJ-0090";
 				break;
 			case "16684025060004a1cb":
-				json.workshop="北均化仓顶"; json.describe="中部1"; json.number="";
+				json.workshop="北均化仓顶"; json.describe="中部1"; json.number="22060023";
 				break;
 			case "1668402506000090d6":
-				json.workshop="北均化仓顶"; json.describe="中部2"; json.number="";
+				json.workshop="北均化仓顶"; json.describe="中部2"; json.number="22060024";
 				break;
 			case "1668402506000a56b4":
-				json.workshop="南均化仓顶"; json.describe="中部4"; json.number="";
+				json.workshop="南均化仓顶"; json.describe="中部4"; json.number="22060021";
 				break;
 			case "1667871736000cf96b":
-				json.workshop="南均化仓顶"; json.describe="中部3"; json.number="";
+				json.workshop="南均化仓顶"; json.describe="中部3"; json.number="22060022";
 				break;
 		}
 		return json

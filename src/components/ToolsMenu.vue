@@ -110,7 +110,7 @@
 				switch(item.type){
 					case "1":
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "0x0000FF80", "#FFFF00", 0.8)
+						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
 						break;
 					case "2":
 						roadFlow_3d(true, 0.08)
@@ -154,7 +154,7 @@
 						isSecurityShow.value = true
 						usagePattern.value = 2
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.8)
+						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
 						break;
 					case "roaming":	// 漫游
 						positioningMovement(0, [-1438.58,170.74,-2208.30], '地面一层', 1000)

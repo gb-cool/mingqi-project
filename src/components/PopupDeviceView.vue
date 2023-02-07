@@ -57,6 +57,7 @@
 	import { ref, inject, watch } from 'vue'
 	import { Device } from '../assets/js/device.js'
 	import ModuleDeviceTask from './ModuleDeviceTask.vue'
+	import { focusFenChengImport_3d } from "../3d/index";
 	export default{
 		props:['type'],
 		components: {
@@ -65,6 +66,7 @@
 		setup(props, context) {
 			let isShow = inject('isShow')	// 是否显示弹窗
 			let _data = ref()
+			let popupIsShow = inject('popupIsShow')	//弹出是否显示
 			_data.value = inject('popupContent')
 			const tableData = ref()
 			tableData.value = _data.value.value
@@ -76,7 +78,10 @@
 			
 			// 行点击事件
 			const intelligentWorkshopEvent = (row, event, column) => {
-				// console.log(context)
+				console.log(row)
+				focusFenChengImport_3d(row.deviceKey, 2000, () => {
+					popupIsShow.value = false
+				})
 				// console.log(event, column)
 			}
 			const getWidth = (width) => {

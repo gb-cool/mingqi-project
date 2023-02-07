@@ -49,8 +49,10 @@
 	import * as THREE from 'three'
 	import axios from 'axios'
 	// 3d part
-	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, limoPDanimation_3d } from "../3d/index";
+	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, 
+	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d  } from "../3d/index";
 	import { wareHouseYard } from "../3d/deviceInterfase.js"
+	import { JoySuch } from '../assets/js/positionPerson.js'
 	export default {
 		name: "app",
 		components: {
@@ -62,9 +64,6 @@
 			ToolsMenuLeft
 		},
 		setup(context) {
-			// wareHouseYard((data) => {
-			// 	console.log(data)
-			// })
 			const isThreeDLoad = ref(0) // 三维是否初始化完成，1表示已初始化
 			provide('isThreeDLoad', isThreeDLoad)
 			const ThreeModuleOpacity = ref(1) // 三维模型不透明度 0-1
@@ -105,13 +104,15 @@
 			onMounted(() => {
 				container = tCanvas.value;
 				pageOnload(container, () => {
-					isThreeDLoad.value = 1
 					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					setSkyBoxFormWeather()
 					if(isRobotMove.value == 1){	// 启动
 						robotMove()
 					}
 					limoPDanimation_3d(0.1, true)
+					setInitalizeMan_3d()	// 设置人员数据到模型
+					setWareHouse()	// 仓储堆场
+					isThreeDLoad.value = 1
 				})
 			});
 			
@@ -122,14 +123,18 @@
 				setInterval(() => {
 					if(pid == 1){
 						if(isRobotMove.value == 2){
-							limoRobotAnimation_3d(1, 3700, false)
+							// limoRobotAnimation_3d(1, 3700, false)
+							limoRobotInitalize_3d()	// 回到初始状态
+							limoRobotLighting_3d(true)	// 充电状态打开
 						}else{
 							limoRobotAnimation_3d(1, 3700, true)
 						}
 						pid = 0
 					}else{
 						if(isRobotMove.value == 2){
-							limoRobotAnimation_3d(20, 3700, false)
+							// limoRobotAnimation_3d(20, 3700, false)
+							limoRobotInitalize_3d()	// 回到初始状态
+							limoRobotLighting_3d(true)	// 充电状态打开
 						}else{
 							limoRobotAnimation_3d(20, 3700, true)
 						}
@@ -144,13 +149,16 @@
 				}
 				if(isRobotMove.value == 1){	// 启动
 					robotMove()
-				}else if(isRobotMove.value == 2){
-					if(pid == 0){
-						limoRobotAnimation_3d(1, 3700, false)
-					}else{
-						limoRobotAnimation_3d(20, 3700, false)
-					}
+				}else if(isRobotMove.value == 2){	// 充电暂停
+					// if(pid == 0){
+					// 	limoRobotAnimation_3d(1, 3700, false)
+					// }else{
+					// 	limoRobotAnimation_3d(20, 3700, false)
+					// }
+					limoRobotInitalize_3d()	// 回到初始状态
+					limoRobotLighting_3d(true)	// 充电状态打开
 				}else if(isRobotMove.value == 3){
+					limoRobotLighting_3d(false)	// 充电状态打开
 					if(pid == 0){
 						limoRobotAnimation_3d(1, 3700, true)
 					}else{
@@ -158,7 +166,57 @@
 					}
 				}
 			})
+			/**
+			 * 设置人员到模型数据
+			 */
+			function setInitalizeMan_3d(){
+				const joySuch = new JoySuch()
+				joySuch.getToken(() => {
+					joySuch.getPersonList((result) => {
+						if(result.code == 0){	//成功
+							let data = result.data.content
+							let md = []
+							for(let i = 0; i < data.length; i++){
+								let p = data[i]
+								md.push({
+									id: p.sn,
+									floor: "地面一层",
+									x: 276934,
+									y: 676333
+								})
+							}
+							initalizeMan_3d(md, () => {})
+						}
+					})
+				})
+			}
 			
+			/**
+			 * 仓储数据模型显示
+			 */
+			function setWareHouse(){
+				const wHEvent = () => {
+					wareHouseYard((data) => {
+						let da = []
+						for(let i =0; i< data.length; i++){
+							let p = data[i]
+							if(p.stockPlaceCode != "tzdc-v"){
+								da.push({
+									stockPlaceCode: p.stockPlaceCode,
+									materialShortName: p.materialShortName + " " +(p.currStock / p.maxStock) +"%",
+									currStock: p.currStock,
+									maxStock: p.maxStock,
+								})
+							}
+						}
+						updateLEDPlane_3d(da)
+					})
+				}
+				wHEvent()
+				// setInterval(function(){
+				// 	wHEvent()
+				// }, 10000)
+			}
 			// 根据天气设置天空盒子
 			const setSkyBoxFormWeather = () => {
 				// 天气预报

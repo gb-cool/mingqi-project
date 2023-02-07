@@ -32,7 +32,7 @@ export class WareHouse{
 			if(callback){
 				callback(response.data)
 			}
-			console.log(response);
+			// console.log(response);
 		}).catch(function (error) {
 			console.error(error);
 		});
