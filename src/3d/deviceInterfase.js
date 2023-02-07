@@ -118,12 +118,13 @@ export const focusCameraDeviceBackId = (id) => {
 };
 
 /*
-	点击粉尘浓度后，返回当前用户点击的粉尘浓度设备id信息
-	拿到id后，去找 class 为 deviceCameraModelBox 的元素往内部添加粉尘浓度的样式。
+	点击粉尘和氧浓度后，返回当前用户点击的粉尘浓度设备id信息
+	拿到id后，去找 class 为 deviceCameraModelBox 的元素往内部添加粉尘和氧浓度的样式。
 	右侧顶部关闭按钮 class名称为 deviceCameraBox-close，样式文件在 ./industyEquip.css 内部，按照需求调整关闭按钮样式。
+	type = 具体是粉浓度设备  还是 氧浓度设备
 */
-export const focusFenCenDeviceBackId = (id) => {
-    console.log("粉尘浓度ID", id);
+export const focusFenCenDeviceBackId = (id, type) => {
+    console.log(type + "ID", id);
 	let el = document.getElementsByClassName("deviceCameraModelBox")[0]
 	el.setAttribute('style', 'background:rgba(1, 0, 55, 0.7);paddind:20px;border-radius:4px;')
 	let _div = document.createElement("div")

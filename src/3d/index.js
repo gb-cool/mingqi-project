@@ -24,6 +24,7 @@ import {
     focusduishiLED,
     focusCameraImport,
     focusFenChengImport,
+    fourColorOpacity,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -192,7 +193,12 @@ export const focusCameraImport_3d = (id, times, td) => {
     focusCameraImport(id, times, td);
 };
 
-// 粉尘浓度聚焦  id = id  times = 时间（毫秒值）  td = 回调函数
+// 粉尘和氧浓度聚焦  id = id  times = 时间（毫秒值）  td = 回调函数
 export const focusFenChengImport_3d = (id, times, td) => {
     focusFenChengImport(id, times, td);
+};
+
+// 设置四色图透明度  number = 0-1   
+export const fourColorOpacity_3d = (number) => {
+    fourColorOpacity(number);
 };
