@@ -27,6 +27,9 @@ import {
     fourColorOpacity,
     focusCar,
     focusPeople,
+    limoRoomMainMachine,
+    limoRoomMainMachineDataInit,
+    limoXunjianRobotFocus,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -143,10 +146,7 @@ export const realtimeMotionCar_3d = (id, point, times, td) => {
     data = [
         {
             id: xxxx,
-            floor: xxxx,
             name: xxxx,
-            x: xxxx,
-            y: xxxx,
         },
         ......
     ]
@@ -215,4 +215,35 @@ export const focusCar_3d = (id, times, td) => {
 // 人员聚焦 id = 人员ID   times = 毫秒数  td = 回调函数
 export const focusPeople_3d = (id, times, td) => {
     focusPeople(id, times, td);
+};
+
+// 立磨间主机聚焦 id = 主机ID   times = 毫秒数  td = 回调函数
+export const limoRoomMainMachine_3d = (id, times, td) => {
+    limoRoomMainMachine(id, times, td);
+};
+
+/*
+    立磨间主机数据驱动更新
+    data = [
+        {
+            id:'xxxx',
+            name: 'xxxxx',
+            status: 0,      四种状态 0 = 关机  1 = 开机  2 = 故障 3 = 维修
+        }
+    ]
+    这是我程序设置的默认值。后续可以根据你传递的参数自定义修改
+    fontColor = {
+        shutDown: { r: 0, g: 0, b: 0, a: 1.0 },                 关机（默认为黑色）
+        open: { r: 0, g: 255, b: 0, a: 1.0 },                   开机（默认为绿色）
+        failure: { r: 255, g: 0, b: 0, a: 1.0 },                故障（默认为红色）
+        maintenance: { r: 110, g: 110, b: 110, a: 1.0 },        维修（默认为灰色）
+    }
+*/
+export const limoRoomMainMachineDataInit_3d = (data, fontColor) => {
+    limoRoomMainMachineDataInit(data, fontColor);
+};
+
+// 立磨间巡检机器人聚焦      times = 毫秒数  td = 回调函数
+export const limoXunjianRobotFocus_3d = (times, td) => {
+    limoXunjianRobotFocus(times, td);
 };
