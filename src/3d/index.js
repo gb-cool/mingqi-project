@@ -30,6 +30,9 @@ import {
     limoRoomMainMachine,
     limoRoomMainMachineDataInit,
     limoXunjianRobotFocus,
+    updataLiMoRobotPlane,
+    updataLEDforOutRoadPlane,
+    focusoutRoadLED,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -246,4 +249,28 @@ export const limoRoomMainMachineDataInit_3d = (data, fontColor) => {
 // 立磨间巡检机器人聚焦      times = 毫秒数  td = 回调函数
 export const limoXunjianRobotFocus_3d = (times, td) => {
     limoXunjianRobotFocus(times, td);
+};
+
+// 立磨间巡检机器人头顶悬浮片更新文本内容
+export const updataLiMoRobotPlane_3d = (name) => {
+    updataLiMoRobotPlane(name);
+};
+
+/*
+    更新外围马路上的四个LED屏幕信息
+    data = [
+        {
+            id: xxxx,
+            value: ['','','',''],  // 最小一个值，最大四个值  如果只有一个值 value.length = 1，以此类推
+        },
+        ......
+    ]
+*/
+export const updataLEDforOutRoadPlane_3d = (data) => {
+    updataLEDforOutRoadPlane(data);
+};
+
+// 外围马路上的四个LED屏幕聚焦 id = ID   times = 毫秒数  td = 回调函数
+export const focusoutRoadLED_3d = (id, times, td) => {
+    focusoutRoadLED(id, times, td);
 };

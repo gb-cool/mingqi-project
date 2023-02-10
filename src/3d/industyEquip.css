@@ -56,11 +56,11 @@
 }
 
 .deviceCameraBox-close {
-    right: 20px ;
-    top: 30px ;
-    font-size: 50px ;
-    height: 50px ;
-    width: 50px ;
+    right: 20px;
+    top: 30px;
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
     cursor: pointer !important;
     pointer-events: visible !important;
 }
@@ -193,4 +193,37 @@
     background-color: black;
     color: #ff0000;
     position: absolute;
+}
+
+.outRoadLEDplanes {
+    width: 100px;
+    height: 92px;
+    background-color: black;
+    color: #ff0000;
+    position: absolute;
+}
+
+.outRoadLed4 {
+    width: 100%;
+    line-height: 22px;
+    text-align: center;
+}
+
+.outRoadBox3 {
+    margin-top: 11px;
+}
+
+.outRoadBox2 {
+    margin-top: 22px;
+}
+
+.outRoadBox1 {
+    margin-top: 33px;
+}
+
+.outLineRed {
+    width: 90%;
+    margin-left: 5%;
+    height: 0.2px;
+    background-color: #ff0000;
 }

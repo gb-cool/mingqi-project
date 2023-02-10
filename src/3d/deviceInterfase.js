@@ -133,3 +133,8 @@ export const focusFenCenDeviceBackId = (id, type) => {
 	el.appendChild(_div)
 	console.log(el)
 };
+
+// 立磨间巡检机器人点击事件
+export const limoRobotClickFun = () => {
+	console.log('点击了立磨间巡检机器人');
+}
