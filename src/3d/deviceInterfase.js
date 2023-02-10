@@ -111,10 +111,15 @@ export const wareHouseYard = (callback) => {
 	右侧顶部关闭按钮 class名称为 deviceCameraBox-close，样式文件在 ./industyEquip.css 内部，按照需求调整关闭按钮样式。
 */
 export const focusCameraDeviceBackId = (id) => {
-    console.log("摄像头ID", id);
-	let el = document.getElementsByClassName("deviceCameraModelBox")[0]
-	console.log(el)
-	// el.appendChild("<div style='width:254px;height:230px'></div>")
+    // console.log("摄像头ID", id);
+	let oWebControl = CacheData.video.oWebControl
+	if(oWebControl != null){
+		oWebControl.JS_RequestInterface({
+			funcName: "setFullScreen"
+		}).then(function (e) {
+			console.log(e)
+		})
+	}
 };
 
 /*
@@ -124,17 +129,16 @@ export const focusCameraDeviceBackId = (id) => {
 	type = 具体是粉浓度设备  还是 氧浓度设备
 */
 export const focusFenCenDeviceBackId = (id, type) => {
-    console.log(type + "ID", id);
-	let el = document.getElementsByClassName("deviceCameraModelBox")[0]
-	el.setAttribute('style', 'background:rgba(1, 0, 55, 0.7);paddind:20px;border-radius:4px;')
-	let _div = document.createElement("div")
-	_div.setAttribute('style', 'font-size:36px;color:#fff;');
-	_div.innerHTML = id
-	el.appendChild(_div)
-	console.log(el)
+   let row = null
+   if(Object.is(type, "粉尘浓度")){
+		row = CacheData.stive.realTableData.filter((item) => Object.is(item.deviceKey, id))[0]
+   }else{
+		row = CacheData.oxygen.realTableData.filter((item) => Object.is(item.deviceKey, id))[0] 
+   }
+   CachePublicFun.showOSLabel(row)	// 粉尘氧浓度标签显示
 };
 
 // 立磨间巡检机器人点击事件
 export const limoRobotClickFun = () => {
-	console.log('点击了立磨间巡检机器人');
+	document.getElementById("robotBtn").click()
 }

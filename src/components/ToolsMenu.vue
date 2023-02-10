@@ -52,6 +52,7 @@
 		setup() {
 			const isThreeDLoad = inject('isThreeDLoad')	// 获取三维加载状态，1表示已初始完成可以执行事件
 			const usagePattern = inject('usagePattern') // 使用模式，1车间，2安防
+			const toolsType = inject('toolsType')	// 功能类型
 			/**
 			 * 改变天空盒子
 			 */
@@ -110,7 +111,7 @@
 				switch(item.type){
 					case "1":
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
+						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.8)
 						break;
 					case "2":
 						roadFlow_3d(true, 0.08)
@@ -145,16 +146,17 @@
 				window.clearInterval(timer.value);
 				
 				usagePattern.value = 1	// 使用模式
-				
+				toolsType.value = name	// 改变功能类型
 				switch(name){
 					case "mainScene":
+						toolsType.value = Math.random()
 						returnEvent()	// 返回主场景
 						break;
 					case "security":	// 安防
 						isSecurityShow.value = true
 						usagePattern.value = 2
 						smallRoomFloorPlane_3d(true)
-						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.1)
+						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.8)
 						break;
 					case "roaming":	// 漫游
 						positioningMovement(0, [-1438.58,170.74,-2208.30], '地面一层', 1000)
@@ -166,7 +168,6 @@
 						isPipelineShow.value = true
 						break;
 				}
-				console.log(usagePattern.value)
 			}
 			let pmnum = 0;
 			let pmList= [

@@ -30,4 +30,21 @@ export class Passage {
 			console.error(error);
 		});
 	}
+	/**
+	 * 获取LED屏数据
+	 */
+	getLedData(callback){
+		const options = {
+			method: 'POST',
+			url: this.url + 'mesPurchaseBuyAccept/queryScreenMessage'
+		};
+		axios.request(options).then(function (response) {
+			if(callback){
+				callback(response.data)
+			}
+			// console.log(response);
+		}).catch(function (error) {
+			console.error(error);
+		});
+	}
 }

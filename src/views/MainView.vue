@@ -50,9 +50,12 @@
 	import axios from 'axios'
 	// 3d part
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, 
-	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d  } from "../3d/index";
+	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d, fourColorOpacity_3d, updataLEDforOutRoadPlane_3d  } from "../3d/index";
 	import { wareHouseYard } from "../3d/deviceInterfase.js"
 	import { JoySuch } from '../assets/js/positionPerson.js'
+	import { Robot } from '../assets/js/robot.js'
+	import { Passage } from '../assets/js/passage.js'
+	import { parseDate } from "element-plus";
 	export default {
 		name: "app",
 		components: {
@@ -72,9 +75,11 @@
 			const usagePattern = ref(1) // 使用模式，1车间，2安防
 			provide('usagePattern', usagePattern)
 			
+			const toolsType = ref("mainScene")	// 功能类型
+			provide('toolsType', toolsType)
+			
 			const isShow = ref(true)	// 面板是否显示
 			provide('isShow', isShow)
-			
 			//弹出窗口
 			let popupIsShow = ref(false)	//弹窗是否显示
 			let popupTitle	= ref('')	//弹窗标题
@@ -89,14 +94,6 @@
 			provide('popupType', popupType)
 			provide('popupRealData', popupRealData)
 			
-			// 返回主场景事件
-			// const returnEvent = () => {
-			// 	if (isThreeDLoad.value == 1) {
-			// 		// tweenMoveing([126,-0,69], [296,96,218], 2000, (e) => {})
-			// 		tweenMoveing([-297,0,-173], [-171,89,17], 2000, (e) => {})
-			// 		mainView()
-			// 	}
-			// };
 			let isRobotMove = ref(0)	// 监听巡检机器人动画是否启动 0不启动，1启动 2充电暂停 3运行
 			provide('isRobotMove', isRobotMove)
 			var tCanvas = ref(null),
@@ -104,15 +101,15 @@
 			onMounted(() => {
 				container = tCanvas.value;
 				pageOnload(container, () => {
+					isThreeDLoad.value = 1
 					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					setSkyBoxFormWeather()
-					if(isRobotMove.value == 1){	// 启动
-						robotMove()
-					}
+					setRobotMoveObj()	//巡检机器人动画
 					limoPDanimation_3d(0.1, true)
 					setInitalizeMan_3d()	// 设置人员数据到模型
 					setWareHouse()	// 仓储堆场
-					isThreeDLoad.value = 1
+					setLed()	// LED屏
+					fourColorOpacity_3d(0.5)	// 设置四色图透明度
 				})
 			});
 			
@@ -123,7 +120,6 @@
 				setInterval(() => {
 					if(pid == 1){
 						if(isRobotMove.value == 2){
-							// limoRobotAnimation_3d(1, 3700, false)
 							limoRobotInitalize_3d()	// 回到初始状态
 							limoRobotLighting_3d(true)	// 充电状态打开
 						}else{
@@ -142,19 +138,39 @@
 					}
 				}, 1000 * 7200)
 			}
+			/**
+			 * 巡检机器人动画、充电设置
+			 */
+			function setRobotMoveObj(){
+				if(CacheData.robot.listData.length > 0){
+					// robotMove()
+					isRobotMove.value = 1
+				}
+				const robot = new Robot()
+				const getRobotStatus = () => {
+					if(CacheData.robot.listData.length == 0){
+						return false
+					}
+					let row = CacheData.robot.listData[0]
+					robot.getRobotReportInfo(row.robotId, (result) => {
+						let robotStatus = result.data.robotStatus
+						// 机器人当前状态：0 充电中、1 巡检中、2 空闲
+						if(robotStatus == 0){
+							isRobotMove.value = 2
+						}else if(robotStatus == 1){
+							isRobotMove.value = 3
+						}else{
+							isRobotMove.value = 0
+						}
+					})
+				}
+				robot.getToken(() => getRobotStatus())
+			}
 			// 监听巡检机器人状态
 			watch(isRobotMove, () => {
-				if(isThreeDLoad.value != 1){
-					return false
-				}
 				if(isRobotMove.value == 1){	// 启动
 					robotMove()
 				}else if(isRobotMove.value == 2){	// 充电暂停
-					// if(pid == 0){
-					// 	limoRobotAnimation_3d(1, 3700, false)
-					// }else{
-					// 	limoRobotAnimation_3d(20, 3700, false)
-					// }
 					limoRobotInitalize_3d()	// 回到初始状态
 					limoRobotLighting_3d(true)	// 充电状态打开
 				}else if(isRobotMove.value == 3){
@@ -163,6 +179,13 @@
 						limoRobotAnimation_3d(1, 3700, true)
 					}else{
 						limoRobotAnimation_3d(20, 3700, true)
+					}
+				}else if(isRobotMove.value == 0){
+					limoRobotLighting_3d(false)	// 充电状态打开
+					if(pid == 0){
+						limoRobotAnimation_3d(1, 3700, false)
+					}else{
+						limoRobotAnimation_3d(20, 3700, false)
 					}
 				}
 			})
@@ -174,18 +197,7 @@
 				joySuch.getToken(() => {
 					joySuch.getPersonList((result) => {
 						if(result.code == 0){	//成功
-							let data = result.data.content
-							let md = []
-							for(let i = 0; i < data.length; i++){
-								let p = data[i]
-								md.push({
-									id: p.sn,
-									floor: "地面一层",
-									x: 276934,
-									y: 676333
-								})
-							}
-							initalizeMan_3d(md, () => {})
+							CacheData.person.allData = result.data.content
 						}
 					})
 				})
@@ -197,13 +209,14 @@
 			function setWareHouse(){
 				const wHEvent = () => {
 					wareHouseYard((data) => {
+						CacheData.wareHouse.realTableData = data	// 缓存仓储堆场数据
 						let da = []
 						for(let i =0; i< data.length; i++){
 							let p = data[i]
 							if(p.stockPlaceCode != "tzdc-v"){
 								da.push({
 									stockPlaceCode: p.stockPlaceCode,
-									materialShortName: p.materialShortName + " " +(p.currStock / p.maxStock) +"%",
+									materialShortName: p.materialShortName + " " +(parseInt(p.currStock) / parseInt(p.maxStock) * 100) +"%",
 									currStock: p.currStock,
 									maxStock: p.maxStock,
 								})
@@ -213,9 +226,48 @@
 					})
 				}
 				wHEvent()
-				// setInterval(function(){
-				// 	wHEvent()
-				// }, 10000)
+				setInterval(function(){
+					wHEvent()
+				}, 60000)
+			}
+			
+			/**
+			 * LED屏数据显示
+			 */
+			function setLed(){
+				const passage = new Passage()
+				const passageEv = () => {
+					passage.getLedData((result) => {
+						let data = result.data.data
+						let da = []
+						data.forEach((item) => {
+							let ledv = []
+							if(Object.is(item.ip, "10.12.64.61") || Object.is(item.ip, "10.12.64.62") || Object.is(item.ip, "10.12.64.63") || Object.is(item.ip, "10.12.64.64")){
+								if(!Object.is(getLedV(item.key1), "")){ledv.push(item.key1)}
+								if(!Object.is(getLedV(item.key2), "")){ledv.push(item.key2)}
+								if(!Object.is(getLedV(item.key3), "")){ledv.push(item.key3)}
+								if(!Object.is(getLedV(item.key4), "")){ledv.push(item.key4)}
+								if(ledv.length == 0) {
+									ledv.push("LED")
+								}
+								da.push({
+									id: item.ip,
+									value: ledv
+								})
+							}
+						})
+						updataLEDforOutRoadPlane_3d(da)	// 设置数据到LED屏
+					})
+				}
+				setInterval(function(){
+					passageEv()
+				}, 30000)
+			}
+			function getLedV(value){
+				if(value == null || value == "null" || value == ""){
+					return ""
+				}
+				return value
 			}
 			// 根据天气设置天空盒子
 			const setSkyBoxFormWeather = () => {

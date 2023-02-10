@@ -52,6 +52,7 @@
 	import axios from 'axios'
 	import ModulePieChart from './ModulePieChart.vue'
 	import { Device } from '../assets/js/device.js'
+	import { limoRoomMainMachineDataInit_3d } from '../3d/index.js'
 	export default {
 		name: "ModuleEnvironment",
 		components: {
@@ -190,20 +191,31 @@
 			const getWorkShonInfo = (row, filed) => {
 				return device.getWorkshop(row.deviceName, row.deviceKey)[filed]
 			}
+			const getWorkShonInfoItem = (row) => {
+				return device.getWorkshop(row.deviceName, row.deviceKey)
+			}
 			let verticalData = []	//立磨数据
 			device.getBatchDevices((result) => {
 				const devices= result.data.devices
-				// oxygenTableData = devices.filter((item) =>  item.deviceName.includes('氧'))
 				oxygenTableData = devices.filter((item) =>  item.productKey.includes('8814edb5acdf4cb4b28c790cd924ddc3'))	// 氧浓度数据
-				oxygenTableData.forEach((item,index,self) => item._code = getWorkShonInfo(item, 'number'))	// 关联设备编号
-				console.log(oxygenTableData)
-				
-				// stiveTableData = devices.filter((item) => item.deviceName.includes('粉尘'))
+				oxygenTableData.forEach((item,index,self) => {
+					let infoItem = getWorkShonInfoItem(item)
+					item._code = infoItem.number
+					item._workshop = infoItem.workshop
+					item._describe = infoItem.describe
+				})	// 关联设备编号
+
 				stiveTableData = devices.filter((item) => item.productKey.includes('2e30f382fc624a36af2ad7559ed8c5f9'))	//粉尘浓度数据
 				stiveTableData = stiveTableData.filter((item) => !Object.is(getWorkShonInfo(item, 'workshop'), ""))	// 过滤粉尘浓度数据位置为空的部分
-				stiveTableData.forEach((item,index,self) => item._code = getWorkShonInfo(item, 'number'))	// 关联设备编号
-				console.log(stiveTableData)
-				// verticalData = devices.filter((item) => item.productKey.includes('6cdd4ae792cb43588904cdd14f70f3d8'))	//立磨数据
+				stiveTableData.forEach((item,index,self) => {
+					let infoItem = getWorkShonInfoItem(item)
+					item._code = infoItem.number
+					item._workshop = infoItem.workshop
+					item._describe = infoItem.describe
+				})	// 关联设备编号
+				
+				verticalData = devices.filter((item) => item.productKey.includes('6cdd4ae792cb43588904cdd14f70f3d8'))	//立磨数据
+				CacheData.vertical.realTableData = verticalData // 缓存立磨列表数据
 				realTime()
 			})
 			// 实时监听
@@ -215,13 +227,22 @@
 						if(result.code != 200){
 							return false
 						}
-						item._concentration = parseFloat(result.data['O2'])	// 浓度
+						let _concentration = parseFloat(result.data['O2'])	// 浓度
+						item._concentration = _concentration
+						item._grade = _concentration < 19.95 ? 1 : ( _concentration >= 19.95 && _concentration < 23) ? 2 : 3	// 告警等级
+						if(item._grade == 3){
+							CacheData.oxygen.alarmListData.unshift(item)	// 缓存告警信息
+						}
 						if(_oxygenIndex >= oxygenTableData.length){
 							oxygenItemMax.value = Math.max.apply(null, oxygenTableData.map((o) => o._concentration)).toFixed(2)
 							// 显示颜色
 							oxygenItemColor.value = oxygenItemMax.value < 19.95 ? color.one : (oxygenItemMax.value >= 19.95 && oxygenItemMax.value < 23) ? color.two : color.four
 							// 弹窗开启 数据存入弹出框内容
 							oxygenTableData.sort((a, b) => b._concentration - a._concentration)
+							// 告警信息缓存
+							if(Object.is(stiveItemColor.value, color.two)){
+								CacheData.oxygen.alarmListData.unshift(item)
+							}
 							if(Object.is(popupType.value, 'oxygen') && popupIsShow.value) {
 								popupContent.value = oxygenTableData
 							}
@@ -235,7 +256,13 @@
 						if(result.code != 200){
 							return false
 						}
-						item._concentration = parseFloat(result.data['dust_concent'])	// 浓度
+						let _concentration = parseFloat(result.data['dust_concent'])	// 浓度
+						item._concentration = _concentration
+						item._grade = _concentration < 20 ? 1 : ( _concentration >= 20 && _concentration < 60) ? 2 : 3	// 告警等级
+						// 告警信息缓存
+						if(item._grade == 3){
+							CacheData.stive.alarmListData.unshift(item)
+						}
 						if(_stiveIndex >= stiveTableData.length){
 							stiveItemMax.value = Math.max.apply(null, stiveTableData.map((o) => o._concentration)).toFixed(2)
 							// 颜色设置
@@ -246,6 +273,41 @@
 							}
 						}
 					})
+				})
+				CacheData.oxygen.realTableData	= oxygenTableData	 // 缓存氧浓度列表数据
+				CacheData.stive.realTableData = stiveTableData		// 缓存粉尘浓度列表数据
+				
+				/**
+				 * 立磨数据处理，更新磨机状态
+				 */
+				let verticalMD = []
+				let vertivalCount = 0
+				verticalData.forEach((item) => {
+					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {
+						vertivalCount++
+					    if (result.code == "200") {
+							let da = result.data
+							let _name = "停止"
+							let status = 0
+							if(da['MJDJ-DL'] > 1){
+								status = 1
+								_name = "运行"
+							}
+							verticalMD.push({
+								id: item.deviceKey,
+								name: _name,
+								status: status
+							})
+							if(vertivalCount >= verticalData.length){
+								limoRoomMainMachineDataInit_3d(verticalMD, {
+									shutDown: { r: 0, g: 0, b: 0, a: 1.0 },                 // 关机（默认为黑色）
+									open: { r: 0, g: 255, b: 0, a: 1.0 },                   // 开机（默认为绿色）
+									failure: { r: 255, g: 0, b: 0, a: 1.0 },                // 故障（默认为红色）
+									maintenance: { r: 110, g: 110, b: 110, a: 1.0 },        // 维修（默认为灰色）
+								})
+							}
+					    }
+					});
 				})
 			}
 			const timer = ref(0)

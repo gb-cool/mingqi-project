@@ -35,7 +35,7 @@
 					@row-click="robotEvent"
 					:show-header="true">
 						<el-table-column 
-						prop="robotControlIp" 
+						prop="robotSn" 
 						label="唯一编码" 
 						align="center">
 						</el-table-column>
@@ -100,18 +100,21 @@
 					
 				</el-tab-pane>
 			</el-tabs>
+			<input style="display: none;" type="button" id="robotBtn" @click="lookRobotEvent" value="巡检机器人触发按钮"/>
 		</div>
 	</div>
 </template>
 
 <script>
 	import { ref, inject, watch, onMounted, onDeactivated } from 'vue'
-	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity, mainView, outRoomOpactiy_3d, limoRobotAnimation_3d } from "../3d/index";	// 三维
+	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity, mainView, outRoomOpactiy_3d, limoRobotAnimation_3d, 
+	limoXunjianRobotFocus_3d, updataLiMoRobotPlane_3d } from "../3d/index";	// 三维
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
 	export default {
 		name: 'ModulePark',
-		setup() {
+		emits:['getName'],
+		setup(props, ctx) {
 			const elTabs = ref()	// 取盒子高度，计算表格内容高度值
 			const activeName = 'first'	// 默认选中导航值
 			let contentHeight = ref(190)	// 内容盒子高度
@@ -129,10 +132,11 @@
 			const intelligentWorkshopData = [	//智能车间数据
 					{id: 5, name: '矿石堆场'},
 					{id: 4, name: '破碎车间'},
-					{id: 0, name: '筛粉车间'},
+					{id: 0, name: '筛分车间'},
 					{id: 3, name: '碎石仓配料车间'},
 					{id: 2, name: '立磨车间'},
 					{id: 1, name: '均化车间'},
+					{id: 6, name: '道路LED'},
 				]
 			// 智能车间点击事件
 			const usagePattern = inject('usagePattern') // 使用模式，1车间，2安防
@@ -182,6 +186,7 @@
 						threeDModuleOpacity.value = 0.2
 					}
 					outWallSetOpacity(threeDModuleOpacity.value)
+					ctx.emit('getName', row)
 				}else{
 					alert(row.name + "模型正在建设！")
 				}
@@ -225,117 +230,89 @@
 			const isRobotMove = inject('isRobotMove')	// 监听巡检机器人动画是否启动 0不启动，1启动 2充电暂停 3运行
 			robot.getToken(() => {
 				robot.getSurfaceList((result) => {
-					if(result.code == 0){
-						robotData.value = result.robotList
-					}
-					if(robotData.value.length > 0){
-						isRobotMove.value = 1
-						realTime()
+					if(result.code == 200){
+						robotData.value = result.data
+						CacheData.robot.listData = result.data	// 缓存巡检机器人列表数据
 					}
 				})
 			})
 			// 机器人状态结构
 			const robotReportInfoFileds	={
-				ssoftVersion: "下位机版本号",
-				nrobotId: "机器人id",
-				runMode: "工作模式",
-				ntaskId: "任务id",
-				nexecId: "任务执行id",
-				ntaskType: "任务类型",
-				nviewPointId: "巡检点id",
-				fmaxTemp: "保留字段",
-				ntransId: "时间戳",
+				battery: "电池实体",
+				nchargestatus: "电池状态 0：放电中 1：充电中",
+				current: "电流，单位毫安",
+				quantity: "电量，单位百分比",
+				temp: "温度，单位摄氏度",
+				voltage: "电压，单位毫伏",
 				
-				motor: "电机信息",
-				nDisplayRFID: "当前机器人经过RFID",
-				blockx: "障碍物x轴坐标（mm）",
-				fAngleCurrentPosition: "机器人角度（°）",
-				farmPosition: "升降臂位置（mm）",
-				blocky: "障碍物y轴坐标（mm）",
-				nPddDis: "局放电机距离（m）",
-				fMoveCurrent: "行走电机电流（mA）",
-				fMoveTemp: "行走电机温度（℃）",
-				fYCurrentPosition: "Y轴的位置（mm）",
-				fYSpeed: "Y轴速度（m/s）",
-				fLiftCurrent: "升降电机电流（mA）",
-				fspeed: "当前速度（m/s）",
-				fArmTemp: "升降电机温度（℃）",
-				nstatus: "机器状态",
-				durtime: "障碍计时",
-				nPddStatus: "局放电机状态",
-				fcurrentPosition: "x轴当前位置（mm）",
-				
-				env: "环境信息",
-				fhumidity: "环境湿度（%）",
-				ftemperature: "环境温度（℃）",
-				
-				battery: "电池电流信息",
-				fcurrent: "电池电流（A）" ,
-				fvoltage: "电池电压（V）",
-				nchargestatus: "电池状态",
-				ftemperature: "电池温度（℃）",
-				fquantity: "电池电量（%）",
-				
-				gas: "气体信息",
-				fch4: "甲烷（%）",
-				fco: "一氧化碳（ppm）",
-				fo2: "氧气（%）",
-				fH2S: "硫化氢（ppm）",
-				fsmog: "烟雾",
-				
-				radar: "障碍物信息",
-				fforwarddistance: "前障碍物距离（m）",
-				fbackdistance: "后障碍物距离（m）",
-				ffDownDistance: "下障碍物距离（m）",
-				
-				pllt: "PM值信息",
-				fpm10: "PM10（ug/m3）",
-				fpm1_0: "PM1.0（ug/m3）",
-				fpm2_5: "PM2.5（ug/m3）",
-				fsf6: "SF6（ppm）",
+				position: "机器人位置信息",
+				motorStatus: "机器行走状态",
+				carAngle: "轮式机器人角度坐标",
+				carVelAngle: "轮式机器人角速度",
+				carVelX: "轮式机器人 vx 速度",
+				carVelY: "轮式机器人 vy 速度",
+				carX: "轮式机器人 x 坐标",
+				carY: "轮式机器人 y 坐标",
+				liftMotor: "升降位置",
+				matchDegree: "轮式机器人置信度",
+				pddMotor: "局放伸缩位置",
+				ptzPitchInfrared: "云台红外俯仰位置",
+				ptzPitchVisble: "云台可见光俯仰位置",
+				ptzYaw: "云台偏航位置",
 				
 				pdd: "局放实体",
-				fTev: "地波值（dB）",
-				fUw: "超声波值（dB）"
+				tev: "地波值(dB)",
+				wev: "超声波值(dB)",
+				
+				runMode: "工作模式(0:任务模式，1：远程模式，2：手持模式)",
+				softStop: "软急停（0：未触发，1：已触发）",
+				stopButton: "急停按钮状态，1 为触发，0 为未触发",
+				
+				env: "环境信息实体",
+				envTemp: "温度(℃)",
+				envHum: "湿度(%)",
+				smog: "烟雾模块 false：无 true：有烟雾",
+				pm2D5: "PM2.5(ug/m3)",
+				pm1D0: "PM1.0(ug/m3)",
+				pm10: "PM10(ug/m3)",
+				
+				gas: "气体实体",
+				ch4: "甲烷(%)",
+				co: "一氧化碳(ppm)",
+				so2: "二氧化硫(ppm)",
+				sf6: "SF6(ppm)",
+				o2: "氧气(%)",
+				h2s: "H2S",
+				
+				robotStatus: "机器人当前状态：0 充电中、1 巡检中、2 空闲"
 			}
 			const robotEvent = (row) => {
+				intoRoom(2)	// 定位到立模间
+				updataLiMoRobotPlane_3d(row.robotName)	// 设置标签名称
+				limoXunjianRobotFocus_3d(2000, () => {})	// 聚焦
+			}
+			const lookRobotEvent = () => {
+				if(CacheData.robot.listData.length == 0){
+					return false
+				}
+				let row = CacheData.robot.listData[0]
 				robot.getRobotReportInfo(row.robotId, (result) => {
-					if(result.code == 0){
-						let curStatus = result.curStatus
-						curStatus.motor = getChildData(curStatus.motor)
-						curStatus.env = getChildData(curStatus.env)
+					// console.log(result)
+					if(result.code == 200){
+						let curStatus = result.data
 						curStatus.battery = getChildData(curStatus.battery)
-						curStatus.gas = getChildData(curStatus.gas)
-						curStatus.radar = getChildData(curStatus.radar)
-						curStatus.pllt = getChildData(curStatus.pllt)
+						curStatus.position = getChildData(curStatus.position)
 						curStatus.pdd = getChildData(curStatus.pdd)
+						curStatus.env = getChildData(curStatus.env)
+						curStatus.gas = getChildData(curStatus.gas)
 						
 						popupTitle.value = '机器人状态详情'
 						popupIsShow.value = true
 						popupContent.value = curStatus
 						popupFileds.value = robotReportInfoFileds
 						popupType.value = 'json'
-						// isRobotMove.value = 3	// 启动
 					}
-					console.log(result)
 				})
-			}
-			const timer = ref(0)
-			function realTime(){
-				//获取机器人详情
-				if(robotData.value.length > 0){
-					let row = robotData.value[0]
-					robot.getRobotReportInfo(row.robotId, (result) => {
-						console.log(result)
-						let ntaskType = result.curStatus.ntaskType
-						// 巡检机器人处于充电状态
-						if(ntaskType == -1 || ntaskType == 0 || ntaskType == 1 || ntaskType == 2){
-							isRobotMove.value = 2	// 充电暂停
-						}else{
-							isRobotMove.value = 3	// 启动
-						}
-					})
-				}				
 			}
 			
 			function getChildData(json){
@@ -444,7 +421,6 @@
 			}
 			
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
-				timer.value = window.setInterval(realTime, 100000)
 				initObj()
 				window.addEventListener("resize", function () {
 					initObj()
@@ -467,7 +443,8 @@
 				carData,
 				carEvent,
 				personData,
-				personEvent
+				personEvent,
+				lookRobotEvent
 			}
 		},
 		methods: {

@@ -4,7 +4,27 @@
 		<div class="box"  ref="elTabs">
 			<el-tabs v-model="activeName" @tab-click="handleClick">
 				<el-tab-pane label="设备告警" name="first">
-					
+					<el-table
+					:data="deviceList" 
+					style="width: 100%" 
+					:height="contentHeight" 
+					highlight-current-row
+					@row-click="deviceEvent"
+					:show-header="true">
+					    <el-table-column 
+						prop="_hz_device" 
+						label="设备" 
+						align="center">
+						<template #default="scope">
+							<span>{{ scope.row._hz_device }}</span>
+						</template>
+						</el-table-column>
+						<el-table-column
+						prop="_hz_value" 
+						label="参数值" 
+						align="center">
+						</el-table-column>
+					</el-table>
 				</el-tab-pane>
 				<el-tab-pane label="巡检机器人告警" name="second">
 					<el-table
@@ -131,12 +151,14 @@
 	import { DateTime } from '../assets/js/dateTime.js'
 	import { Robot } from '../assets/js/robot.js'
 	import { Video } from '../assets/js/video.js'
+	import { focusFenChengImport_3d, intoRoom, outWallSetOpacity } from "../3d/index";
 	export default {
 		name: 'ModuleAlarm',
 		components: {
 			PopupLayer
 		},
 		setup() {
+			const threeDModuleOpacity = inject('threeDModuleOpacity') // 三维模型不透明度 0-1
 			const elTabs = ref()	// 取盒子高度，计算表格内容高度值
 			const componentElem = ref()
 			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
@@ -148,6 +170,57 @@
 			const activeName = 'fourth'	// 默认选中导航值
 
 			const dateTime = new DateTime()
+			
+			// 设备告警]
+			const deviceList = ref([])
+			function getDeviceData(){
+				let data = []
+				CacheData.oxygen.alarmListData.forEach((item) => {
+					data.push(Object.assign({
+						_hz_device: item.deviceName,
+						_hz_value: item._concentration,
+						_hz_type: "oxygen"
+					}, item))
+				})
+				CacheData.stive.alarmListData.forEach((item) => {
+					data.push(Object.assign({
+						_hz_device: item.deviceName,
+						_hz_value: item._concentration,
+						_hz_type: "stive"
+					}, item))
+				})
+				deviceList.value = data
+			}
+			const deviceEvent = (row, event, column) => {
+				if(Object.is(row._hz_type, "oxygen") || Object.is(row._hz_type, "stive")){
+					if(threeDModuleOpacity.value > 0.2){
+						threeDModuleOpacity.value = 0.2
+					}
+					let _workshop = row._workshop
+					if(_workshop.includes('堆场')){
+						intoRoom(5)
+					}
+					if(_workshop.includes('破碎')){
+						intoRoom(4)
+					}
+					if(_workshop.includes('筛分')){
+						intoRoom(0)
+					}
+					if(_workshop.includes('碎石')){
+						intoRoom(3)
+					}
+					if(_workshop.includes('立磨')){
+						intoRoom(2)
+					}
+					if(_workshop.includes('均化')){
+						intoRoom(1)
+					}
+					outWallSetOpacity(threeDModuleOpacity.value)
+					focusFenChengImport_3d(row.deviceKey, 2000, () => {
+						CachePublicFun.showOSLabel(row)	// 粉尘氧浓度标签显示
+					})
+				}
+			}
 			// 人员定位告警
 			const dataList = ref([])
 			const joySuch = new JoySuch()
@@ -227,9 +300,9 @@
 			const robotData = ref([])
 			const robot = new Robot()
 			robot.getToken(() => {
-				robot.getAlarmList(4, (result) => {
-					robotData.value = result.records
+				robot.getAlarmList(1, (result) => {
 					// console.log(result)
+					robotData.value = result.list
 				})
 			})
 			const robotFiled = {
@@ -305,6 +378,7 @@
 			const realTime = () => {
 				joySuch.getAlarmList((result) => alarmListHandle(result))
 				videoISAPIAlarm()
+				getDeviceData()		// 获取设备告警数据
 			}
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
 				timer.value = window.setInterval(realTime, 100000)
@@ -317,10 +391,11 @@
 				window.clearInterval(timer.value);
 			})
 			
-			
 			// 导航切换
-			const handleClick = () => {
-				
+			const handleClick = (tab, event) => {
+				if(Object.is(tab.props.name, "first")){
+					getDeviceData()
+				}
 			}
 			return {
 				elTabs,
@@ -338,7 +413,9 @@
 				videoData,
 				videoFiled,
 				videoAlarmEvent,
-				videoChangeTime
+				videoChangeTime,
+				deviceList,
+				deviceEvent
 			}
 		}
 	}

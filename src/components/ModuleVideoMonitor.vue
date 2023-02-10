@@ -7,7 +7,7 @@
 
 <script>
 	import { ref, inject, onBeforeUnmount, watch, onMounted } from 'vue'
-	import { focusCameraImport_3d } from "../3d/index";
+	import { focusCameraImport_3d, intoRoom, outWallSetOpacity } from "../3d/index";
 	export default {
 		name: 'ModuleVideoMonitor',
 		props: ['list'],
@@ -17,6 +17,7 @@
 			// 创建播放实例
 			let initCount = 0
 			let pubKey = ''
+			CacheData.video.oWebControl = null
 			let oWebControl = null
 			let playWnd = ref()
 			
@@ -33,7 +34,6 @@
 							oWebControl.JS_SetWindowControlCallback({   // 设置消息回调
 								cbIntegrationCallBack: cbIntegrationCallBack
 							});
-							
 							oWebControl.JS_CreateWnd("playWnd", _width, _height).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
 								init();  // 创建播放实例成功后初始化
 							});
@@ -63,6 +63,7 @@
 						oWebControl = null;
 					}
 				});
+				CacheData.video.oWebControl = oWebControl	// 缓存视频控件
 			}
 			// 设置窗口控制回调
 			function setCallbacks() {
@@ -71,6 +72,7 @@
 			    });
 			}
 			
+			const threeDModuleOpacity = inject('threeDModuleOpacity') // 三维模型不透明度 0-1
 			// 推送消息
 			function cbIntegrationCallBack(oData) {
 				let responseMsg = oData.responseMsg
@@ -78,13 +80,25 @@
 				if(type == 1){
 					let cameraIndexCode = responseMsg.msg.cameraIndexCode
 					if(cameraIndexCode != ""){
+						let cameraItem = CacheData.video.listData.filter((item) => Object.is(item.cameraIndexCode, cameraIndexCode))[0]
+						let cameraName = cameraItem.cameraName
+						if(threeDModuleOpacity.value > 0.2){
+							threeDModuleOpacity.value = 0.2
+						}
+						if(cameraName.includes('均化')){
+							intoRoom(1)
+							outWallSetOpacity(threeDModuleOpacity.value)
+						}else if(cameraName.includes('立磨')){
+							intoRoom(2)
+							outWallSetOpacity(threeDModuleOpacity.value)
+						}
 						// 摄像头聚焦
 						focusCameraImport_3d(cameraIndexCode, 2000, () => {
-							oWebControl.JS_RequestInterface({
+							/* oWebControl.JS_RequestInterface({
 								funcName: "setFullScreen"
 							}).then(function (e) {
 								console.log(e)
-							})
+							}) */
 						})
 					}
 				}

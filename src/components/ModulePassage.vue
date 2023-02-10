@@ -38,7 +38,6 @@
 	import { ref, onMounted } from 'vue'
 	import { Passage } from '../assets/js/passage.js'
 	import { DateTime } from '../assets/js/dateTime.js'
-	import { WareHouse } from '../assets/js/warehouse.js'
 	
 	export default {
 		name: 'ModulePassage',
@@ -59,7 +58,6 @@
 			// 	{time: '2022/11/06 17:50', plate: '渝A154677', type: '入'},
 			// 	{time: '2022/11/06 17:50', plate: '渝A154677', type: '入'},
 			// ]
-			new WareHouse().getData()
 			
 			const dataList = ref([])
 			
