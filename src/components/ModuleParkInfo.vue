@@ -8,6 +8,13 @@
 			highlight-current-row
 			@row-click="wareHouseEvent"
 			:show-header="true">
+				<el-table-column
+				type="index"
+				align="center">
+					<template #default="scope">
+						<e :style="getStyleFun(scope.row)"></e>
+					</template>
+				</el-table-column>
 			    <el-table-column 
 				prop="_hz_device" 
 				label="设备" 
@@ -176,7 +183,19 @@
 				}else if(Object.is(row._hz_type, "vertical")){
 					limoRoomMainMachine_3d(row.deviceKey, 2000, () => {})
 				}	
-			}		
+			}
+			
+			/**
+			 * 获取样式标签
+			 */
+			const getStyleFun = (row) => {
+				if(Object.is(row._hz_type, "oxygen") || Object.is(row._hz_type, "stive")){
+					let color = CacheData.oxygen.color
+					let bgColor = row._grade == 1 ? color.one : row._grade == 2 ? color.two : color.four
+					return "display: inline-block;width: 1rem;height: 1rem;background:"+ bgColor +";border-radius: 50%;"
+					console.log(row)
+				}
+			}
 			
 			const elTabs = ref()	// 取盒子高度，计算表格内容高度值
 			let contentHeight = ref(228)	// 内容盒子高度
@@ -198,7 +217,8 @@
 				contentHeight,
 				isShow,
 				wareHouseList,
-				wareHouseEvent
+				wareHouseEvent,
+				getStyleFun
 			}
 		}
 	}

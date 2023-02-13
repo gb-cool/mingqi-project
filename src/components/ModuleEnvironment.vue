@@ -67,12 +67,7 @@
 			let airQuality = ref('优')	// 空气质量
 			let airQualityValue = ref(0)
 			let airQualityColor = ref('#00D98B')
-			let color = {
-				one: '#00D98B',
-				two: '#FFF100',
-				three: '#FE9418',
-				four: '#D10202'
-			}
+			let color = CacheData.oxygen.color	// 等级颜色
 			changeBarWidth()
 			weather()
 			function changeBarWidth(){
@@ -229,14 +224,15 @@
 						}
 						let _concentration = parseFloat(result.data['O2'])	// 浓度
 						item._concentration = _concentration
-						item._grade = _concentration < 19.95 ? 1 : ( _concentration >= 19.95 && _concentration < 23) ? 2 : 3	// 告警等级
+						let thresholdValue = CacheData.oxygen.thresholdValue	// 阈值
+						item._grade = _concentration < thresholdValue[0] ? 1 : ( _concentration >= thresholdValue[0] && _concentration < thresholdValue[1]) ? 2 : 3	// 告警等级
 						if(item._grade == 3){
 							CacheData.oxygen.alarmListData.unshift(item)	// 缓存告警信息
 						}
 						if(_oxygenIndex >= oxygenTableData.length){
 							oxygenItemMax.value = Math.max.apply(null, oxygenTableData.map((o) => o._concentration)).toFixed(2)
 							// 显示颜色
-							oxygenItemColor.value = oxygenItemMax.value < 19.95 ? color.one : (oxygenItemMax.value >= 19.95 && oxygenItemMax.value < 23) ? color.two : color.four
+							oxygenItemColor.value = oxygenItemMax.value < thresholdValue[0] ? color.one : (oxygenItemMax.value >= thresholdValue[0] && oxygenItemMax.value < thresholdValue[1]) ? color.two : color.four
 							// 弹窗开启 数据存入弹出框内容
 							oxygenTableData.sort((a, b) => b._concentration - a._concentration)
 							// 告警信息缓存
@@ -258,7 +254,8 @@
 						}
 						let _concentration = parseFloat(result.data['dust_concent'])	// 浓度
 						item._concentration = _concentration
-						item._grade = _concentration < 20 ? 1 : ( _concentration >= 20 && _concentration < 60) ? 2 : 3	// 告警等级
+						let thresholdValue = CacheData.stive.thresholdValue	// 阈值
+						item._grade = _concentration < thresholdValue[0] ? 1 : ( _concentration >= thresholdValue[0] && _concentration < thresholdValue[1]) ? 2 : 3	// 告警等级
 						// 告警信息缓存
 						if(item._grade == 3){
 							CacheData.stive.alarmListData.unshift(item)
@@ -266,7 +263,7 @@
 						if(_stiveIndex >= stiveTableData.length){
 							stiveItemMax.value = Math.max.apply(null, stiveTableData.map((o) => o._concentration)).toFixed(2)
 							// 颜色设置
-							stiveItemColor.value = stiveItemMax.value < 20 ? color.one : (stiveItemMax.value >= 20 && stiveItemMax.value < 60) ? color.two : color.four
+							stiveItemColor.value = stiveItemMax.value < thresholdValue[0] ? color.one : (stiveItemMax.value >= thresholdValue[0] && stiveItemMax.value < thresholdValue[1]) ? color.two : color.four
 							stiveTableData.sort((a, b) => b._concentration - a._concentration)
 							if(Object.is(popupType.value, 'stive') && popupIsShow.value) {
 								popupContent.value = stiveTableData

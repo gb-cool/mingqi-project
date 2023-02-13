@@ -5,12 +5,20 @@ var CacheData = {
 	oxygen: {
 		// 氧浓度
 		realTableData: [],		// 氧浓度实时表格数据
-		alarmListData: []		// 告警信息
+		alarmListData: [],		// 告警信息
+		thresholdValue: [19.95, 23],		// 阈值
+		color: {				// 等级颜色
+			one: '#00D98B',
+			two: '#FFF100',
+			three: '#FE9418',
+			four: '#D10202'
+		}
 	},
 	stive: {
 		// 粉尘浓度
 		realTableData: [],		// 氧浓度实时表格数据
-		alarmListData: []		// 告警信息
+		alarmListData: [],		// 告警信息
+		thresholdValue: [20, 60]		// 阈值
 	},
 	vertical: {
 		// 立模数据
@@ -40,14 +48,8 @@ var CacheData = {
  */
 var CachePublicFun = {
 	showOSLabel: (row) => {
-		console.log(row)
 		// 粉尘氧浓度标签显示
-		let color = {
-			one: '#00D98B',
-			two: '#FFF100',
-			three: '#FE9418',
-			four: '#D10202'
-		}
+		let color = CacheData.oxygen.color
 		let bg = color.one
 		if(row._grade == 1){
 			bg = color.one
@@ -58,7 +60,7 @@ var CachePublicFun = {
 		}
 		let el = document.getElementsByClassName("deviceCameraModelBox")[0]
 		el.innerHTML = ""
-		el.setAttribute('style', 'background:rgba(1, 0, 55, 0.7);padding:20px 84px 20px 20px;border-radius:14px;min-width: 82px;min-height: 32px;')
+		el.setAttribute('style', 'background:rgba(1, 0, 55, 0.4);padding:20px 84px 20px 20px;border-radius:14px;min-width: 82px;min-height: 32px;')
 		let _div = document.createElement("div")
 		_div.setAttribute('style', 'font-size:54px;color:#fff;position:relative;');
 		_div.innerHTML ="<p style = 'width:40px;height:40px;border-radius:50%;position:absolute;top: 50%;transform: translate(0, -20px);background:"+ bg +"'></p>"+
