@@ -78,10 +78,7 @@
 			
 			// 行点击事件
 			const intelligentWorkshopEvent = (row, event, column) => {
-				console.log(row)
-				focusFenChengImport_3d(row.deviceKey, 2000, () => {
-					popupIsShow.value = false
-				})
+				// console.log(row)
 				// console.log(event, column)
 			}
 			const getWidth = (width) => {

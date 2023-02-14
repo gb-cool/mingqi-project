@@ -1,10 +1,10 @@
 <!-- 人员信息组件 -->
 <template>
 	<div class="ModulePersonInfo">
-		<div class="photo">
+		<div class="photo" @click="lookPosition">
 			<img src="../assets/img/head-portrait.png"/>
 		</div>
-		<div class="info">
+		<div class="info" @click="lookInfo">
 			<p>姓名:<span>{{name}}</span></p>
 			<p>编号:<span>{{serial}}</span></p>
 			<p>电量:<span>{{area}}</span></p>
@@ -15,7 +15,19 @@
 <script>
 	export default {
 		name: "ModulePersonInfo",
-		props: ['name','serial', 'area']
+		props: ['name','serial', 'area'],
+		setup(props, ctx) {
+			const lookPosition = () => {
+				ctx.emit('lookPosition', props.serial)
+			}
+			const lookInfo = () => {
+				ctx.emit('lookInfo', props.serial)
+			}
+			return{
+				lookPosition,
+				lookInfo
+			}
+		}
 	}
 </script>
 

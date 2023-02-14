@@ -3,8 +3,9 @@
 	<div class="ModulePerson">
 		<el-scrollbar>
 			<ul>
-				<li v-for="(item, index) in personData" :key="index" @click="intelligentWorkshopEvent(item)">
-					<ModulePersonInfo :name='item.empName' :serial='item.deviceNo' :area='item.electric'/>
+				<!-- @click="intelligentWorkshopEvent(item)" -->
+				<li v-for="(item, index) in personData" :key="index" >
+					<ModulePersonInfo @lookPosition="lookPosition" @lookInfo="lookInfo" :name='item.empName' :serial='item.deviceNo' :area='item.electric'/>
 				</li>
 			</ul>
 		</el-scrollbar>
@@ -15,7 +16,7 @@
 	import { ref, inject, onMounted, onDeactivated } from 'vue'
 	import ModulePersonInfo from './ModulePersonInfo.vue'
 	import { JoySuch, Seekey } from '../assets/js/positionPerson.js'
-	import { initalizeMan_3d, realtimeMotionMan_3d } from "../3d/index";
+	import { initalizeMan_3d, realtimeMotionMan_3d, focusPeople_3d } from "../3d/index";
 	export default {
 		name: 'ModulePerson',
 		components: {
@@ -55,43 +56,8 @@
 				popupFileds.value = fileds
 				popupType.value = 'json'
 			}
-			let pList = [
-				{
-					dateTime: "2022-12-20 21:10:54",
-					department: "",
-					deviceNo: "1918FF029298",
-					electric: "50-75%",
-					empName: "陈洪",
-					empNo: "",
-					imgaddr: "",
-					islxsign: "0",
-					latitude: 29.843071137691485,
-					longitude: 106.98064524723237,
-					specifictype: "0",
-					tel: "13883237748",
-					worktype: "",
-					worktypename: "",
-					workunit: ""
-				},
-				{
-					dateTime: "2022-12-20 21:30:14",
-					department: "",
-					deviceNo: "1918FF029299",
-					electric: "50-75%",
-					empName: "贺浩",
-					empNo: "",
-					imgaddr: "",
-					islxsign: "0",
-					latitude: 29.84407113,
-					longitude: 106.9816452,
-					specifictype: "0",
-					tel: "13883237748",
-					worktype: "",
-					worktypename: "",
-					workunit: ""
-				}
-			]
-			const timer = ref(0)
+		
+			const psersonTimer = ref(0)
 			let personData = ref([])
 			const joySuch = new JoySuch()
 			const getData = joySuch.getToken(() => {
@@ -113,12 +79,8 @@
 						seekey.getBlts((seekData) => {
 							if(seekData.errorCode == 0) _seekD = seekData.data.data
 							mergePositionData(pData, _seekD)	// 合并人员实时位置信息
-							// console.log(pData)
 						})
 						personData.value = pData
-						if(personData.value == ""){
-							personData.value = pList
-						}
 					}else if(result.code == 1002){  // token失效
 						getData()
 					}
@@ -145,32 +107,79 @@
 						}
 					}
 				}
-				// setPersonMove(joySuchData)	// 设置人员动画
+				setPersonMove(joySuchData)	// 设置人员动画
 			}
 			/**
 			 * 设置人员动画
 			 */
 			function setPersonMove(data){
-				// console.log(data)
 				if(isThreeDLoad.value != 1){
 					return false
 				}
+				let len = data.length
+				let count = 0
 				for(let i = 0; i < data.length; i++){
 					let p = data[i]
 					let point = [p.x, p.y]
 					let layer = joySuch.getLayerToName(p.layer)
-					realtimeMotionMan_3d(p.deviceNo, point, layer, 5000, (result) => {})
+					realtimeMotionMan_3d(p.deviceNo, point, layer, 2000, (result) => {
+						count++
+						if(count >= len){
+							setTimeout(function(){
+								realTime()
+							}, 5000)
+						}
+					})
+				}
+			}
+			
+			/**
+			 * 人员聚焦
+			 */
+			const lookPosition = (deviceNo) => {
+				let row = personData.value.filter((item) => Object.is(item.deviceNo, deviceNo))
+				if(row.length > 0){
+					row = row[0]
+					focusPeople_3d(deviceNo, 2000, () => {})	// 聚焦
+				}
+			}
+			/**
+			 * 查看人员信息
+			 */
+			const lookInfo = (deviceNo) => {
+				let row = personData.value.filter((item) => Object.is(item.deviceNo, deviceNo))
+				if(row.length > 0){
+					row = row[0]
+					intelligentWorkshopEvent(row)	// 标签显示
 				}
 			}
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
-				timer.value = window.setInterval(realTime, 60000)
+				psersonTimer.value = setInterval(function(){
+					if(CacheData.person.allData.length > 0){
+						clearInterval(psersonTimer.value)
+						console.log(new Date())
+						let data = CacheData.person.allData
+						let md = []
+						for(let i = 0; i < data.length; i++){
+							let p = data[i]
+							md.push({id: p.sn,name: p.name})
+						}
+						initalizeMan_3d(md, () => {
+							console.log("开始执行")
+							psersonTimer.value = null
+							realTime()
+						})
+					}
+				}, 1000)
 			})
 			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
-				window.clearInterval(timer.value);
+				clearInterval(psersonTimer.value);
 			})
 			return {
 				personData,
-				intelligentWorkshopEvent
+				intelligentWorkshopEvent,
+				lookPosition,
+				lookInfo
 			}
 		}
 	}
