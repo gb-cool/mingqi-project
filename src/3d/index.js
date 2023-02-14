@@ -33,6 +33,8 @@ import {
     updataLiMoRobotPlane,
     updataLEDforOutRoadPlane,
     focusoutRoadLED,
+    pipeLineFun,
+    visibleMan,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -273,4 +275,19 @@ export const updataLEDforOutRoadPlane_3d = (data) => {
 // 外围马路上的四个LED屏幕聚焦 id = ID   times = 毫秒数  td = 回调函数
 export const focusoutRoadLED_3d = (id, times, td) => {
     focusoutRoadLED(id, times, td);
+};
+
+/*
+    管道动画方法
+    type = 0(所有管道正常显示)  1(所有管道显示动画效果)  2(磁悬浮风机管道动画)   3(输送管道动画)   4(罗茨风机管道动画)    5(压缩空气管道动画)    6(水管动画)    7(氮气管道动画)   
+    speed = number 
+    color = 当type为1时 需要传递一个长度为6的数组  [0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff]  这个数组的顺序，按照type的管道顺序来的;  当type为2-7的时候  直接传值 0xffffff;
+*/
+export const pipeLineFun_3d = (type, speed, color) => {
+    pipeLineFun(type, speed, color);
+};
+
+// 根据状态决定是否显示当前人员模型   id = 人员ID   bool = boolean(true 为显示   false   为隐藏  )
+export const visibleMan_3d = (id, bool) => {
+    visibleMan(id, bool);
 };
