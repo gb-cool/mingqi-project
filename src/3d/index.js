@@ -281,7 +281,7 @@ export const focusoutRoadLED_3d = (id, times, td) => {
     管道动画方法
     type = 0(所有管道正常显示)  1(所有管道显示动画效果)  2(磁悬浮风机管道动画)   3(输送管道动画)   4(罗茨风机管道动画)    5(压缩空气管道动画)    6(水管动画)    7(氮气管道动画)   
     speed = number 
-    color = 当type为1时 需要传递一个长度为6的数组  [0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff]  这个数组的顺序，按照type的管道顺序来的;  当type为2-7的时候  直接传值 0xffffff;
+    color = 当type为1时 需要传递一个长度为7的数组  [0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff]  这个数组的顺序，按照type的管道顺序来的;  当type为2-7的时候  直接传值 0xffffff; 注意，最后一个颜色值是控制outline颜色的。
 */
 export const pipeLineFun_3d = (type, speed, color) => {
     pipeLineFun(type, speed, color);
