@@ -46,7 +46,8 @@
 <script>
 	import { ref, inject } from 'vue'
 	import * as THREE from 'three'
-	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, fourColorDiagram_3d, outRoomOpactiy_3d} from "../3d/index"	// 三维
+	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, 
+	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d} from "../3d/index"	// 三维
 	export default {
 		name: "ToolsMenu",
 		setup() {
@@ -82,17 +83,30 @@
 			// 管道事件
 			// 压缩空气管道、氮气管道、粉料输送管道、循环水管道、罗茨风机管道、磁悬浮风机管道
 			const isPipelineShow = ref(false)	// 是否显示管道
-			const pipelineSelect = ref('1')
+			const pipelineSelect = ref('0')
 			const pipelineData = [
-				{img: 'foot-1.png', type:'1', name: '压缩空气管道'},
-				{img: 'foot-2.png', type:'2', name: '氮气管道'},
-				{img: 'foot-3.png', type:'3', name: '粉料输送管道'},
-				{img: 'foot-4.png', type:'4', name: '循环水管道'},
-				{img: 'foot-5.png', type:'5', name: '罗茨风机管道'},
-				{img: 'foot-6.png', type:'6', name: '磁悬浮风机管道'}
+				{img: 'foot-0.png', type:'0', name: '所有管道'},
+				{img: 'foot-0-1.png', type:'1', name: '所有管道动画'},
+				{img: 'foot-3.png', type:'5', name: '压缩空气管道'},
+				{img: 'foot-4.png', type:'7', name: '氮气管道'},
+				{img: 'foot-5.png', type:'3', name: '粉料输送管道'},
+				{img: 'foot-1.png', type:'6', name: '循环水管道'},
+				{img: 'foot-2.png', type:'4', name: '罗茨风机管道'},
+				{img: 'foot-6.png', type:'2', name: '磁悬浮风机管道'}
 			]
+			//  type = 0(所有管道正常显示)  1(所有管道显示动画效果)  2(磁悬浮风机管道动画)   
+			// 3(输送管道动画)   4(罗茨风机管道动画)    5(压缩空气管道动画)    6(水管动画)    7(氮气管道动画) 
 			const pipelineEvent = (item) => {
 				pipelineSelect.value = item.type
+				// outwallCondition_3d(0.5)	// 外墙和外楼顶透明度状态
+				opacity.value = 0.1
+				threeDModuleOpacity.value = opacity.value
+				outRoomOpactiy_3d(opacity.value) // 除地面意外的所有其他物体设置透明度
+				if(Object.is(item.type, "1")){
+					pipeLineFun_3d(item.type, 0.2, [0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff])	// 管道动画方法
+				}else{
+					pipeLineFun_3d(item.type, 0.2, 0xffffff)	// 管道动画方法
+				}
 			}
 			
 			// 智慧安防
@@ -105,7 +119,7 @@
 			const securityEvent = (item) => {
 				securitySelect.value = item.type
 				roadFlow_3d(false)
-				smallRoomFloorPlane_3d(false)
+				smallRoomFloorPlane_3d(false)	// 小厂房内部黄色蓝色片显示隐藏
 				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)
 				outRoomOpactiy_3d(1)
 				switch(item.type){
@@ -139,10 +153,12 @@
 				rectangleActive.value = name
 				isPipelineShow.value = false
 				isSecurityShow.value = false
-				roadFlow_3d(false)
-				smallRoomFloorPlane_3d(false)
-				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)
-				outRoomOpactiy_3d(1)
+				roadFlow_3d(false)	// 控制马路上流动线条显示隐藏
+				smallRoomFloorPlane_3d(false)	// 小厂房内部黄色蓝色片显示隐藏
+				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)	// 四色图显示隐藏并更改颜色
+				outRoomOpactiy_3d(1)	// 除地面意外的所有其他物体设置透明度
+				pipeLineFun_3d(0, 0.2, 0xffffff)	// 管道全部正常显示
+				
 				window.clearInterval(timer.value);
 				
 				usagePattern.value = 1	// 使用模式
@@ -153,7 +169,7 @@
 						returnEvent()	// 返回主场景
 						break;
 					case "security":	// 安防
-						isSecurityShow.value = true
+						isSecurityShow.value = true	// 显示安防
 						usagePattern.value = 2
 						smallRoomFloorPlane_3d(true)
 						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.8)
@@ -165,7 +181,8 @@
 						})
 						break;
 					case "pipe":	//管道
-						isPipelineShow.value = true
+						isPipelineShow.value = true	// 显示管道
+						usagePattern.value = 3	//使用模式
 						break;
 				}
 			}
