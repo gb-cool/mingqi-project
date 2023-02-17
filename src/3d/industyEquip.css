@@ -209,6 +209,13 @@
     text-align: center;
 }
 
+.roomUpText {
+    width: 100%;
+    font-size: 14px;
+    line-height: 32px;
+    text-align: center;
+}
+
 .outRoadBox3 {
     margin-top: 11px;
 }
@@ -226,4 +233,13 @@
     margin-left: 5%;
     height: 0.2px;
     background-color: #ff0000;
+}
+
+
+.roomUpLEDplanes {
+    width: 100px;
+    height: 32px;
+    background-color: black;
+    color: #ff0000;
+    position: absolute;
 }

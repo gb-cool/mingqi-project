@@ -35,6 +35,8 @@ import {
     focusoutRoadLED,
     pipeLineFun,
     visibleMan,
+    updataRoomUpLEDplane,
+    focusRoomUpLED
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -291,3 +293,22 @@ export const pipeLineFun_3d = (type, speed, color) => {
 export const visibleMan_3d = (id, bool) => {
     visibleMan(id, bool);
 };
+
+/*
+    更新房子上面的六个LED屏幕信息  6个LED目前的ID是 outRoom1  outRoom2  outRoom3  outRoom4  outRoom5  outRoom6  
+    data = [
+        {
+            id: xxxx,
+            value: 'xxxxx',
+        },
+        ......
+    ]
+*/
+export const updataRoomUpLEDplane_3d = (data) => {
+    updataRoomUpLEDplane(data)
+}
+
+// 外围墙上的6个LED片聚焦
+export const focusRoomUpLED_3d = (id, times, td) => {
+    focusRoomUpLED(id, times, td)
+}
