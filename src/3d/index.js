@@ -289,9 +289,13 @@ export const pipeLineFun_3d = (type, speed, color) => {
     pipeLineFun(type, speed, color);
 };
 
-// 根据状态决定是否显示当前人员模型   id = 人员ID   bool = boolean(true 为显示   false   为隐藏  )
-export const visibleMan_3d = (id, bool) => {
-    visibleMan(id, bool);
+/*  
+    根据状态决定是否显示当前人员模型
+    data = [id, id, id, id]
+    bool = boolean(true 为显示   false   为隐藏  )
+*/ 
+export const visibleMan_3d = (data, bool) => {
+    visibleMan(data, bool);
 };
 
 /*
