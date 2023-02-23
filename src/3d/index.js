@@ -36,7 +36,8 @@ import {
     pipeLineFun,
     visibleMan,
     updataRoomUpLEDplane,
-    focusRoomUpLED
+    focusRoomUpLED,
+    roamAnimation,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -293,7 +294,7 @@ export const pipeLineFun_3d = (type, speed, color) => {
     根据状态决定是否显示当前人员模型
     data = [id, id, id, id]
     bool = boolean(true 为显示   false   为隐藏  )
-*/ 
+*/
 export const visibleMan_3d = (data, bool) => {
     visibleMan(data, bool);
 };
@@ -309,10 +310,15 @@ export const visibleMan_3d = (data, bool) => {
     ]
 */
 export const updataRoomUpLEDplane_3d = (data) => {
-    updataRoomUpLEDplane(data)
-}
+    updataRoomUpLEDplane(data);
+};
 
 // 外围墙上的6个LED片聚焦
 export const focusRoomUpLED_3d = (id, times, td) => {
-    focusRoomUpLED(id, times, td)
+    focusRoomUpLED(id, times, td);
+};
+
+// 场景漫游  type == 0(开始漫游)  1(结束漫游)  2(暂停漫游)  3(继续漫游)   speed = 速度值越大越慢，越小越快   td 漫游结束回调
+export const roamAnimation_3d = (type, speed , td) => {
+    roamAnimation(type, speed , td)
 }
