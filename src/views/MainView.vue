@@ -50,7 +50,8 @@
 	import axios from 'axios'
 	// 3d part
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, 
-	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d, fourColorOpacity_3d, updataLEDforOutRoadPlane_3d  } from "../3d/index";
+	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d, fourColorOpacity_3d,
+	 updataLEDforOutRoadPlane_3d, updataRoomUpLEDplane_3d  } from "../3d/index";
 	import { wareHouseYard } from "../3d/deviceInterfase.js"
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
@@ -235,28 +236,91 @@
 			 * LED屏数据显示
 			 */
 			function setLed(){
+				let roomJson ={
+					"10.12.64.65": "outRoom5",
+					"10.12.64.66": "outRoom6",
+					"10.12.64.67": "outRoom4",
+					"10.12.64.68": "outRoom3",
+					// "10.12.64.69": "outRoom1",
+					"10.12.64.70": "outRoom1",
+					"10.12.64.88": "outRoom2"
+				}
 				const passage = new Passage()
 				const passageEv = () => {
 					passage.getLedData((result) => {
 						let data = result.data.data
+						CacheData.led.roadListData = []
+						CacheData.led.roomListData = []
 						let da = []
+						let roomDa = []
 						data.forEach((item) => {
 							let ledv = []
-							if(Object.is(item.ip, "10.12.64.61") || Object.is(item.ip, "10.12.64.62") || Object.is(item.ip, "10.12.64.63") || Object.is(item.ip, "10.12.64.64")){
-								if(!Object.is(getLedV(item.key1), "")){ledv.push(item.key1)}
-								if(!Object.is(getLedV(item.key2), "")){ledv.push(item.key2)}
-								if(!Object.is(getLedV(item.key3), "")){ledv.push(item.key3)}
-								if(!Object.is(getLedV(item.key4), "")){ledv.push(item.key4)}
+							if(Object.is(item.ip, "10.12.64.61") 
+							|| Object.is(item.ip, "10.12.64.62") 
+							|| Object.is(item.ip, "10.12.64.63") 
+							|| Object.is(item.ip, "10.12.64.64")){
+								if(Object.is(item.ip, "10.12.64.61")){
+									item.direction1 = "←"
+									item.direction2 = "←"
+									item.direction3 = "↑"
+									item.direction4 = ""
+								}
+								if(Object.is(item.ip, "10.12.64.62")){
+									item.direction1 = "←"
+									item.direction2 = "←"
+									item.direction3 = ""
+									item.direction4 = ""
+								}
+								if(Object.is(item.ip, "10.12.64.63")){
+									item.direction1 = "↑"
+									item.direction2 = "←"
+									item.direction3 = ""
+									item.direction4 = ""
+								}
+								if(Object.is(item.ip, "10.12.64.64")){
+									item.direction1 = "←"
+									item.direction2 = ""
+									item.direction3 = ""
+									item.direction4 = ""
+								}
+								if(!Object.is(getLedV(item.key1), "")){ledv.push(item.direction1 + " " + item.key1 + " " + item.value1)}
+								if(!Object.is(getLedV(item.key2), "")){ledv.push(item.direction2 + " " + item.key2 + " " + item.value2)}
+								if(!Object.is(getLedV(item.key3), "")){ledv.push(item.direction3 + " " + item.key3 + " " + item.value3)}
+								if(!Object.is(getLedV(item.key4), "")){ledv.push(item.direction4 + " " + item.key4 + " " + item.value4)}
 								if(ledv.length == 0) {
 									ledv.push("LED")
 								}
+								item._value = ledv
+								CacheData.led.roadListData.push(item)	// 缓存道路LED数据
 								da.push({
 									id: item.ip,
 									value: ledv
 								})
 							}
+							// 车间LED
+							if(Object.is(item.ip, "10.12.64.65") 
+							|| Object.is(item.ip, "10.12.64.66") 
+							|| Object.is(item.ip, "10.12.64.67") 
+							|| Object.is(item.ip, "10.12.64.68") 
+							// || Object.is(item.ip, "10.12.64.69")
+							|| Object.is(item.ip, "10.12.64.70")
+							|| Object.is(item.ip, "10.12.64.88")){
+								if(!Object.is(getLedV(item.key1), "")){ledv.push(item.key1 + " " + item.value1)}
+								if(!Object.is(getLedV(item.key2), "")){ledv.push(item.key2 + " " + item.value2)}
+								if(ledv.length == 0) {
+									ledv.push("正在接入中")
+								}
+								item._value = ledv
+								item._id = roomJson[item.ip]
+								roomDa.push({
+									id: roomJson[item.ip],
+									value: ledv
+								})
+								CacheData.led.roomListData.push(item)	// 缓存道路LED数据
+							}
 						})
-						updataLEDforOutRoadPlane_3d(da)	// 设置数据到LED屏
+						updataLEDforOutRoadPlane_3d(da)	// 道路LED屏数据设置
+						updataRoomUpLEDplane_3d(roomDa) // 车间LED屏数据设置
 					})
 				}
 				setInterval(function(){

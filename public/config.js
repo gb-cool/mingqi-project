@@ -1,4 +1,6 @@
 const urlConfig = {
+	"root" : "http://localhost:8090",
+	
 	"Seekey": "http://10.12.67.17:46000/",
 	
 	// "JoySuch": "http://10.12.67.17:9999/",

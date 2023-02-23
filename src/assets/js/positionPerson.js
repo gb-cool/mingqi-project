@@ -322,7 +322,7 @@ export class JoySuch extends PositionPerson{
 	// 根据楼层数，获取模型名称
 	getLayerToName(layer){
 		let name = "地面一层"
-		switch(layer){
+		switch(layer.toString()){
 			case "1": 
 				name = "地面一层"
 				break;

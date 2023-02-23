@@ -30,7 +30,8 @@ var CacheData = {
 	},
 	person: {
 		// 人员
-		allData: []				// 所有人员数据
+		allData: [],			// 所有人员数据
+		realListData: []			// 重点区域人员实时数据
 	},
 	video: {
 		// 视频
@@ -40,6 +41,10 @@ var CacheData = {
 	robot: {
 		// 巡检机器人
 		listData: []			// 巡检机器人列表数据
+	},
+	led: {
+		roadListData: [],		// 道路LED列表数据
+		roomListData: []		// 车间LED列表数据
 	}
 }
 
