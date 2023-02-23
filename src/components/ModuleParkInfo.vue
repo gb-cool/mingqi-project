@@ -36,7 +36,7 @@
 <script>
 	import { ref, onMounted, watch, onDeactivated } from 'vue'
 	import { WareHouse } from '../assets/js/warehouse.js'
-	import { focusduishiLED_3d, focusFenChengImport_3d, limoRoomMainMachine_3d } from "../3d/index";
+	import { focusduishiLED_3d, focusFenChengImport_3d, limoRoomMainMachine_3d, focusoutRoadLED_3d, focusRoomUpLED_3d } from "../3d/index";
 	export default{
 		name: 'ModuleParkInfo',
 		props:['type'],
@@ -52,7 +52,7 @@
 				isShow.value = type
 				realTime()
 			}
-			// timer.value = window.setInterval(realTime, 3000)	// 实时刷新数据
+			timer.value = window.setInterval(realTime, 10000)	// 实时刷新数据
 			function realTime(){
 				console.log(isShow.value)
 				switch(isShow.value){
@@ -74,6 +74,9 @@
 						break;
 					case "均化车间":
 						getHomogenizingRealTimeData()
+						break;
+					case "道路LED":
+						getLedRealTimeData()
 						break;
 				}
 			}
@@ -121,7 +124,6 @@
 			function getVerticalMillRealTimeData(){
 				let data = packOSData("立磨")
 				let verticalData = CacheData.vertical.realTableData
-				// console.log(verticalData)
 				for(let i = 0; i < verticalData.length; i++){
 					let d = verticalData[i]
 					const returnedTarget = Object.assign({
@@ -138,6 +140,29 @@
 			 */
 			function getHomogenizingRealTimeData(){
 				let data = packOSData("均化")
+				wareHouseList.value = data
+			}
+			/**
+			 * LED屏
+			 */
+			function getLedRealTimeData(){
+				let data = []
+				CacheData.led.roadListData.forEach((d) => {
+					data.push(Object.assign({
+						_hz_device: d.ip,
+						_hz_value: d._value,
+						_hz_type: "led",
+						_hz_code: "road"
+					}, d))
+				})
+				CacheData.led.roomListData.forEach((d) => {
+					data.push(Object.assign({
+						_hz_device: d.ip,
+						_hz_value: d._value,
+						_hz_type: "led",
+						_hz_code: "room"
+					}, d))
+				})
 				wareHouseList.value = data
 			}
 			/**
@@ -179,10 +204,16 @@
 						CachePublicFun.showOSLabel(row)	// 粉尘氧浓度标签显示
 					})
 				}else if(Object.is(row._hz_type, "ware")){
-					focusduishiLED_3d(row.stockPlaceCode, 2000, () => {})
+					focusduishiLED_3d(row.stockPlaceCode, 2000, () => {})	// 堆场
 				}else if(Object.is(row._hz_type, "vertical")){
-					limoRoomMainMachine_3d(row.deviceKey, 2000, () => {})
-				}	
+					limoRoomMainMachine_3d(row.deviceKey, 2000, () => {})	// 立磨
+				}else if(Object.is(row._hz_type, "led")){
+					if(Object.is(row._hz_code, "road")){
+						focusoutRoadLED_3d(row.ip, 2000, () => {})
+					}else{
+						focusRoomUpLED_3d(row._id, 2000, () => {})
+					}
+				}
 			}
 			
 			/**
@@ -193,7 +224,8 @@
 					let color = CacheData.oxygen.color
 					let bgColor = row._grade == 1 ? color.one : row._grade == 2 ? color.two : color.four
 					return "display: inline-block;width: 1rem;height: 1rem;background:"+ bgColor +";border-radius: 50%;"
-					console.log(row)
+				}else if(Object.is(row._hz_type, "led")){
+					return "display: inline-block;width: 1rem;height: 1rem;background:"+ CacheData.oxygen.color.one +";border-radius: 50%;"
 				}
 			}
 			

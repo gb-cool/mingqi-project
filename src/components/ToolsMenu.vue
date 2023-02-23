@@ -85,14 +85,14 @@
 			const isPipelineShow = ref(false)	// 是否显示管道
 			const pipelineSelect = ref('0')
 			const pipelineData = [
-				{img: 'foot-0.png', type:'0', name: '所有管道'},
+				{img: 'foot-0.png', type:'0', color:'0xffffff', name: '所有管道'},
 				{img: 'foot-0-1.png', type:'1', name: '所有管道动画'},
-				{img: 'foot-3.png', type:'5', name: '压缩空气管道'},
-				{img: 'foot-4.png', type:'7', name: '氮气管道'},
-				{img: 'foot-5.png', type:'3', name: '粉料输送管道'},
-				{img: 'foot-1.png', type:'6', name: '循环水管道'},
-				{img: 'foot-2.png', type:'4', name: '罗茨风机管道'},
-				{img: 'foot-6.png', type:'2', name: '磁悬浮风机管道'}
+				{img: 'foot-3.png', type:'5', color: 0x224288, name: '压缩空气管道'},
+				{img: 'foot-4.png', type:'7', color: 0xffd355, name: '氮气管道'},
+				{img: 'foot-5.png', type:'3', color: 0x828282, name: '粉料输送管道'},
+				{img: 'foot-1.png', type:'6', color: 0x369edb, name: '循环水管道'},
+				{img: 'foot-2.png', type:'4', color: 0x6482C8, name: '罗茨风机管道'},
+				{img: 'foot-6.png', type:'2', color: 0xa5c367, name: '磁悬浮风机管道'}
 			]
 			//  type = 0(所有管道正常显示)  1(所有管道显示动画效果)  2(磁悬浮风机管道动画)   
 			// 3(输送管道动画)   4(罗茨风机管道动画)    5(压缩空气管道动画)    6(水管动画)    7(氮气管道动画) 
@@ -103,9 +103,9 @@
 				threeDModuleOpacity.value = opacity.value
 				outRoomOpactiy_3d(opacity.value) // 除地面意外的所有其他物体设置透明度
 				if(Object.is(item.type, "1")){
-					pipeLineFun_3d(item.type, 0.2, [0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff])	// 管道动画方法
+					pipeLineFun_3d(item.type, 0.2, [0xa5c367, 0x828282, 0x6482C8, 0x224288, 0x369edb, 0xffd355])	// 管道动画方法
 				}else{
-					pipeLineFun_3d(item.type, 0.2, 0xffffff)	// 管道动画方法
+					pipeLineFun_3d(item.type, 0.2, item.color)	// 管道动画方法
 				}
 			}
 			

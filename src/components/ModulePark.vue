@@ -181,11 +181,13 @@
 							tweenMoveing([-2534,0,-3630], [-1186,717,-2345], 2000, (e) => {})
 							break;
 					}
-					intoRoom(row.id)
-					if(threeDModuleOpacity.value > 0.2){
-						threeDModuleOpacity.value = 0.2
+					if(row.id != 6){
+						intoRoom(row.id)
+						if(threeDModuleOpacity.value > 0.2){
+							threeDModuleOpacity.value = 0.2
+						}
+						outWallSetOpacity(threeDModuleOpacity.value)
 					}
-					outWallSetOpacity(threeDModuleOpacity.value)
 					ctx.emit('getName', row)
 				}else{
 					alert(row.name + "模型正在建设！")

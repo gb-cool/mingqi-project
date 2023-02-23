@@ -16,7 +16,8 @@
 	import { ref, inject, onMounted, onDeactivated } from 'vue'
 	import ModulePersonInfo from './ModulePersonInfo.vue'
 	import { JoySuch, Seekey } from '../assets/js/positionPerson.js'
-	import { initalizeMan_3d, realtimeMotionMan_3d, focusPeople_3d } from "../3d/index";
+	import { initalizeMan_3d, realtimeMotionMan_3d, focusPeople_3d, visibleMan_3d } from "../3d/index";
+import { visibleMan } from '@/3d/industryEquip';
 	export default {
 		name: 'ModulePerson',
 		components: {
@@ -107,6 +108,20 @@
 						}
 					}
 				}
+				let hideData = []
+				if(CacheData.person.realListData.length > 0){
+					let historyData = CacheData.person.realListData	// 缓存的历史数据
+					historyData.forEach((item) => {
+						let isa = joySuchData.filter((e) => Object.is(e.deviceNo, item.deviceNo))
+						if(isa.length == 0){
+							hideData.push(item.deviceNo)
+						}
+					})
+				}
+				if(hideData.length > 0){
+					visibleMan_3d(hideData, false)	// 根据状态决定是否显示当前人员模型
+				}
+				CacheData.person.realListData = joySuchData	// 缓存人员信息
 				setPersonMove(joySuchData)	// 设置人员动画
 			}
 			/**
@@ -116,13 +131,13 @@
 				if(isThreeDLoad.value != 1){
 					return false
 				}
+				let showData = []
+				data.forEach((item) => showData.push(item.deviceNo))
+				visibleMan_3d(showData, true)	// 显示当前人员模型
 				let len = data.length
 				let count = 0
-				for(let i = 0; i < data.length; i++){
-					let p = data[i]
-					let point = [p.x, p.y]
-					let layer = joySuch.getLayerToName(p.layer)
-					realtimeMotionMan_3d(p.deviceNo, point, layer, 2000, (result) => {
+				data.forEach((p) => {
+					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {
 						count++
 						if(count >= len){
 							setTimeout(function(){
@@ -130,7 +145,7 @@
 							}, 5000)
 						}
 					})
-				}
+				})
 			}
 			
 			/**
@@ -157,17 +172,20 @@
 				psersonTimer.value = setInterval(function(){
 					if(CacheData.person.allData.length > 0){
 						clearInterval(psersonTimer.value)
-						console.log(new Date())
 						let data = CacheData.person.allData
 						let md = []
-						for(let i = 0; i < data.length; i++){
-							let p = data[i]
-							md.push({id: p.sn,name: p.name})
-						}
+						let hideData = []
+						data.forEach((p) => {
+							md.push({id: p.sn, name: p.name})
+							hideData.push(p.sn)
+						})
 						initalizeMan_3d(md, () => {
 							console.log("开始执行")
 							psersonTimer.value = null
-							realTime()
+							setTimeout(() => {
+								visibleMan_3d(hideData, false)	// 隐藏人员
+								realTime()	// 人员实时动画
+							}, 1000)
 						})
 					}
 				}, 1000)
