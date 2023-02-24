@@ -4027,7 +4027,7 @@ var roamTimeout,
     roamIndex,
     roamPausedType = true,
     roamGoingType = true;
-window.roamAnimation = (roomID, type, speed = 20, td = () => {}) => {
+export const roamAnimation = (roomID, type, speed = 20, td = () => {}) => {
     if (type == 0) {
         cameraTween && cameraTween.stop();
         orbitTween && orbitTween.stop();

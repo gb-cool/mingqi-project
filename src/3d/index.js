@@ -321,9 +321,9 @@ export const focusRoomUpLED_3d = (id, times, td) => {
     focusRoomUpLED(id, times, td);
 };
 
-// 场景漫游  type == 0(开始漫游)  1(结束漫游)  2(暂停漫游)  3(继续漫游)   speed = 速度值越大越慢，越小越快   td 漫游结束回调
-export const roamAnimation_3d = (type, speed, td) => {
-    roamAnimation(type, speed, td);
+// 场景漫游 room==0(破碎间和筛分间漫游) 1(碎石间漫游) 2(立磨间漫游) 3(均化间漫游)  type == 0(开始漫游)  1(结束漫游)  2(暂停漫游)  3(继续漫游)   speed = 速度值越大越慢，越小越快   td 漫游结束回调
+export const roamAnimation_3d = (room, type, speed, td) => {
+    roamAnimation(room, type, speed, td);
 };
 
 // 破碎间皮带动画  speed 控制皮带速度 越大越快     bool 控制皮带动画是否开启
