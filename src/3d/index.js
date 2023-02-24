@@ -38,6 +38,9 @@ import {
     updataRoomUpLEDplane,
     focusRoomUpLED,
     roamAnimation,
+    posuiDanimation,
+    saifenDanimation,
+    suishiDanimation,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -319,6 +322,21 @@ export const focusRoomUpLED_3d = (id, times, td) => {
 };
 
 // 场景漫游  type == 0(开始漫游)  1(结束漫游)  2(暂停漫游)  3(继续漫游)   speed = 速度值越大越慢，越小越快   td 漫游结束回调
-export const roamAnimation_3d = (type, speed , td) => {
-    roamAnimation(type, speed , td)
-}
+export const roamAnimation_3d = (type, speed, td) => {
+    roamAnimation(type, speed, td);
+};
+
+// 破碎间皮带动画  speed 控制皮带速度 越大越快     bool 控制皮带动画是否开启
+export const posuiDanimation_3d = (speed, bool) => {
+    posuiDanimation(speed, bool);
+};
+
+// 筛分间皮带动画  speed 控制皮带速度 越大越快     bool 控制皮带动画是否开启
+export const saifenDanimation_3d = (speed, bool) => {
+    saifenDanimation(speed, bool);
+};
+
+// 碎石间皮带动画  speed 控制皮带速度 越大越快     bool 控制皮带动画是否开启
+export const suishiDanimation_3d = (speed, bool) => {
+    suishiDanimation(speed, bool);
+};
