@@ -319,6 +319,26 @@ export class JoySuch extends PositionPerson{
 			console.log(error);
 		})
 	}
+	/**
+	 * 获取人员头像
+	 */
+	getImageView(imgaddr, callback){
+		const path = this.JoySuch.url + '/api/v2/'+ imgaddr +'&origin=thumb&buildId=205046'	// 接口地址
+		const options = {
+			method: 'GET',
+			responseType: "blob",
+			url: path,
+			// url: this.JoySuch.url + '/api/v2/image/view',
+			// params: {id: '27', origin: 'thumb', buildId: '205046'},
+			headers: {token: this.token}
+		};
+		
+		axios.request(options).then(function (response) {
+			callback(response)
+		}).catch(function (error) {
+			console.error(error);
+		});
+	}
 	// 根据楼层数，获取模型名称
 	getLayerToName(layer){
 		let name = "地面一层"

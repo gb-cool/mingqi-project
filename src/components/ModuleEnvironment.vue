@@ -222,7 +222,7 @@
 						if(result.code != 200){
 							return false
 						}
-						let _concentration = parseFloat(result.data['O2'])	// 浓度
+						let _concentration = parseFloat(result.data['O2']).toFixed(2)	// 浓度
 						item._concentration = _concentration
 						let thresholdValue = CacheData.oxygen.thresholdValue	// 阈值
 						item._grade = _concentration < thresholdValue[0] ? 1 : ( _concentration >= thresholdValue[0] && _concentration < thresholdValue[1]) ? 2 : 3	// 告警等级
@@ -252,7 +252,7 @@
 						if(result.code != 200){
 							return false
 						}
-						let _concentration = parseFloat(result.data['dust_concent'])	// 浓度
+						let _concentration = parseFloat(result.data['dust_concent']).toFixed(2)	// 浓度
 						item._concentration = _concentration
 						let thresholdValue = CacheData.stive.thresholdValue	// 阈值
 						item._grade = _concentration < thresholdValue[0] ? 1 : ( _concentration >= thresholdValue[0] && _concentration < thresholdValue[1]) ? 2 : 3	// 告警等级

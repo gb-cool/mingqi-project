@@ -38,6 +38,25 @@
 			</li>
 			<li>
 				<div class="rectangle" :class="[Object.is(rectangleActive, 'roaming')?'active':'']" @click="btnEvent('roaming')">园区漫游</div>
+				<div class="otherBox" v-show="isRoamingShow">
+					<div class="pipelineBox"  v-for="(item, index) in roamingData" :key="item.type">
+						<el-tooltip :content="item.name" placement="top" effect="light">
+							<div 
+							:class="['pipeline', (item.type == roamingSelect)?'active':'']"
+							@click="roamingEvent(item)">
+								<span>{{item.soft}}</span>
+								<!-- <img :src="require('../assets/img/'+ item.img)"/> -->
+							</div>
+						</el-tooltip>
+					</div>
+					<ul class="roamingRoom">
+						<li v-for="(item, index) in roamingRoomData" :key="item.roomId" 
+						@click="roamingRoomEvent(item)" 
+						:class="[(item.roomId == roamingRoomSelect)?'active':'']">
+							{{item.name}}
+						</li>
+					</ul>
+				</div>
 			</li>
 		</ul>
 	</div>
@@ -47,7 +66,7 @@
 	import { ref, inject } from 'vue'
 	import * as THREE from 'three'
 	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, 
-	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d} from "../3d/index"	// 三维
+	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d, roamAnimation_3d} from "../3d/index"	// 三维
 	export default {
 		name: "ToolsMenu",
 		setup() {
@@ -137,6 +156,35 @@
 				}
 			}
 			
+			// 园区漫游
+			const isRoamingShow = ref(false)	// 是否显示漫游控制按钮
+			const roamingSelect = ref('0')
+			const roamingData = [
+				{img: 'foot-10.png', type:'0', name: '开始漫游', soft: "开始"},
+				{img: 'foot-10.png', type:'2', name: '暂停漫游', soft: "暂停"},
+				{img: 'foot-10.png', type:'3', name: '继续漫游', soft: "继续"},
+				{img: 'foot-10.png', type:'1', name: '结束漫游', soft: "结束"}
+			]
+			const roamingRoomData = [
+				{name: "破碎间和筛分间", roomId: "0"},
+				{name: "碎石间", roomId: "1"},
+				{name: "立磨间", roomId: "2"},
+				{name: "均化间", roomId: "3"}
+			]
+			const roamingVelocity = 50	// 漫游速度
+			const roamingRoomSelect = ref(0)	// 漫游车间
+			// 选择按钮事件
+			const roamingEvent = (item) => {
+				roamingSelect.value = item.type
+				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})
+			}
+			// 选择车间事件
+			const roamingRoomEvent = (item) => {
+				roamingRoomSelect.value = item.roomId
+				roamingSelect.value = 0
+				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})
+			}
+			
 			// 返回主场景事件 园区总览
 			const returnEvent = () => {
 				if (isThreeDLoad.value == 1) {
@@ -153,6 +201,7 @@
 				rectangleActive.value = name
 				isPipelineShow.value = false
 				isSecurityShow.value = false
+				isRoamingShow.value = false
 				roadFlow_3d(false)	// 控制马路上流动线条显示隐藏
 				smallRoomFloorPlane_3d(false)	// 小厂房内部黄色蓝色片显示隐藏
 				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)	// 四色图显示隐藏并更改颜色
@@ -160,6 +209,8 @@
 				pipeLineFun_3d(0, 0.2, 0xffffff)	// 管道全部正常显示
 				
 				window.clearInterval(timer.value);
+				
+				roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
 				
 				usagePattern.value = 1	// 使用模式
 				toolsType.value = name	// 改变功能类型
@@ -175,10 +226,8 @@
 						fourColorDiagram_3d(true, "#0000FF", "#FFFF00", 0.8)
 						break;
 					case "roaming":	// 漫游
-						positioningMovement(0, [-1438.58,170.74,-2208.30], '地面一层', 1000)
-						tweenMoveing([-1682,-0,-2314], [-1292,717,-1519], 2000, (e) => {
-							timer.value = window.setInterval(setPositioningMovement, 4000)
-						})
+						isRoamingShow.value = true
+						roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})	// 执行漫游
 						break;
 					case "pipe":	//管道
 						isPipelineShow.value = true	// 显示管道
@@ -186,23 +235,6 @@
 						break;
 				}
 			}
-			let pmnum = 0;
-			let pmList= [
-				[-1665.06,173.19,-2238.10],
-				[-1438.58,170.74,-2208.30],
-				[-1389.26,213.42,-2802.28],
-				[-1438.58,170.74,-2208.30],
-				[-1574.82,120.18,-1714.29],
-				[-1438.58,170.74,-2208.30]
-			]
-			function setPositioningMovement(){
-				positioningMovement(0, pmList[pmnum], '地面一层', 4000)
-				pmnum++
-				if(pmnum >= pmList.length){
-					pmnum = 0
-				}
-			}
-			
 			return {
 				changeSky,
 				pipelineData,
@@ -214,7 +246,14 @@
 				isSecurityShow,
 				securitySelect,
 				securityData,
-				securityEvent
+				securityEvent,
+				isRoamingShow,
+				roamingSelect,
+				roamingData,
+				roamingEvent,
+				roamingRoomData,
+				roamingRoomSelect,
+				roamingRoomEvent
 			}
 		}
 	}
@@ -298,6 +337,10 @@
 		position: relative;
 		top: 25%;
 	}
+	.pipeline span{
+		position: relative;
+		top: -4px;
+	}
 	.rectangle:hover, .pipeline:hover{
 		background: rgba(4, 142, 249, 1);
 	}
@@ -306,5 +349,13 @@
 	}
 	.rectangle.active{
 		background: rgba(4, 142, 249, 1);
+	}
+	.roamingRoom li{
+		padding: 0px 6px;
+		text-shadow: 0px 3px 6px #000;
+		font-weight: 700;
+	}
+	.roamingRoom li.active{
+		color: rgba(4, 142, 249, 1);
 	}
 </style>

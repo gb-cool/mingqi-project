@@ -1,11 +1,11 @@
 <!-- 危险区域人员 -->
 <template>
 	<div class="ModulePerson">
-		<el-scrollbar>
+		<el-scrollbar :always="true">
 			<ul>
 				<!-- @click="intelligentWorkshopEvent(item)" -->
 				<li v-for="(item, index) in personData" :key="index" >
-					<ModulePersonInfo @lookPosition="lookPosition" @lookInfo="lookInfo" :name='item.empName' :serial='item.deviceNo' :area='item.electric'/>
+					<ModulePersonInfo @lookPosition="lookPosition" @lookInfo="lookInfo" :thumb="item.imgaddr" :name='item.empName' :serial='item.deviceNo' :area='item.electric'/>
 				</li>
 			</ul>
 		</el-scrollbar>
@@ -17,13 +17,14 @@
 	import ModulePersonInfo from './ModulePersonInfo.vue'
 	import { JoySuch, Seekey } from '../assets/js/positionPerson.js'
 	import { initalizeMan_3d, realtimeMotionMan_3d, focusPeople_3d, visibleMan_3d } from "../3d/index";
-import { visibleMan } from '@/3d/industryEquip';
+	import { visibleMan } from '@/3d/industryEquip';
 	export default {
 		name: 'ModulePerson',
 		components: {
 			ModulePersonInfo
 		},
-		setup() {
+		emits:['getPersonNum'],
+		setup(props, ctx) {
 			const isThreeDLoad = inject('isThreeDLoad')	// 获取三维加载状态，1表示已初始完成可以执行事件
 			let popupIsShow = inject('popupIsShow')	// 是否显示弹窗
 			let popupTitle = inject('popupTitle')	// 弹出标题
@@ -82,6 +83,7 @@ import { visibleMan } from '@/3d/industryEquip';
 							mergePositionData(pData, _seekD)	// 合并人员实时位置信息
 						})
 						personData.value = pData
+						ctx.emit('getPersonNum', "（"+ pData.length +"人）")	// 将人员数量传递给父级
 					}else if(result.code == 1002){  // token失效
 						getData()
 					}
