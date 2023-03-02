@@ -209,6 +209,15 @@
     text-align: center;
 }
 
+.outRoadLed4_len {
+    width: 200%;
+    height: 23px;
+    line-height: 22px;
+    text-align: center;
+    margin-left: -50%;
+    transform: scale(0.6);
+}
+
 .roomUpText {
     width: 100%;
     font-size: 14px;

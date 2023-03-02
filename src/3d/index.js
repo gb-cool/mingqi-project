@@ -41,6 +41,8 @@ import {
     posuiDanimation,
     saifenDanimation,
     suishiDanimation,
+    limoCameraDeviceFocus,
+    limoCameraDeviceDataup,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -339,4 +341,22 @@ export const saifenDanimation_3d = (speed, bool) => {
 // 碎石间皮带动画  speed 控制皮带速度 越大越快     bool 控制皮带动画是否开启
 export const suishiDanimation_3d = (speed, bool) => {
     suishiDanimation(speed, bool);
+};
+
+// 立磨间摄像头设备聚焦
+export const limoCameraDeviceFocus_3d = (id, times, td) => {
+    limoCameraDeviceFocus(id, times, td);
+};
+
+/*
+    立磨间摄像头名称更新
+    data = [
+        {
+            id:'xxxx',
+            name: 'xxxxx',
+        }
+    ]
+*/
+export const limoCameraDeviceDataup_3d = (data) => {
+    limoCameraDeviceDataup(data);
 };
