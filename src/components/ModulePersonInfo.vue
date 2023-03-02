@@ -1,8 +1,8 @@
 <!-- 人员信息组件 -->
 <template>
 	<div class="ModulePersonInfo">
-		<div class="photo" @click="lookPosition">
-			<img src="../assets/img/head-portrait.png"/>
+		<div class="photo" ref="photoDom" :style="squareStyle" @click="lookPosition">
+			<img :src="setThumb"/>
 		</div>
 		<div class="info" @click="lookInfo">
 			<p>姓名:<span>{{name}}</span></p>
@@ -13,9 +13,11 @@
 </template>
 
 <script>
+	import { ref, onMounted } from 'vue'
+	import { JoySuch } from '../assets/js/positionPerson.js'
 	export default {
 		name: "ModulePersonInfo",
-		props: ['name','serial', 'area'],
+		props: ['thumb', 'name','serial', 'area'],
 		setup(props, ctx) {
 			const lookPosition = () => {
 				ctx.emit('lookPosition', props.serial)
@@ -23,9 +25,30 @@
 			const lookInfo = () => {
 				ctx.emit('lookInfo', props.serial)
 			}
+			let src = require('../assets/img/head-portrait.png')
+			const setThumb = ref(src)
+			
+			const joySuch = new JoySuch()
+			const getData = joySuch.getToken(() => {
+				joySuch.getImageView(props.thumb, (res) => {
+					let blob = new Blob([res.data], { type: 'image/jpeg' })
+					setThumb.value = window.URL.createObjectURL(blob)
+				})
+			})
+			const photoDom = ref();
+			const squareStyle = ref({
+			  maxWidth: '58px'
+			})
+			onMounted(()=>{
+				squareStyle.value.maxWidth = photoDom.value.offsetHeight + "px"
+			})
+			
 			return{
 				lookPosition,
-				lookInfo
+				lookInfo,
+				setThumb,
+				photoDom,
+				squareStyle
 			}
 		}
 	}

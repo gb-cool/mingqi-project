@@ -141,6 +141,9 @@
 	background: #000C2A !important;
 	border: 1px solid #31446E;
 }
+.el-table__body-wrapper::-webkit-scrollbar-bar{
+	display: block !important;
+}
 .el-table colgroup col[name='gutter']{
 	width: 11px;
 }
@@ -150,6 +153,9 @@
 .el-popper{
 	font-size: 1rem;
 	padding: 0.7rem 1rem;
+}
+.el-table__body-wrapper .el-scrollbar__bar{
+	display: block !important;
 }
 /**
  * 弹出窗

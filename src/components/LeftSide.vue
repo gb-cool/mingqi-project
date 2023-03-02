@@ -23,10 +23,10 @@
 		<div class="module-down">
 			<ModuleBg>
 				<template v-slot:title>
-					<ModuleTitle title="重点区域人员"/>
+					<ModuleTitle :title="'重点区域人员'+ personNum"/>
 				</template>
 				<template v-slot:main>
-					<ModulePerson/>
+					<ModulePerson @getPersonNum="setPersonNum"/>
 				</template>
 			</ModuleBg>
 		</div>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+	import { ref } from 'vue'
 	import ModuleBg from './ModuleBg.vue'
 	import ModuleTitle from './ModuleTitle.vue'
 	import ModuleEnvironment from './ModuleEnvironment.vue'
@@ -47,6 +48,16 @@
 			ModuleEnvironment,
 			ModuleVideo,
 			ModulePerson
+		},
+		setup() {
+			const personNum = ref("")
+			const setPersonNum = (data) => {
+				personNum.value = data
+			}
+			return {
+				personNum,
+				setPersonNum
+			}
 		}
 	}
 </script>

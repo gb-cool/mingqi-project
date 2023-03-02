@@ -51,7 +51,7 @@
 	// 3d part
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, 
 	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d, fourColorOpacity_3d,
-	 updataLEDforOutRoadPlane_3d, updataRoomUpLEDplane_3d  } from "../3d/index";
+	 updataLEDforOutRoadPlane_3d, updataRoomUpLEDplane_3d, posuiDanimation_3d, saifenDanimation_3d, suishiDanimation_3d } from "../3d/index";
 	import { wareHouseYard } from "../3d/deviceInterfase.js"
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
@@ -106,11 +106,14 @@
 					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					setSkyBoxFormWeather()
 					setRobotMoveObj()	//巡检机器人动画
-					limoPDanimation_3d(0.1, true)
+					limoPDanimation_3d(0.1, true)	// 立磨皮带动画
 					setInitalizeMan_3d()	// 设置人员数据到模型
 					setWareHouse()	// 仓储堆场
 					setLed()	// LED屏
 					fourColorOpacity_3d(0.5)	// 设置四色图透明度
+					posuiDanimation_3d(0.1, true)	// 破碎皮带动画
+					saifenDanimation_3d(0.1, true)	// 筛分皮带动画
+					suishiDanimation_3d(0.1, true)	// 碎石皮带动画
 				})
 			});
 			
