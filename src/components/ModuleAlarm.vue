@@ -375,7 +375,12 @@
 				contentHeight.value = elTabs.value.offsetHeight - h - 15
 			}
 			
+			
+			const toolsType = inject("toolsType")	// 功能模式
 			const realTime = () => {
+				if(Object.is(toolsType.value, "roaming")){
+					return false
+				}
 				joySuch.getAlarmList((result) => alarmListHandle(result))
 				videoISAPIAlarm()
 				getDeviceData()		// 获取设备告警数据

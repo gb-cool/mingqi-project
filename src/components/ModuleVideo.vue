@@ -40,6 +40,7 @@
 				const regionIndexCode = "7cc1121b-9b6f-47f4-b76d-13883c37f2cd"
 				video.getCameras((cameras) => {
 					let dataList = cameras.data.list
+					// console.log(dataList)
 					let list = dataList.filter((item) => Object.is(item.regionIndexCode, regionIndexCode))
 					urls.value = list
 					CacheData.video.listData = list		// 缓存重点区域列表数据
@@ -49,6 +50,7 @@
 			// video.getPreviewURLs('36fd26f851ff4f97b09a73549ad78f29', (result) => {
 				// console.log(result)
 			// })
+			
 			onMounted(() => {
 				const swiper = new Swiper('.swiper', {
 					loop: false,
