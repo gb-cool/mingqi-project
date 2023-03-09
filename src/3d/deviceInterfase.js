@@ -153,3 +153,12 @@ export const limoRobotClickFun = () => {
 export const limoCameraToID = (id) => {
     console.log("立磨间摄像头设备ID：", id);
 };
+
+/*
+	用户点击场景里面的模型设备时，返回当前点击的是哪个车间以及具体设备ID
+	拿到id后，去找 class 为 deviceCameraModelBox 的元素往内部添加需要展示的样式
+	右侧顶部关闭按钮 class名称为 deviceCameraBox-close，样式文件在 ./industyEquip.css 内部，按照需求调整关闭按钮样式。
+*/
+export const userClickDeviceID = (room, id) => {
+    console.log("当前所处车间：", room, ";当前设备ID: ", id);
+};

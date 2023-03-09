@@ -43,6 +43,7 @@ import {
     suishiDanimation,
     limoCameraDeviceFocus,
     limoCameraDeviceDataup,
+    sceneDeviceLook
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -360,3 +361,8 @@ export const limoCameraDeviceFocus_3d = (id, times, td) => {
 export const limoCameraDeviceDataup_3d = (data) => {
     limoCameraDeviceDataup(data);
 };
+
+// 所有设备聚焦方法 id = 设备ID   times = 聚焦时间   isPlane = 是否显示信息框  false = 不显示   true = 显示   td = 回调函数
+export const sceneDeviceLook_3d = (id, times, isPlane, td) => {
+    sceneDeviceLook(id, times, isPlane, td)
+}
