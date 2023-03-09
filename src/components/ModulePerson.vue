@@ -13,7 +13,7 @@
 </template>
 
 <script>
-	import { ref, inject, onMounted, onDeactivated } from 'vue'
+	import { ref, inject, onMounted, onDeactivated, watch } from 'vue'
 	import ModulePersonInfo from './ModulePersonInfo.vue'
 	import { JoySuch, Seekey } from '../assets/js/positionPerson.js'
 	import { initalizeMan_3d, realtimeMotionMan_3d, focusPeople_3d, visibleMan_3d } from "../3d/index";
@@ -58,6 +58,8 @@
 				popupFileds.value = fileds
 				popupType.value = 'json'
 			}
+			
+			const toolsType = inject("toolsType")	// 功能模式
 		
 			const psersonTimer = ref(0)
 			let personData = ref([])
@@ -69,6 +71,10 @@
 			seekey.getSeekeyAccessToken()
 			let timerCount = 0;
 			const realTime = () => {
+				if(CacheData.person.allData.length == 0 || Object.is(toolsType.value, "roaming")){
+					setTimeout(() => realTime(), 1000)
+					return false
+				}
 				if(timerCount % 60 == 0) {
 					// 执行1个小时更新获取相对位置Token值
 					seekey.getSeekeyAccessToken()
@@ -124,15 +130,13 @@
 					visibleMan_3d(hideData, false)	// 根据状态决定是否显示当前人员模型
 				}
 				CacheData.person.realListData = joySuchData	// 缓存人员信息
-				setPersonMove(joySuchData)	// 设置人员动画
+				setPersonMove(joySuchData)
+				// Object.is(toolsType.value, "roaming") ? setTimeout(() => realTime(), 10000) : setPersonMove(joySuchData)
 			}
 			/**
 			 * 设置人员动画
 			 */
 			function setPersonMove(data){
-				if(isThreeDLoad.value != 1){
-					return false
-				}
 				let showData = []
 				data.forEach((item) => showData.push(item.deviceNo))
 				visibleMan_3d(showData, true)	// 显示当前人员模型
@@ -140,14 +144,15 @@
 				let count = 0
 				data.forEach((p) => {
 					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {
-						count++
-						if(count >= len){
-							setTimeout(function(){
-								realTime()
-							}, 5000)
-						}
+						// count++
+						// if(count >= len){
+						// 	setTimeout(function(){
+						// 		realTime()
+						// 	}, 5000)
+						// }
 					})
 				})
+				setTimeout(() => realTime(), 6000)
 			}
 			
 			/**
@@ -171,7 +176,7 @@
 				}
 			}
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
-				psersonTimer.value = setInterval(function(){
+				/* psersonTimer.value = setInterval(function(){
 					if(CacheData.person.allData.length > 0){
 						clearInterval(psersonTimer.value)
 						let data = CacheData.person.allData
@@ -190,10 +195,10 @@
 							}, 1000)
 						})
 					}
-				}, 1000)
+				}, 1000) */
 			})
 			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
-				clearInterval(psersonTimer.value);
+				/* clearInterval(psersonTimer.value); */
 			})
 			return {
 				personData,

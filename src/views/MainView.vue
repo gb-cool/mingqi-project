@@ -29,6 +29,7 @@
 		</footer>
 		<!-- 弹出窗口 -->
 		<PopupLayer :title="popupTitle" :type="popupType" ref="popup" :class="[popupIsShow?'show':'hide']" @isShow='(v) => popupIsShow = v' :fileds="popupFileds" :information="popupContent"></PopupLayer>
+		<input id="openVideoDom" type="button" style="display: none;" @click="openVideo"/>
 	</div>
 </template>
 
@@ -51,11 +52,13 @@
 	// 3d part
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, 
 	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d, fourColorOpacity_3d,
-	 updataLEDforOutRoadPlane_3d, updataRoomUpLEDplane_3d, posuiDanimation_3d, saifenDanimation_3d, suishiDanimation_3d } from "../3d/index";
+	 updataLEDforOutRoadPlane_3d, updataRoomUpLEDplane_3d, posuiDanimation_3d, saifenDanimation_3d, suishiDanimation_3d, 
+	  visibleMan_3d, limoCameraDeviceDataup_3d} from "../3d/index";
 	import { wareHouseYard } from "../3d/deviceInterfase.js"
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
 	import { Passage } from '../assets/js/passage.js'
+	import { Video } from '../assets/js/video.js'
 	import { parseDate } from "element-plus";
 	export default {
 		name: "app",
@@ -94,7 +97,7 @@
 			provide('popupFileds', popupFileds)
 			provide('popupType', popupType)
 			provide('popupRealData', popupRealData)
-			
+
 			let isRobotMove = ref(0)	// 监听巡检机器人动画是否启动 0不启动，1启动 2充电暂停 3运行
 			provide('isRobotMove', isRobotMove)
 			var tCanvas = ref(null),
@@ -105,235 +108,162 @@
 					isThreeDLoad.value = 1
 					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					setSkyBoxFormWeather()
-					setRobotMoveObj()	//巡检机器人动画
+					setRobotMoveObj()	//获取巡检机器人状态并更改
 					limoPDanimation_3d(0.1, true)	// 立磨皮带动画
-					setInitalizeMan_3d()	// 设置人员数据到模型
-					setWareHouse()	// 仓储堆场
-					setLed()	// LED屏
+					setInitalizeMan_3d()	// 获取所有人员数据并缓存
+
 					fourColorOpacity_3d(0.5)	// 设置四色图透明度
 					posuiDanimation_3d(0.1, true)	// 破碎皮带动画
 					saifenDanimation_3d(0.1, true)	// 筛分皮带动画
 					suishiDanimation_3d(0.1, true)	// 碎石皮带动画
+					
+					setVideoData()	// 车间摄像头数据
+					setInterval(updateTime, baseTime)
 				})
 			});
 			
-			//巡检机器人动画
-			let pid = 1	// 1正向行驶，0返回
-			function robotMove(){
-				limoRobotAnimation_3d(20, 3700, true)
-				setInterval(() => {
-					if(pid == 1){
-						if(isRobotMove.value == 2){
-							limoRobotInitalize_3d()	// 回到初始状态
-							limoRobotLighting_3d(true)	// 充电状态打开
-						}else{
-							limoRobotAnimation_3d(1, 3700, true)
-						}
-						pid = 0
-					}else{
-						if(isRobotMove.value == 2){
-							// limoRobotAnimation_3d(20, 3700, false)
-							limoRobotInitalize_3d()	// 回到初始状态
-							limoRobotLighting_3d(true)	// 充电状态打开
-						}else{
-							limoRobotAnimation_3d(20, 3700, true)
-						}
-						pid = 1
-					}
-				}, 1000 * 7200)
-			}
 			/**
-			 * 巡检机器人动画、充电设置
+			 * 巡检机器人
 			 */
+			let pid = 1	// 1正向行驶，0返回
+			// 机器人实时执行函数
+			function realRobotFun(){
+				isRobotMove.value == 2 ? (limoRobotInitalize_3d(), limoRobotLighting_3d(true)) : limoRobotAnimation_3d(pid == 1 ? 1 : 20, 3700, true)
+				pid = pid == 1 ? 0 : 1
+			}
+			// 获取巡检机器人状态并更改
 			function setRobotMoveObj(){
-				if(CacheData.robot.listData.length > 0){
-					// robotMove()
-					isRobotMove.value = 1
-				}
+				if(CacheData.robot.listData.length == 0) return false
+				// 机器人当前状态：0 充电中、1 巡检中、2 空闲
 				const robot = new Robot()
-				const getRobotStatus = () => {
-					if(CacheData.robot.listData.length == 0){
-						return false
-					}
-					let row = CacheData.robot.listData[0]
-					robot.getRobotReportInfo(row.robotId, (result) => {
-						let robotStatus = result.data.robotStatus
-						// 机器人当前状态：0 充电中、1 巡检中、2 空闲
-						if(robotStatus == 0){
-							isRobotMove.value = 2
-						}else if(robotStatus == 1){
-							isRobotMove.value = 3
-						}else{
-							isRobotMove.value = 0
-						}
-					})
-				}
-				robot.getToken(() => getRobotStatus())
+				robot.getToken(() => robot.getRobotReportInfo(CacheData.robot.listData[0].robotId, (result) => isRobotMove.value = result.data.robotStatus == 0 ? 2 : result.data.robotStatus == 1 ? 3 : 0))
 			}
 			// 监听巡检机器人状态
 			watch(isRobotMove, () => {
-				if(isRobotMove.value == 1){	// 启动
-					robotMove()
-				}else if(isRobotMove.value == 2){	// 充电暂停
-					limoRobotInitalize_3d()	// 回到初始状态
-					limoRobotLighting_3d(true)	// 充电状态打开
-				}else if(isRobotMove.value == 3){
-					limoRobotLighting_3d(false)	// 充电状态打开
-					if(pid == 0){
-						limoRobotAnimation_3d(1, 3700, true)
-					}else{
-						limoRobotAnimation_3d(20, 3700, true)
-					}
-				}else if(isRobotMove.value == 0){
-					limoRobotLighting_3d(false)	// 充电状态打开
-					if(pid == 0){
-						limoRobotAnimation_3d(1, 3700, false)
-					}else{
-						limoRobotAnimation_3d(20, 3700, false)
-					}
+				switch(isRobotMove.value){
+					case 1:	// 启动
+						break;
+					case 2:	// 充电暂停
+						limoRobotInitalize_3d()	// 回到初始状态
+						limoRobotLighting_3d(true)	// 充电状态打开
+						break;
+					case 3:	// 远行
+						limoRobotLighting_3d(false)	// 充电状态关闭
+						pid == 0 ? limoRobotAnimation_3d(1, 3700, true) : limoRobotAnimation_3d(20, 3700, true)
+						break;
+					case 0:	// 不启动
+						limoRobotLighting_3d(false)	// 充电状态关闭
+						pid == 0 ? limoRobotAnimation_3d(1, 3700, false) : limoRobotAnimation_3d(20, 3700, false)
+						break;
 				}
 			})
 			/**
-			 * 设置人员到模型数据
+			 * 获取所有人员数据并缓存
 			 */
 			function setInitalizeMan_3d(){
 				const joySuch = new JoySuch()
-				joySuch.getToken(() => {
-					joySuch.getPersonList((result) => {
-						if(result.code == 0){	//成功
-							CacheData.person.allData = result.data.content
-						}
+				joySuch.getToken(() => joySuch.getPersonList((result) => {
+					let data = result.code == 0 ? result.data.content : []
+					if(data.length == 0) return false
+					let md = []
+					let hideData = []
+					data.forEach((p) => {
+						md.push({id: p.sn, name: p.name})
+						hideData.push(p.sn)
 					})
+					initalizeMan_3d(md, () => {
+						setTimeout(() => {
+							visibleMan_3d(hideData, false)	// 隐藏人员
+							CacheData.person.allData = data
+						}, 1000)
+					})
+				}))
+			}
+			
+			/**
+			 * 仓储数据数据获取并缓存
+			 */
+			function setWareHouse(){
+				wareHouseYard((data) => {
+					CacheData.wareHouse.realTableData = data	// 缓存仓储堆场数据
+					let da = []
+					for(let i =0; i< data.length; i++){
+						let p = data[i]
+						if(p.stockPlaceCode != "tzdc-v"){
+							da.push({
+								stockPlaceCode: p.stockPlaceCode,
+								materialShortName: p.materialShortName + " " +(parseInt(p.currStock) / parseInt(p.maxStock) * 100) +"%",
+								currStock: p.currStock,
+								maxStock: p.maxStock,
+							})
+						}
+					}
+					updateLEDPlane_3d(da)
 				})
 			}
 			
 			/**
-			 * 仓储数据模型显示
+			 * LED屏数据获取显示并缓存
 			 */
-			function setWareHouse(){
-				const wHEvent = () => {
-					wareHouseYard((data) => {
-						CacheData.wareHouse.realTableData = data	// 缓存仓储堆场数据
-						let da = []
-						for(let i =0; i< data.length; i++){
-							let p = data[i]
-							if(p.stockPlaceCode != "tzdc-v"){
-								da.push({
-									stockPlaceCode: p.stockPlaceCode,
-									materialShortName: p.materialShortName + " " +(parseInt(p.currStock) / parseInt(p.maxStock) * 100) +"%",
-									currStock: p.currStock,
-									maxStock: p.maxStock,
-								})
-							}
-						}
-						updateLEDPlane_3d(da)
-					})
-				}
-				wHEvent()
-				setInterval(function(){
-					wHEvent()
-				}, 60000)
+			const passage = new Passage()
+			let roomJson ={
+				"10.12.64.65": "outRoom5",
+				"10.12.64.66": "outRoom6",
+				"10.12.64.67": "outRoom4",
+				"10.12.64.68": "outRoom3",
+				"10.12.64.70": "outRoom1",
+				"10.12.64.88": "outRoom2"
 			}
-			
-			/**
-			 * LED屏数据显示
-			 */
 			function setLed(){
-				let roomJson ={
-					"10.12.64.65": "outRoom5",
-					"10.12.64.66": "outRoom6",
-					"10.12.64.67": "outRoom4",
-					"10.12.64.68": "outRoom3",
-					// "10.12.64.69": "outRoom1",
-					"10.12.64.70": "outRoom1",
-					"10.12.64.88": "outRoom2"
-				}
-				const passage = new Passage()
-				const passageEv = () => {
-					passage.getLedData((result) => {
-						let data = result.data.data
-						CacheData.led.roadListData = []
-						CacheData.led.roomListData = []
-						let da = []
-						let roomDa = []
-						data.forEach((item) => {
-							let ledv = []
-							if(Object.is(item.ip, "10.12.64.61") 
-							|| Object.is(item.ip, "10.12.64.62") 
-							|| Object.is(item.ip, "10.12.64.63") 
-							|| Object.is(item.ip, "10.12.64.64")){
-								if(Object.is(item.ip, "10.12.64.61")){
-									item.direction1 = "←"
-									item.direction2 = "←"
-									item.direction3 = "↑"
-									item.direction4 = ""
-								}
-								if(Object.is(item.ip, "10.12.64.62")){
-									item.direction1 = "←"
-									item.direction2 = "←"
-									item.direction3 = ""
-									item.direction4 = ""
-								}
-								if(Object.is(item.ip, "10.12.64.63")){
-									item.direction1 = "↑"
-									item.direction2 = "←"
-									item.direction3 = ""
-									item.direction4 = ""
-								}
-								if(Object.is(item.ip, "10.12.64.64")){
-									item.direction1 = "←"
-									item.direction2 = ""
-									item.direction3 = ""
-									item.direction4 = ""
-								}
-								if(!Object.is(getLedV(item.key1), "")){ledv.push(item.direction1 + " " + item.key1 + " " + item.value1)}
-								if(!Object.is(getLedV(item.key2), "")){ledv.push(item.direction2 + " " + item.key2 + " " + item.value2)}
-								if(!Object.is(getLedV(item.key3), "")){ledv.push(item.direction3 + " " + item.key3 + " " + item.value3)}
-								if(!Object.is(getLedV(item.key4), "")){ledv.push(item.direction4 + " " + item.key4 + " " + item.value4)}
-								if(ledv.length == 0) {
-									ledv.push("LED")
-								}
-								item._value = ledv
-								CacheData.led.roadListData.push(item)	// 缓存道路LED数据
-								da.push({
-									id: item.ip,
-									value: ledv
-								})
+				passage.getLedData((result) => {
+					let data = result.data.data
+					CacheData.led.roadListData = []
+					CacheData.led.roomListData = []
+					let da = []
+					let roomDa = []
+					data.forEach((item) => {
+						let ledv = []
+						if(Object.is(item.ip, "10.12.64.61") 
+						|| Object.is(item.ip, "10.12.64.62") 
+						|| Object.is(item.ip, "10.12.64.63") 
+						|| Object.is(item.ip, "10.12.64.64")){
+							switch(item.ip) {
+								case "10.12.64.61": item.direction1 = "←";item.direction2 = "←";item.direction3 = "↑";item.direction4 = ""; break;
+								case "10.12.64.62": item.direction1 = "←";item.direction2 = "←";item.direction3 = "";item.direction4 = ""; break;
+								case "10.12.64.63": item.direction1 = "↑";item.direction2 = "←";item.direction3 = "";item.direction4 = ""; break;
+								case "10.12.64.64": item.direction1 = "←";item.direction2 = "";item.direction3 = "";item.direction4 = ""; break;
 							}
-							// 车间LED
-							if(Object.is(item.ip, "10.12.64.65") 
-							|| Object.is(item.ip, "10.12.64.66") 
-							|| Object.is(item.ip, "10.12.64.67") 
-							|| Object.is(item.ip, "10.12.64.68") 
-							// || Object.is(item.ip, "10.12.64.69")
-							|| Object.is(item.ip, "10.12.64.70")
-							|| Object.is(item.ip, "10.12.64.88")){
-								if(!Object.is(getLedV(item.key1), "")){ledv.push(item.key1 + " " + item.value1)}
-								if(!Object.is(getLedV(item.key2), "")){ledv.push(item.key2 + " " + item.value2)}
-								if(ledv.length == 0) {
-									ledv.push("正在接入中")
-								}
-								item._value = ledv
-								item._id = roomJson[item.ip]
-								roomDa.push({
-									id: roomJson[item.ip],
-									value: ledv
-								})
-								CacheData.led.roomListData.push(item)	// 缓存道路LED数据
-							}
-						})
-						updataLEDforOutRoadPlane_3d(da)	// 道路LED屏数据设置
-						updataRoomUpLEDplane_3d(roomDa) // 车间LED屏数据设置
+							if(!Object.is(getLedV(item.key1), "")){ledv.push(item.direction1 + " " + item.key1 + " " + item.value1)}
+							if(!Object.is(getLedV(item.key2), "")){ledv.push(item.direction2 + " " + item.key2 + " " + item.value2)}
+							if(!Object.is(getLedV(item.key3), "")){ledv.push(item.direction3 + " " + item.key3 + " " + item.value3)}
+							if(!Object.is(getLedV(item.key4), "")){ledv.push(item.direction4 + " " + item.key4 + " " + item.value4)}
+							if(ledv.length == 0) {ledv.push("LED")}
+							item._value = ledv
+							CacheData.led.roadListData.push(item)	// 缓存道路LED数据
+							da.push({id: item.ip,value: ledv})
+						}
+						// 车间LED
+						if(Object.is(item.ip, "10.12.64.65") 
+						|| Object.is(item.ip, "10.12.64.66") 
+						|| Object.is(item.ip, "10.12.64.67") 
+						|| Object.is(item.ip, "10.12.64.68") 
+						|| Object.is(item.ip, "10.12.64.70")
+						|| Object.is(item.ip, "10.12.64.88")){
+							if(!Object.is(getLedV(item.key1), "")){ledv.push(item.key1 + " " + item.value1)}
+							if(!Object.is(getLedV(item.key2), "")){ledv.push(item.key2 + " " + item.value2)}
+							if(ledv.length == 0) {ledv.push("正在接入中")}
+							item._value = ledv
+							item._id = roomJson[item.ip]
+							roomDa.push({id: roomJson[item.ip],value: ledv})
+							CacheData.led.roomListData.push(item)	// 缓存道路LED数据
+						}
 					})
-				}
-				setInterval(function(){
-					passageEv()
-				}, 30000)
+					updataLEDforOutRoadPlane_3d(da)	// 道路LED屏数据设置
+					updataRoomUpLEDplane_3d(roomDa) // 车间LED屏数据设置
+				})
 			}
 			function getLedV(value){
-				if(value == null || value == "null" || value == ""){
-					return ""
-				}
+				if(value == null || value == "null" || value == "") return ""
 				return value
 			}
 			// 根据天气设置天空盒子
@@ -385,6 +315,52 @@
 			provide('oxygenItem', oxygenItem)
 			provide('stiveItem', stiveItem)
 			
+			// 立磨车间摄像头
+			const video = new Video()
+			function setVideoData(){
+				const limoVideoData = video.getCamerasByRegionIndexCode('e6beca3d-fd0f-4da9-ac1c-83bb747bed6b', (result) => {
+					if(Object.is(result.msg, "success")){
+						let data = eval("("+ result.data +")")
+						CacheData.video.limoListData = data.data.list
+						console.log(CacheData.video.limoListData)
+					}			
+				})
+				let mateData = video.getIpToCameraIndexCode("all")
+				let limo3D = []
+				mateData.forEach((item) => {
+					limo3D.push({
+						id: item.ip,
+						name: item.cameraName
+					})
+				})
+				limoCameraDeviceDataup_3d(limo3D)
+			}
+			const openVideo = () => {
+				popupType.value = "video"
+				popupIsShow.value = true
+				let item =  video.getIpToCameraIndexCode("ip", CacheData.video.limoSelectId)[0]	// 根据ID获取关联值
+				popupTitle.value = item.cameraName
+			}
+			
+			/**
+			 * 定时实时执行
+			 */
+			const baseTime = 1000	// 定时器时间单位，1s
+			let timeCount = 0	//计数器
+			function updateTime(){
+				if(Object.is(toolsType.value, "roaming")) return false
+				if(timeCount % 34 ===0){
+					setLed()	// LED屏
+				}
+				if(timeCount % 56 ===0){
+					setWareHouse()	// 仓储堆场
+				}
+				if((timeCount % 7200) === 0){
+					realRobotFun()	// 巡检机器人
+				}
+				timeCount++
+			}
+			
 			return {
 				tCanvas,
 				isShow,
@@ -393,7 +369,9 @@
 				popupContent,
 				popupFileds,
 				popupType,
-				isRobotMove
+				isRobotMove,
+				isThreeDLoad,
+				openVideo
 			};
 		}
 	};

@@ -151,6 +151,8 @@ export const limoRobotClickFun = () => {
 
 // 立磨间摄像头设备点击事件
 export const limoCameraToID = (id) => {
+	CacheData.video.limoSelectId = id
+	document.getElementById("openVideoDom").click()
     console.log("立磨间摄像头设备ID：", id);
 };
 

@@ -158,6 +158,8 @@
 			let popupType = inject('popupType') // 弹窗内容类型
 			let popupRealData = inject('popupRealData') // 实时数据
 			
+			const toolsType = inject("toolsType")	// 功能模式
+			
 			// 氧 粉尘浓度数据
 			let oxygenTableData = []
 			let stiveTableData = []
@@ -215,6 +217,9 @@
 			})
 			// 实时监听
 			const realTime = (status = null) => {
+				if(Object.is(toolsType.value, "roaming")){
+					return false
+				}
 				let _oxygenIndex = 0
 				oxygenTableData.forEach((item) => {
 					device.getQueryDeviceShadow(item.deviceKey, item.projectId, (result) => {

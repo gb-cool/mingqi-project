@@ -36,7 +36,10 @@ var CacheData = {
 	video: {
 		// 视频
 		oWebControl: null,		// 视频控件
-		listData: []			// 重点区域列表数据
+		otherOWebControl: null, 
+		listData: [],	// 重点区域列表数据
+		limoListData: [],	//立磨车间摄像头数据
+		limoSelectId: null	//立磨车间选中的摄像头id值	
 	},
 	robot: {
 		// 巡检机器人

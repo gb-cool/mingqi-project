@@ -3,7 +3,7 @@
 	<div class="PopupLayer">
 			<div class="title">
 				<span>{{title}}</span>
-				<img src="../assets/img/close.png" @click="$emit('isShow', false)"/>
+				<img src="../assets/img/close.png" @click="closeFun"/>
 			</div>
 			<div class="box">
 				<div class="main">
@@ -25,23 +25,29 @@
 						<!-- 粉尘浓度 -->
 						<PopupDeviceView type="stive"/>
 					</div>
-					
+					<div style="min-width: calc(0.6*100vw);" v-if="Object.is(type, 'video')">
+						<ModuleVideoMonitorOther />
+					</div>
 				</div>
 			</div>		
 	</div>
 </template>
 
 <script>
-	import { ref, onMounted } from 'vue'
+	import { ref, onMounted, inject } from 'vue'
 	import PopupDeviceView from './PopupDeviceView.vue'
+	import ModuleVideoMonitorOther from './ModuleVideoMonitorOther.vue'
 	export default {
 		name: 'PopupLayer',
 		components: {
-			PopupDeviceView
+			PopupDeviceView,
+			ModuleVideoMonitorOther
 		},
+		emits:["isShow"],
 		props: ['title', 'fileds', 'information', 'type'],
 		setup(props, context) {
 			// console.log(props.type)
+			let popupType = inject('popupType') // 弹窗内容类型
 			// 获取表结构名称
 			const getFiled = (key) => {
 				if(props.fileds[key] == undefined){
@@ -55,9 +61,26 @@
 				console.log(item)
 			}
 			//关闭事件
+			const closeFun = () => {
+				context.emit('isShow', false)
+				if(props.type == "video"){
+					// CacheData.video.otherOWebControl.JS_HideWnd()
+					CacheData.video.otherOWebControl.JS_DestroyWnd().then(function(){ // oWebControl 为 WebControl 的对象
+						console.log("成功")
+						// 销毁插件窗口成功
+						CacheData.video.otherOWebControl = null
+						CacheData.video.limoSelectId = null
+						popupType.value = ""
+					},function(){
+						// 销毁插件窗口失败
+						console.log("失败")
+					});
+				}
+			}
 			return {
 				getFiled,
-				getInfo
+				getInfo,
+				closeFun
 			}
 		}
 	}
