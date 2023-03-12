@@ -36,7 +36,7 @@
 <script>
 	import { ref, onMounted, watch, onDeactivated } from 'vue'
 	import { WareHouse } from '../assets/js/warehouse.js'
-	import { focusduishiLED_3d, focusFenChengImport_3d, limoRoomMainMachine_3d, focusoutRoadLED_3d, focusRoomUpLED_3d } from "../3d/index";
+	import { focusduishiLED_3d, focusFenChengImport_3d, limoRoomMainMachine_3d, focusoutRoadLED_3d, focusRoomUpLED_3d, sceneDeviceLook_3d } from "../3d/index";
 	export default{
 		name: 'ModuleParkInfo',
 		props:['type'],
@@ -54,7 +54,6 @@
 			}
 			timer.value = window.setInterval(realTime, 10000)	// 实时刷新数据
 			function realTime(){
-				console.log(isShow.value)
 				switch(isShow.value){
 					case "矿石堆场":
 						// 实时更新堆场数据
@@ -102,6 +101,7 @@
 			 */
 			function getCrushingShopRealTimeData(){
 				let data = packOSData("破碎")
+				data = data.concat(deviceData("破碎"))
 				wareHouseList.value = data
 			}
 			/**
@@ -109,6 +109,7 @@
 			 */
 			function getScreeningPlantRealTimeData(){
 				let data = packOSData("筛分")
+				data = data.concat(deviceData("筛分"))
 				wareHouseList.value = data
 			}
 			/**
@@ -166,6 +167,22 @@
 				wareHouseList.value = data
 			}
 			/**
+			 * 设备数据
+			 * @param {Object} type
+			 */
+			function deviceData(type){
+				let data = []
+				let deviceData = CacheData.device.relationData.filter((item) => item._room.includes(type))
+				deviceData.forEach((item) => {
+					data.push(Object.assign({
+						_hz_device: item._name,
+						_hz_value: item._use,
+						_hz_type: "device"
+					}, item))
+				})
+				return data
+			}
+			/**
 			 * 车间粉尘氧浓度设备数据
 			 * @param {Object} type
 			 */
@@ -213,6 +230,10 @@
 					}else{
 						focusRoomUpLED_3d(row._id, 2000, () => {})
 					}
+				}else if(Object.is(row._hz_type, "device")){
+					sceneDeviceLook_3d(row._id, 2000, true, () => {
+						CachePublicFun.showDeviceLabel(row)	// 设备标签显示
+					})	// 设备聚焦
 				}
 			}
 			

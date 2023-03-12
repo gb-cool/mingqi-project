@@ -321,8 +321,7 @@
 				const limoVideoData = video.getCamerasByRegionIndexCode('e6beca3d-fd0f-4da9-ac1c-83bb747bed6b', (result) => {
 					if(Object.is(result.msg, "success")){
 						let data = eval("("+ result.data +")")
-						CacheData.video.limoListData = data.data.list
-						console.log(CacheData.video.limoListData)
+						CacheData.video.limoListData = data.data.list	// 缓存立磨车间摄像头数据
 					}			
 				})
 				let mateData = video.getIpToCameraIndexCode("all")
@@ -333,7 +332,7 @@
 						name: item.cameraName
 					})
 				})
-				limoCameraDeviceDataup_3d(limo3D)
+				limoCameraDeviceDataup_3d(limo3D)	// 立磨间摄像头名称更新
 			}
 			const openVideo = () => {
 				popupType.value = "video"
