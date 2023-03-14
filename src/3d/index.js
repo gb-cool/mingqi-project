@@ -43,7 +43,8 @@ import {
     suishiDanimation,
     limoCameraDeviceFocus,
     limoCameraDeviceDataup,
-    sceneDeviceLook
+    sceneDeviceLook,
+    shoucengAnimations,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -364,5 +365,10 @@ export const limoCameraDeviceDataup_3d = (data) => {
 
 // 所有设备聚焦方法 id = 设备ID   times = 聚焦时间   isPlane = 是否显示信息框  false = 不显示   true = 显示   td = 回调函数
 export const sceneDeviceLook_3d = (id, times, isPlane, td) => {
-    sceneDeviceLook(id, times, isPlane, td)
-}
+    sceneDeviceLook(id, times, isPlane, td);
+};
+
+// 收尘动画展示隐藏  type = 1(破碎间)  2(筛分间)  3(碎石配料间)  speed = 速度   bool = true(显示)  false(隐藏)
+export const shoucengAnimations_3d = (type, speed, bool) => {
+    shoucengAnimations(type, speed, bool);
+};
