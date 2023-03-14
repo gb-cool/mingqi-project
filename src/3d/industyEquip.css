@@ -63,6 +63,7 @@
     width: 50px;
     cursor: pointer !important;
     pointer-events: visible !important;
+	padding: 15px;
 }
 
 .limoTitle {
