@@ -38,8 +38,13 @@
 							oWebControl.JS_SetWindowControlCallback({   // 设置消息回调
 								cbIntegrationCallBack: cbIntegrationCallBack
 							});
-							oWebControl.JS_CreateWnd("playWndOther", _width, _height).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
-								init();  // 创建播放实例成功后初始化
+							oWebControl.JS_CreateWnd("playWndOther", _width, _height, {
+								cbSetDocTitle: function (uuid) {
+								  oWebControl._pendBg = false
+								}
+							}).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
+								init()  // 创建播放实例成功后初始化
+								setDocOffset()
 							});
 						}, function (e) { // 启动插件服务失败
 							console.log(e)
@@ -68,10 +73,6 @@
 				});
 				CacheData.video.otherOWebControl = oWebControl	// 缓存视频控件
 			}
-			// 设置窗口控制回调
-			function setCallbacks() {
-			    
-			}
 			// 推送消息
 			function cbIntegrationCallBack(oData) {
 				let responseMsg = oData.responseMsg
@@ -81,6 +82,17 @@
 					oWebControl.JS_RequestInterface({
 					    funcName: "setFullScreen"
 					})
+				}
+			}
+			/**
+			 * 设置控件位置
+			 */
+			function setDocOffset(){
+				if(CacheData.video.iframePos.left){
+					oWebControl.JS_SetDocOffset({
+						left: CacheData.video.iframePos.left,
+						top: CacheData.video.iframePos.top
+					});  // 更新插件窗口位置
 				}
 			}
 			//初始化
@@ -159,6 +171,7 @@
 					_height = playWndOther.value.offsetHeight
 					_width = playWndOther.value.offsetWidth
 					if (oWebControl != null) {
+						setDocOffset()
 					    oWebControl.JS_Resize(_width, _height);
 					    setWndCover();
 					}
@@ -239,8 +252,7 @@
 				const gpuMode = 0;                                        //是否启用GPU硬解，0-不启用，1-启用
 				let wndId = 0;                                      //播放窗口序号（在2x2以上布局下可指定播放窗口）
 				
-				let item =  new Video().getIpToCameraIndexCode("ip", CacheData.video.limoSelectId)[0]	// 根据ID获取关联值
-				// let item = 	CacheData.video.limoListData.filter((da) => Object.is(da.cameraIndexCode, mate.cameraIndexCode))
+				let item = CacheData.video.selectCameraData
 				wndId++
 				let cameraIndexCode = item.cameraIndexCode
 				cameraIndexCode = cameraIndexCode.replace(/(^\s*)/g, "");

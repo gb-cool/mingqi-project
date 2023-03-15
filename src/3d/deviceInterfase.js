@@ -1,6 +1,7 @@
 import { Device } from "../assets/js/device.js";
 import { WareHouse } from "../assets/js/warehouse.js";
 import { clickLMJtoChangeColor_3d } from "./index";
+import { Video } from '../assets/js/video.js'
 /**
  * 查询立磨列表数据
  * callback： 回调方法
@@ -151,7 +152,7 @@ export const limoRobotClickFun = () => {
 
 // 立磨间摄像头设备点击事件
 export const limoCameraToID = (id) => {
-	CacheData.video.limoSelectId = id
+	CacheData.video.selectCameraData = new Video().getIpToCameraIndexCode("ip", id)[0]	// 根据ID获取关联值
 	document.getElementById("openVideoDom").click()
     console.log("立磨间摄像头设备ID：", id);
 };
@@ -163,6 +164,8 @@ export const limoCameraToID = (id) => {
 */
 export const userClickDeviceID = (room, id) => {
 	let row = CacheData.device.relationData.filter((item) => Object.is(item._id, id))[0]
-	CachePublicFun.showDeviceLabel(row)
+	const device = new Device()
+	CachePublicFun.isLMJBT(row._id) ? device.setLMJBTData(row) : CachePublicFun.showDeviceLabel(row)	// 设备标签显示
+	device.setDeviceAnimations(row)	// 设置设备动画
     console.log("当前所处车间：", room, ";当前设备ID: ", id);
 };

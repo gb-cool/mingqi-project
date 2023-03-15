@@ -175,7 +175,11 @@ html, body {
 						left: iframePos.left + scrollValue.left,
 						top: iframePos.top + scrollValue.top
 					});  // 更新插件窗口位置
-					
+					console.log(window.parent.window.frames['uploadFrame'])
+					console.log(window.parent.iframePos)
+					// console.log(window.parent.document.getElementById("iframe1"))
+					// console.log( iframePos.left + scrollValue.left, iframePos.top + scrollValue.top)
+					// console.log(oWebControl)
 					oWebControl.JS_Resize(800, 400);
 					setWndCover();	
 					break;
@@ -209,7 +213,6 @@ html, body {
 			}
 		}
 	});
-	
 	// 顶部：iframe.getBoundingClientRect().top小于0并且其绝对值超过DIV.get(0).getBoundingClientRect().top部分需要剪切
 	// 底部：(iframe.getBoundingClientRect().bottom - iframe父窗口可视域高度，为H1)为不可见部分
 	//       ($(window).height() - DIV.get(0).getBoundingClientRect().bottom)
@@ -236,13 +239,13 @@ html, body {
 			if (iframeClientPos.top < 0 && Math.abs(iframeClientPos.top) > divTop){
 				var deltaTop = Math.abs(iframeClientPos.top) - divTop;
 				oWebControl.JS_CuttingPartWindow(0, 0, 801, deltaTop + 1);
-				//console.log({deltaTop: deltaTop});
+				console.log({deltaTop: deltaTop});
 			}
 			
 			// 判断剪切矩形的左边距
 			if (iframeClientPos.left < 0 && Math.abs(iframeClientPos.left) > divLeft){
 				var deltaLeft = Math.abs(iframeClientPos.left) - divLeft;
-				//console.log({deltaLeft: deltaLeft});
+				console.log({deltaLeft: deltaLeft});
 				oWebControl.JS_CuttingPartWindow(0, 0, deltaLeft, 401);  // 多剪掉一个像素条，防止出现剪掉一部分窗口后出现一个像素条
 			}
 			
@@ -350,7 +353,6 @@ html, body {
                 keyLength: 1024
             })
         }).then(function (oData) {
-            console.log(oData)
             if (oData.responseMsg.data) {
                 pubKey = oData.responseMsg.data
                 callback()
@@ -380,7 +382,6 @@ html, body {
     function requestInterface(value)
     {
         oWebControl.JS_RequestInterface(JSON.parse(value)).then(function (oData) {
-            console.log(oData)
             showCBInfo(JSON.stringify(oData ? oData.responseMsg : ''));
         });
     }

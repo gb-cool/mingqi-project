@@ -39,7 +39,9 @@ var CacheData = {
 		otherOWebControl: null, 
 		listData: [],	// 重点区域列表数据
 		limoListData: [],	//立磨车间摄像头数据
-		limoSelectId: null	//立磨车间选中的摄像头id值	
+		selectCameraData: null,	// 选中摄像头数据
+		iframePos: {},	// iframe与文档的偏移量
+		iframeClientPos: null	// iframe相对视窗的位置
 	},
 	robot: {
 		// 巡检机器人
@@ -156,14 +158,14 @@ var CacheData = {
 			{_id: 'P-117', _room:"立磨车间", _name: '移动卸料小车胶带机', _position:'碎石仓顶南侧', _use: ''},
 			{_id: 'LMYDXC-P-116', _room:"立磨车间", _name: 'P-116移动小车', _position:'', _use: ''},
 			{_id: 'LMYDXC-P-117', _room:"立磨车间", _name: 'P-117移动小车', _position:'', _use: ''},
-			{_id: 'LMJBT-M01', _room:"立磨车间", _name: '立磨机本体M01', _position:'', _use: ''},
-			{_id: 'LMJBT-M02', _room:"立磨车间", _name: '立磨机本体M02', _position:'', _use: ''},
-			{_id: 'LMJBT-M03', _room:"立磨车间", _name: '立磨机本体M03', _position:'', _use: ''},
-			{_id: 'LMJBT-M04', _room:"立磨车间", _name: '立磨机本体M04', _position:'', _use: ''},
-			{_id: 'LMJBT-M05', _room:"立磨车间", _name: '立磨机本体M05', _position:'', _use: ''},
-			{_id: 'LMJBT-M06', _room:"立磨车间", _name: '立磨机本体M06', _position:'', _use: ''},
-			{_id: 'LMJBT-M07', _room:"立磨车间", _name: '立磨机本体M07', _position:'', _use: ''},
-			{_id: 'LMJBT-M08', _room:"立磨车间", _name: '立磨机本体M08', _position:'', _use: ''},
+			{_id: 'LMJBT-M01', _room:"立磨车间", _name: '立磨机本体M01', _position:'', _use: '', _deviceKey:"16735812250003f39b"},
+			{_id: 'LMJBT-M02', _room:"立磨车间", _name: '立磨机本体M02', _position:'', _use: '', _deviceKey:"1672825159000fb72f"},
+			{_id: 'LMJBT-M03', _room:"立磨车间", _name: '立磨机本体M03', _position:'', _use: '', _deviceKey:"1672825280000ad947"},
+			{_id: 'LMJBT-M04', _room:"立磨车间", _name: '立磨机本体M04', _position:'', _use: '', _deviceKey:"1672825567000c9946"},
+			{_id: 'LMJBT-M05', _room:"立磨车间", _name: '立磨机本体M05', _position:'', _use: '', _deviceKey:"16728256160002d46d"},
+			{_id: 'LMJBT-M06', _room:"立磨车间", _name: '立磨机本体M06', _position:'', _use: '', _deviceKey:"167282566200039a6f"},
+			{_id: 'LMJBT-M07', _room:"立磨车间", _name: '立磨机本体M07', _position:'', _use: '', _deviceKey:"1672889351000906c1"},
+			{_id: 'LMJBT-M08', _room:"立磨车间", _name: '立磨机本体M08', _position:'', _use: '', _deviceKey:"167282577000043b38"},
 			{_id: 'LMJJSJ-M01', _room:"立磨车间", _name: '立磨机减速机M01', _position:'', _use: ''},
 			{_id: 'LMJJSJ-M02', _room:"立磨车间", _name: '立磨机减速机M02', _position:'', _use: ''},
 			{_id: 'LMJJSJ-M03', _room:"立磨车间", _name: '立磨机减速机M03', _position:'', _use: ''},
@@ -429,7 +431,6 @@ var CacheData = {
 		}
 	}
 }
-
 /**
  * 公共方法
  */
@@ -461,25 +462,23 @@ var CachePublicFun = {
 		el.setAttribute('style', 'background:rgba(1, 0, 55, 0.7);border: 3px solid rgba(71, 136, 255, 0.5);box-shadow:0px 3px 6px rgba(71,136,255,0.5);padding:20px 84px 20px 36px;border-radius:14px;min-width: 82px;min-height: 32px;')
 		let _div = document.createElement("div")
 		_div.setAttribute('style', 'font-size:54px;color:#fff;position:relative;');
-		// _div.innerHTML ="<p style = 'width:40px;height:40px;border-radius:50%;position:absolute;top: 50%;transform: translate(0, -20px);background:"+ CacheData.oxygen.color.one +"'></p>"+
-		// "<span style='margin-left:44px'>" + row._name + "（"+ row._use +"）</span"
-		/* let ul = "<ul>"
-		for(let key in row){
-			if(fileds.hasOwnProperty(key) && row[key] !=null && row[key] != ""){
-				ul += "<li style='padding:0.8rem 0px;'><p style='float:left;text-align:right;padding-right:2rem;'>"+ fileds[key] +" ： </p><span>"+ row[key] +"</span></li>"
-			}
-		}
-		ul += "</ul>" */
 		let _box = ""
 		_box += "<div style='height:90px;line-height:70px;border-bottom:1px solid #fff;font-weight:700;'>"+ row["_name"] +"</div>"
 		_box += "<table><tbody>"
 		for(let key in row){
 			if(fileds.hasOwnProperty(key) && row[key] !=null && row[key] != "" && key != "_name"){
-				_box += "<tr><td><p style='text-align:right;padding:0.8rem 2rem 0.8rem 0;color:#92A6CB;'>"+ fileds[key] +" ： </p></td><td><span>"+ row[key] +"</span></td></tr>"
+				_box += "<tr><td><p style='text-align:right;padding:0.8rem 2rem 0.8rem 0;color:#92A6CB;white-space: nowrap;'>"+ fileds[key] +" ： </p></td><td><span style='white-space: nowrap;'>"+ row[key] +"</span></td></tr>"
 			}
 		}
 		_box += "</tbody></table>"
 		_div.innerHTML = _box
 		el.appendChild(_div)
+	},
+	/**
+	 * 判断是否立磨机本体
+	 */
+	isLMJBT(id){
+		let data = ['LMJBT-M01', 'LMJBT-M02', 'LMJBT-M03', 'LMJBT-M04', 'LMJBT-M05', 'LMJBT-M06', 'LMJBT-M07', 'LMJBT-M08']
+		return data.includes(id)
 	}
 }

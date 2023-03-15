@@ -8,7 +8,12 @@
 		<p class="edges left"></p>
 		<!-- 标题 -->
 		<div class="title">
-			<slot name="title"></slot>
+			<div class="name">
+				<slot name="title"></slot>
+			</div>
+			<div class="tool">
+				<slot name="tool"></slot>
+			</div>
 		</div>
 		<!-- 内容 -->
 		<div class="main">
@@ -72,10 +77,20 @@
 		border-radius: 0 0 0 @border-radius;
 	}
 	.title{
-		width: 62.5%;
 		height: @title-height;
 		line-height: @title-height;
 		margin: 0 auto;
+		position: relative;
+	}
+	.name{
+		width: 62.5%;
+		margin: 0 auto;
+	}
+	.tool{
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		height: 100%;
 	}
 	.main{
 		height: calc(100% - @title-height);

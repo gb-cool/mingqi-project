@@ -295,8 +295,9 @@
 								status = 1
 								_name = "运行"
 							}
+							let id = CacheData.device.relationData.filter((dev) => Object.is(item.deviceKey, dev._deviceKey))[0]._id
 							verticalMD.push({
-								id: item.deviceKey,
+								id: id,
 								name: _name,
 								status: status
 							})
@@ -311,6 +312,9 @@
 					    }
 					});
 				})
+				setTimeout(() => {
+					realTime()
+				}, 1000 * 26)
 			}
 			const timer = ref(0)
 			const isWeatherIcon = ref(true)
@@ -332,13 +336,13 @@
 				}
 			}
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
-				timer.value = window.setInterval(realTime, 100000)
+				// timer.value = window.setInterval(realTime, 100000)
 				changeWeatherSH()
 				window.addEventListener('resize', changeWeatherSH);
 			})
 			
 			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
-				window.clearInterval(timer.value);
+				// window.clearInterval(timer.value);
 				window.removeEventListener('resize', changeWeatherSH);
 			})
 			

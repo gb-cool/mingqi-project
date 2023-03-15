@@ -5,6 +5,8 @@ import CryptoJS from 'crypto-js'
 import axios from 'axios'
 import qs from 'qs'
 import { DateTime } from './dateTime.js'
+import { shoucengAnimations_3d } from "../../3d/index"
+
 export class Device {
 	url = 'http://10.12.3.102:32076/'
 	appId = 'cbd60b1fe4d64ac1a1ea9164117045bd' // 应用唯一标识。
@@ -270,5 +272,43 @@ export class Device {
 				break;
 		}
 		return json
+	}
+	/**
+	 * 设置立磨数据显示
+	 * @param {Object} row
+	 */
+	setLMJBTData(row){
+		let k = row._id.split("-")[1].replace("0", "")
+		let verticalData = CacheData.vertical.realTableData.filter((item) => item.deviceName.includes(k))
+		if(verticalData.length > 0){
+			let data = verticalData[0]
+			this.getQueryDeviceShadow(data.deviceKey, data.projectId, (result) => {
+				result.code == "200" ? CachePublicFun.showDeviceLabel(Object.assign(row, result.data)) : CachePublicFun.showDeviceLabel(row)
+			})
+		}else{
+			CachePublicFun.showDeviceLabel(row)	// 设备标签显示
+		}
+	}
+	/**
+	 * 设置设备动画
+	 * @param {Object} row
+	 */
+	setDeviceAnimations(row){
+		switch(row._id){
+			case "SC-001":
+				shoucengAnimations_3d(1, 0.1, true)	// 破碎间收尘动画
+				break;
+			case "SC-002":
+				shoucengAnimations_3d(2, 0.1, true)	// 筛分间收尘动画
+				break;
+			case "SC-004":
+				shoucengAnimations_3d(3, 0.1, true)	// 碎石配料间收尘动画
+				break;
+			default:
+				shoucengAnimations_3d(1, 0.1, false)	// 破碎间收尘动画
+				shoucengAnimations_3d(2, 0.1, false)	// 筛分间收尘动画
+				shoucengAnimations_3d(3, 0.1, false)	// 碎石配料间收尘动画
+				break;
+		}
 	}
 }

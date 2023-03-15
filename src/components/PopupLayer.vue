@@ -25,6 +25,12 @@
 						<!-- 粉尘浓度 -->
 						<PopupDeviceView type="stive"/>
 					</div>
+					
+					<div style="min-width: 800px;" v-if="Object.is(type, 'videoList')">
+						<!-- 粉尘浓度 -->
+						<PopupVideoView type="videoList"/>
+					</div>
+					
 					<div style="min-width: calc(0.6*100vw);" v-if="Object.is(type, 'video')">
 						<ModuleVideoMonitorOther />
 					</div>
@@ -36,12 +42,14 @@
 <script>
 	import { ref, onMounted, inject } from 'vue'
 	import PopupDeviceView from './PopupDeviceView.vue'
+	import PopupVideoView from './PopupVideoView.vue'
 	import ModuleVideoMonitorOther from './ModuleVideoMonitorOther.vue'
 	export default {
 		name: 'PopupLayer',
 		components: {
 			PopupDeviceView,
-			ModuleVideoMonitorOther
+			ModuleVideoMonitorOther,
+			PopupVideoView
 		},
 		emits:["isShow"],
 		props: ['title', 'fileds', 'information', 'type'],
@@ -69,7 +77,7 @@
 						console.log("成功")
 						// 销毁插件窗口成功
 						CacheData.video.otherOWebControl = null
-						CacheData.video.limoSelectId = null
+						CacheData.video.selectCameraData = null
 						popupType.value = ""
 					},function(){
 						// 销毁插件窗口失败

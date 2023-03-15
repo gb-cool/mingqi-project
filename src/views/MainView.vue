@@ -28,6 +28,7 @@
 			<ToolsMenu/>
 		</footer>
 		<!-- 弹出窗口 -->
+		<PopupLayer :title="popupTitle_video" :type="popupType_video" ref="popup_video" :class="[popupIsShow_video?'show':'hide']" @isShow='(v) => popupIsShow_video = v' :fileds="popupFileds_video" :information="popupContent_video"></PopupLayer>
 		<PopupLayer :title="popupTitle" :type="popupType" ref="popup" :class="[popupIsShow?'show':'hide']" @isShow='(v) => popupIsShow = v' :fileds="popupFileds" :information="popupContent"></PopupLayer>
 		<input id="openVideoDom" type="button" style="display: none;" @click="openVideo"/>
 	</div>
@@ -53,7 +54,7 @@
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, 
 	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d, fourColorOpacity_3d,
 	 updataLEDforOutRoadPlane_3d, updataRoomUpLEDplane_3d, posuiDanimation_3d, saifenDanimation_3d, suishiDanimation_3d, 
-	  visibleMan_3d, limoCameraDeviceDataup_3d} from "../3d/index";
+	  visibleMan_3d, limoCameraDeviceDataup_3d, shoucengAnimations_3d} from "../3d/index";
 	import { wareHouseYard } from "../3d/deviceInterfase.js"
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
@@ -97,6 +98,19 @@
 			provide('popupFileds', popupFileds)
 			provide('popupType', popupType)
 			provide('popupRealData', popupRealData)
+			
+			let popupIsShow_video = ref(false)	//弹窗是否显示
+			let popupTitle_video	= ref('')	//弹窗标题
+			let popupContent_video = ref()	// 弹窗内容
+			let popupFileds_video = ref()		//弹窗表结构
+			let popupType_video = ref('json')	// 弹出内容类型 默认json，list
+			let popupRealData_video = ref({})	// 实时数据
+			provide('popupIsShow_video', popupIsShow_video)
+			provide('popupTitle_video', popupTitle_video)
+			provide('popupContent_video', popupContent_video)
+			provide('popupFileds_video', popupFileds_video)
+			provide('popupType_video', popupType_video)
+			provide('popupRealData_video', popupRealData_video)
 
 			let isRobotMove = ref(0)	// 监听巡检机器人动画是否启动 0不启动，1启动 2充电暂停 3运行
 			provide('isRobotMove', isRobotMove)
@@ -109,13 +123,13 @@
 					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					setSkyBoxFormWeather()
 					setRobotMoveObj()	//获取巡检机器人状态并更改
-					limoPDanimation_3d(0.1, true)	// 立磨皮带动画
+					limoPDanimation_3d(0.3, true)	// 立磨皮带动画
 					setInitalizeMan_3d()	// 获取所有人员数据并缓存
 
 					fourColorOpacity_3d(0.5)	// 设置四色图透明度
-					posuiDanimation_3d(0.1, true)	// 破碎皮带动画
-					saifenDanimation_3d(0.1, true)	// 筛分皮带动画
-					suishiDanimation_3d(0.1, true)	// 碎石皮带动画
+					posuiDanimation_3d(0.3, true)	// 破碎皮带动画
+					saifenDanimation_3d(0.3, true)	// 筛分皮带动画
+					suishiDanimation_3d(0.3, true)	// 碎石皮带动画
 					
 					setVideoData()	// 车间摄像头数据
 					setInterval(updateTime, baseTime)
@@ -337,7 +351,7 @@
 			const openVideo = () => {
 				popupType.value = "video"
 				popupIsShow.value = true
-				let item =  video.getIpToCameraIndexCode("ip", CacheData.video.limoSelectId)[0]	// 根据ID获取关联值
+				let item = CacheData.video.selectCameraData
 				popupTitle.value = item.cameraName
 			}
 			
@@ -368,6 +382,13 @@
 				popupContent,
 				popupFileds,
 				popupType,
+				
+				popupIsShow_video,
+				popupTitle_video,
+				popupContent_video,
+				popupFileds_video,
+				popupType_video,
+				
 				isRobotMove,
 				isThreeDLoad,
 				openVideo
