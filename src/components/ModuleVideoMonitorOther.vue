@@ -1,7 +1,7 @@
 <!-- 视频监控 -->
 <template>
 	<div class="ModuleVideoMonitor">
-		<div id="playWndOther" style="height: calc(0.6 * 100vh);" ref="playWndOther" class="playWnd">
+		<div id="playWndOther" style="height: calc(34vh - 74px);" ref="playWndOther" class="playWnd">
 			<span v-if="isProgress">正在加载中...</span>
 		</div>
 	</div>
@@ -176,7 +176,15 @@
 					    setWndCover();
 					}
 				},3000)
-			}		
+			}
+			let popupTitle = inject('popupTitle')	// 弹出标题
+			watch(popupTitle, (newValue, oldValue) => {
+				let item = CacheData.video.selectCameraData
+				// console.log(item)
+				if(item){
+					startPreview(item.cameraIndexCode)
+				}
+			})
 			onMounted(()=>{
 				_width = playWndOther.value.offsetWidth
 				_height = playWndOther.value.offsetHeight
@@ -191,7 +199,7 @@
 				window.removeEventListener('resize', calculate);
 			});
 			function setInitPlugin(){
-				console.log(CacheData.video.otherOWebControl)
+				// console.log(CacheData.video.otherOWebControl)
 				if(CacheData.video.otherOWebControl == "开始创建"){
 					setTimeout(()=>{
 						setInitPlugin()

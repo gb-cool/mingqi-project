@@ -28,8 +28,8 @@
 			<ToolsMenu/>
 		</footer>
 		<!-- 弹出窗口 -->
-		<PopupLayer :title="popupTitle_video" :type="popupType_video" ref="popup_video" :class="[popupIsShow_video?'show':'hide']" @isShow='(v) => popupIsShow_video = v' :fileds="popupFileds_video" :information="popupContent_video"></PopupLayer>
-		<PopupLayer :title="popupTitle" :type="popupType" ref="popup" :class="[popupIsShow?'show':'hide']" @isShow='(v) => popupIsShow = v' :fileds="popupFileds" :information="popupContent"></PopupLayer>
+		<PopupLayer :title="popupTitle_video" :type="popupType_video" ref="popup_video" :class="[popupIsShow_video?'show':'hide', Object.is(popupType_video, 'videoList') ? 'video' : '']" @isShow='(v) => popupIsShow_video = v' :fileds="popupFileds_video" :information="popupContent_video"></PopupLayer>
+		<PopupLayer :title="popupTitle" :type="popupType" ref="popup" :class="[popupIsShow?'show':'hide',  Object.is(popupType, 'video') ? 'videoControl' : '']" @isShow='(v) => popupIsShow = v' :fileds="popupFileds" :information="popupContent"></PopupLayer>
 		<input id="openVideoDom" type="button" style="display: none;" @click="openVideo"/>
 	</div>
 </template>

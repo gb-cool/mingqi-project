@@ -398,6 +398,7 @@
 				})
 				joySuch.getRealTimeData((result) => {
 					if(result.code == 0){	//成功
+						console.log(result)
 						carData.value = result.data.filter((item) => (item.specifictype == '4'))
 					}else if(result.code == 1002){  // token失效
 						getData()

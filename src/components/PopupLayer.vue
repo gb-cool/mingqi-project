@@ -26,12 +26,12 @@
 						<PopupDeviceView type="stive"/>
 					</div>
 					
-					<div style="min-width: 800px;" v-if="Object.is(type, 'videoList')">
-						<!-- 粉尘浓度 -->
+					<div style="min-width: 334px; width: calc(25vw - 66px);max-width: 414px;" v-if="Object.is(type, 'videoList')">
+						<!-- 视频列表 -->
 						<PopupVideoView type="videoList"/>
 					</div>
 					
-					<div style="min-width: calc(0.6*100vw);" v-if="Object.is(type, 'video')">
+					<div style="width: calc(25vw - 46px);" v-if="Object.is(type, 'video')">
 						<ModuleVideoMonitorOther />
 					</div>
 				</div>
@@ -132,6 +132,7 @@
 		top: 50%;
 		transform: translate(-50%, -50%);
 	}
+	
 	.title{
 		height: @title-height;
 		line-height: @title-height;
@@ -165,6 +166,27 @@
 	}
 	.jsonBox{
 		padding: calc(20/1080*100vh) 0px;
+	}
+	.PopupLayer.show.video{
+		left: 25%;
+		top: 50%;
+		transform: translate(0, -50%);
+		width: calc(25vw - 20);
+		min-width: 380px;
+		max-width: 460px;
+	}
+	.PopupLayer.show.video .main{
+		min-width: auto;
+	}
+	.PopupLayer.show.videoControl{
+		left: 50%;
+		top: 33%;
+		transform: translate(0, 0%);
+		width: calc(25vw);
+	}
+	.PopupLayer.show.videoControl .main{
+		min-width: auto;
+		height: calc(34vh - 74px);
 	}
 	
 	@media screen and (max-width: 1920px) {

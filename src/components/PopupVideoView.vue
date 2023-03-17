@@ -8,28 +8,36 @@
 			active-text-color="#000"
 		    mode="horizontal"
 		    @select="handleSelect">
-		    <el-menu-item index="1">所有摄像头</el-menu-item>
-		    <el-menu-item index="2">矿石堆场</el-menu-item>
-		    <el-menu-item index="3">破碎车间</el-menu-item>
-			<el-menu-item index="4">筛分车间</el-menu-item>
-			<el-menu-item index="5">碎石仓配料车间</el-menu-item>
+<!-- 		    <el-menu-item index="1">所有摄像头</el-menu-item>
+		    <el-menu-item index="2">矿石堆场</el-menu-item> -->
+<!-- 			<el-menu-item index="4">筛分车间</el-menu-item>
+			<el-menu-item index="5">碎石仓配料车间</el-menu-item> -->
 			<el-menu-item index="6">立磨车间</el-menu-item>
 			<el-menu-item index="7">均化车间</el-menu-item>
+			<el-menu-item index="3">破碎车间</el-menu-item>
 		</el-menu>
 		<el-table
 			:data="tableData"
 			highlight-current-row
 			:height="contentHeight" 
 			@row-click="intelligentWorkshopEvent"
+			:show-header="false"
 			border>
-			<el-table-column align="center" prop="cameraName" label="摄像头名称"/>
+			<el-table-column align="center" prop="cameraName" label="摄像头名称">
+				<template #default="scope">
+					<p style="text-align: left;text-indent: 2rem;">
+						<img style="width: 1.2rem;position: relative;top: 3px;margin-right: 0.5rem;" src="../assets/img/video.png"/>
+						<span>{{ scope.row.cameraName }}</span>
+					</p>
+				</template>
+			</el-table-column>
 			<!-- <el-table-column align="center" prop="cameraIndexCode" label="摄像头编号"/> -->
-			<el-table-column align="center" prop="cameraTypeName" label="摄像头类型"/>
-			<el-table-column align="center" prop="regionIndexCode" label="所属车间">
+			<!-- <el-table-column align="center" prop="cameraTypeName" label="摄像头类型"/> -->
+			<!-- <el-table-column align="center" prop="regionIndexCode" label="所属车间">
 				<template #default="scope">
 					<span>	{{ getRoom(scope.row) }}</span>
 				</template>
-			</el-table-column>
+			</el-table-column> -->
 		</el-table>
 	</div>
 </template>
@@ -71,7 +79,7 @@
 				// console.log(event, column)
 			}
 			
-			const activeIndex = ref('1')
+			const activeIndex = ref('6')
 			const handleSelect = (key, keyPath) => {
 				switch(parseInt(key)){
 					case 1:
