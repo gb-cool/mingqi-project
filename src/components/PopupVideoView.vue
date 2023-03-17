@@ -23,7 +23,7 @@
 			@row-click="intelligentWorkshopEvent"
 			border>
 			<el-table-column align="center" prop="cameraName" label="摄像头名称"/>
-			<el-table-column align="center" prop="cameraIndexCode" label="摄像头编号"/>
+			<!-- <el-table-column align="center" prop="cameraIndexCode" label="摄像头编号"/> -->
 			<el-table-column align="center" prop="cameraTypeName" label="摄像头类型"/>
 			<el-table-column align="center" prop="regionIndexCode" label="所属车间">
 				<template #default="scope">

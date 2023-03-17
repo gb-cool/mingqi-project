@@ -6,7 +6,7 @@
 				<div class="chart">
 					<div class="point" v-if="Object.is(oxygenItemColor, '#D10202')"></div>
 					<ModulePieChart name="氧浓度" value="100" :color='oxygenItemColor' :barWidth='barWidth'/>
-					<div class="price">{{oxygenItemMax}}<span>%</span></div>
+					<div class="price">{{oxygenItemMax}}<span>%Vol</span></div>
 				</div>
 				<p>氧浓度</p>
 			</div>
@@ -14,7 +14,7 @@
 				<div class="chart">
 					<div class="point" v-if="Object.is(stiveItemColor, '#D10202')"></div>
 					<ModulePieChart name="粉尘浓度" value="100" :color='stiveItemColor' :barWidth='barWidth'/>
-					<div class="price">{{stiveItemMax}}<span>%</span></div>
+					<div class="price">{{stiveItemMax}}<span>mg/m³</span></div>
 				</div>
 				<p>粉尘浓度</p>
 			</div>
@@ -442,9 +442,11 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
+		text-align: center;
 	}
 	.pie .chart .price span{
 		font-size: 0.8rem;
+		display: block;
 	}
 	/**
 	 * 天气

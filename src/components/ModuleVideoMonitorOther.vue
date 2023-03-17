@@ -19,13 +19,13 @@
 			// 创建播放实例
 			let initCount = 0
 			let pubKey = ''
-			CacheData.video.otherOWebControl = null
+			
 			let oWebControl = null
 			let playWndOther = ref()
 			
 			const isProgress = ref(true)
-			
 			function initPlugin () {
+				CacheData.video.otherOWebControl = "开始创建"
 			    oWebControl = new WebControl({
 			        szPluginContainer: "playWndOther",                       // 指定容器id
 					iServicePortStart: 15900,                           // 指定起止端口号，建议使用该值
@@ -43,6 +43,7 @@
 								  oWebControl._pendBg = false
 								}
 							}).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
+								CacheData.video.otherOWebControl = oWebControl	// 缓存视频控件
 								init()  // 创建播放实例成功后初始化
 								setDocOffset()
 							});
@@ -71,7 +72,6 @@
 						oWebControl = null;
 					}
 				});
-				CacheData.video.otherOWebControl = oWebControl	// 缓存视频控件
 			}
 			// 推送消息
 			function cbIntegrationCallBack(oData) {
@@ -180,7 +180,8 @@
 			onMounted(()=>{
 				_width = playWndOther.value.offsetWidth
 				_height = playWndOther.value.offsetHeight
-				initPlugin()
+				
+				setInitPlugin()
 
 				window.addEventListener('scroll', calculate, true);	// 监听滚动条scroll事件，使插件窗口跟随浏览器滚动而移动
 				window.addEventListener('resize', calculate);	//监听resize事件，使插件窗口尺寸跟随DIV窗口变化
@@ -189,6 +190,28 @@
 				window.removeEventListener('scroll', calculate, true);  
 				window.removeEventListener('resize', calculate);
 			});
+			function setInitPlugin(){
+				console.log(CacheData.video.otherOWebControl)
+				if(CacheData.video.otherOWebControl == "开始创建"){
+					setTimeout(()=>{
+						setInitPlugin()
+					},100)
+					return false
+				}
+				if(CacheData.video.otherOWebControl == null){
+					initPlugin()
+				}else{
+					CacheData.video.otherOWebControl.JS_DestroyWnd().then(function(){ // oWebControl 为 WebControl 的对象
+						console.log("成功")
+						// 销毁插件窗口成功
+						CacheData.video.otherOWebControl = null
+						setInitPlugin()
+					},function(){
+						// 销毁插件窗口失败
+						console.log("失败")
+					});
+				}
+			}
 			
 			// 设置窗口裁剪，当因滚动条滚动导致窗口需要被遮住的情况下需要JS_CuttingPartWindow部分窗口
 			function setWndCover() {

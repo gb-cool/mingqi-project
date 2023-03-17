@@ -16,12 +16,12 @@
 						</el-descriptions>
 					</div>
 					
-					<div style="min-width: 1200px;" v-if="Object.is(type, 'oxygen')">
+					<div style="min-width: 900px;" v-if="Object.is(type, 'oxygen')">
 						<!-- 氧浓度 -->
 						<PopupDeviceView type="oxygen"/>
 					</div>
 					
-					<div style="min-width: 1200px;" v-if="Object.is(type, 'stive')">
+					<div style="min-width: 900px;" v-if="Object.is(type, 'stive')">
 						<!-- 粉尘浓度 -->
 						<PopupDeviceView type="stive"/>
 					</div>
@@ -69,21 +69,39 @@
 				console.log(item)
 			}
 			//关闭事件
+			let isClose = false
 			const closeFun = () => {
-				context.emit('isShow', false)
+				if(isClose){
+					return false
+				}
+				isClose = true
 				if(props.type == "video"){
 					// CacheData.video.otherOWebControl.JS_HideWnd()
-					CacheData.video.otherOWebControl.JS_DestroyWnd().then(function(){ // oWebControl 为 WebControl 的对象
-						console.log("成功")
-						// 销毁插件窗口成功
-						CacheData.video.otherOWebControl = null
-						CacheData.video.selectCameraData = null
-						popupType.value = ""
-					},function(){
-						// 销毁插件窗口失败
-						console.log("失败")
-					});
+					closeVideo()
+				}else{
+					context.emit('isShow', false)
+					isClose = false
 				}
+			}
+			function closeVideo(){
+				if(CacheData.video.otherOWebControl == "开始创建"){
+					setTimeout(() => {
+						closeVideo()
+					},100)
+					return false
+				}
+				CacheData.video.otherOWebControl.JS_DestroyWnd().then(function(){ // oWebControl 为 WebControl 的对象
+					console.log("成功")
+					// 销毁插件窗口成功
+					CacheData.video.otherOWebControl = null
+					// CacheData.video.selectCameraData = null
+					popupType.value = ""
+				},function(){
+					// 销毁插件窗口失败
+					console.log("失败")
+				});
+				context.emit('isShow', false)
+				isClose = false
 			}
 			return {
 				getFiled,
