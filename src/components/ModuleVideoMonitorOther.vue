@@ -1,7 +1,7 @@
 <!-- 视频监控 -->
 <template>
 	<div class="ModuleVideoMonitor">
-		<div id="playWndOther" style="height: calc(34vh - 74px);" ref="playWndOther" class="playWnd">
+		<div id="playWndOther" ref="playWndOther" class="playWnd">
 			<span v-if="isProgress">正在加载中...</span>
 		</div>
 	</div>
@@ -24,6 +24,12 @@
 			let playWndOther = ref()
 			
 			const isProgress = ref(true)
+			
+			let iframePos = urlConfig.iframePos	// iframe与文档的偏移量
+			if(top == self || !location.href.includes("type=iframe")){
+				iframePos = {left: 0,top: 0}
+			}
+			
 			function initPlugin () {
 				CacheData.video.otherOWebControl = "开始创建"
 			    oWebControl = new WebControl({
@@ -39,13 +45,11 @@
 								cbIntegrationCallBack: cbIntegrationCallBack
 							});
 							oWebControl.JS_CreateWnd("playWndOther", _width, _height, {
-								cbSetDocTitle: function (uuid) {
-								  oWebControl._pendBg = false
-								}
+								cbSetDocTitle: function (uuid) {oWebControl._pendBg = false}
 							}).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
 								CacheData.video.otherOWebControl = oWebControl	// 缓存视频控件
-								init()  // 创建播放实例成功后初始化
 								setDocOffset()
+								init()  // 创建播放实例成功后初始化
 							});
 						}, function (e) { // 启动插件服务失败
 							console.log(e)
@@ -88,10 +92,10 @@
 			 * 设置控件位置
 			 */
 			function setDocOffset(){
-				if(CacheData.video.iframePos.left){
+				if(iframePos.left){
 					oWebControl.JS_SetDocOffset({
-						left: CacheData.video.iframePos.left,
-						top: CacheData.video.iframePos.top
+						left: iframePos.left,
+						top: iframePos.top
 					});  // 更新插件窗口位置
 				}
 			}
@@ -323,7 +327,9 @@
 	}
 </script>
 
-<style scoped>
+<style scoped lang="less">
+	@boxPadding: 20px;
+	@boxBoderWidth: 3px;
 	.ModuleVideoMonitor, video{
 		width: 100%;
 		height: 100%;
@@ -331,9 +337,8 @@
 	/* video{
 		object-fit: fill;
 	} */
-	.playWnd{
-		/* width: 354px; */              
-		height: 100%;
+	.playWnd{             
+		height: calc(33.33vh - 2*@boxPadding - 2*@boxBoderWidth);
 		position: relative;
 	}
 	.playWnd>span{
@@ -341,5 +346,12 @@
 		top: 40%;
 		left: 50%;
 		transform: translate(-50%, 0);
+	}
+	@media screen and (max-width: 1920px) {
+		@boxPadding: 10px;
+		@boxBoderWidth: 1px;
+		.playWnd{
+			height: calc(33.33vh - 2*@boxPadding - 2*@boxBoderWidth);
+		}
 	}
 </style>

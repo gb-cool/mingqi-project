@@ -31,6 +31,11 @@
 		<PopupLayer :title="popupTitle_video" :type="popupType_video" ref="popup_video" :class="[popupIsShow_video?'show':'hide', Object.is(popupType_video, 'videoList') ? 'video' : '']" @isShow='(v) => popupIsShow_video = v' :fileds="popupFileds_video" :information="popupContent_video"></PopupLayer>
 		<PopupLayer :title="popupTitle" :type="popupType" ref="popup" :class="[popupIsShow?'show':'hide',  Object.is(popupType, 'video') ? 'videoControl' : '']" @isShow='(v) => popupIsShow = v' :fileds="popupFileds" :information="popupContent"></PopupLayer>
 		<input id="openVideoDom" type="button" style="display: none;" @click="openVideo"/>
+		<p v-if="isGrid" style="position: fixed;z-index: 5;height: 1px;width:100%;left: 0px;top:33.33vh; background: #f00;"></p>
+		<p v-if="isGrid" style="position: fixed;z-index: 5;height: 1px;width:100%;left: 0px;bottom:33.33vh; background: #f00;"></p>
+		<p v-if="isGrid" style="position: fixed;z-index: 5;height: 100%;width:1px;left: 25vw;top:0px; background: #f00;"></p>
+		<p v-if="isGrid" style="position: fixed;z-index: 5;height: 100%;width:1px;left: 50vw;top:0px; background: #f00;"></p>
+		<p v-if="isGrid" style="position: fixed;z-index: 5;height: 100%;width:1px;left: 75vw;top:0px; background: #f00;"></p>
 	</div>
 </template>
 
@@ -72,6 +77,8 @@
 			ToolsMenuLeft
 		},
 		setup(context) {
+			const isGrid = ref(false)
+			isGrid.value = urlConfig.isGrid
 			const isThreeDLoad = ref(0) // 三维是否初始化完成，1表示已初始化
 			provide('isThreeDLoad', isThreeDLoad)
 			const ThreeModuleOpacity = ref(1) // 三维模型不透明度 0-1
@@ -391,7 +398,8 @@
 				
 				isRobotMove,
 				isThreeDLoad,
-				openVideo
+				openVideo,
+				isGrid
 			};
 		}
 	};

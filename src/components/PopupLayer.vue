@@ -26,12 +26,12 @@
 						<PopupDeviceView type="stive"/>
 					</div>
 					
-					<div style="min-width: 334px; width: calc(25vw - 66px);max-width: 414px;" v-if="Object.is(type, 'videoList')">
+					<div class="voidListBox" v-if="Object.is(type, 'videoList')">
 						<!-- 视频列表 -->
 						<PopupVideoView type="videoList"/>
 					</div>
 					
-					<div style="width: calc(25vw - 46px);" v-if="Object.is(type, 'video')">
+					<div class="voidMonitorBox" v-if="Object.is(type, 'video')">
 						<ModuleVideoMonitorOther />
 					</div>
 				</div>
@@ -150,12 +150,14 @@
 		height: 40%;
 		right: 20px;
 	}
+	@boxBoderWidth: 3px;
+	@boxPadding: 20px;
 	.box{
 		box-sizing: border-box;
-		border: 3px solid rgba(71,136,255,0.5);
+		border: @boxBoderWidth solid rgba(71,136,255,0.5);
 		background: rgba(1,0,55,0.7);
 		box-shadow: inset 0px 0px 46px rgb(4 142 249 / 20%);
-		padding: 20px;
+		padding: @boxPadding;
 	}
 	.main{
 		overflow: auto;
@@ -167,37 +169,60 @@
 	.jsonBox{
 		padding: calc(20/1080*100vh) 0px;
 	}
+	@videoPaddingRight: 20/1920*100vw;
 	.PopupLayer.show.video{
 		left: 25%;
 		top: 50%;
 		transform: translate(0, -50%);
-		width: calc(25vw - 20);
+		width: calc(25vw - @videoPaddingRight);
 		min-width: 380px;
-		max-width: 460px;
+		// max-width: 460px;
 	}
 	.PopupLayer.show.video .main{
 		min-width: auto;
 	}
 	.PopupLayer.show.videoControl{
 		left: 50%;
-		top: 33%;
+		top: calc(33.33vh - @title-height);
 		transform: translate(0, 0%);
 		width: calc(25vw);
 	}
 	.PopupLayer.show.videoControl .main{
 		min-width: auto;
-		height: calc(34vh - 74px);
+		height: calc(33.33vh - 2*@boxBoderWidth - 2*@boxPadding);
+	}
+	
+	.voidListBox{
+		min-width: 334px; width: calc(25vw - @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
+	}
+	.voidMonitorBox{
+		width: calc(25vw - 2*@boxPadding - 2*@boxBoderWidth);
 	}
 	
 	@media screen and (max-width: 1920px) {
+		@title-height: 34px;
+		@boxBoderWidth: 1px;
+		@videoPaddingRight: 20px;
+		@boxPadding: 10px;
 		.title{
-			height: 34px;
-			line-height: 34px;
 			text-indent: 44px;
 			border-width: 1px;
 		}
 		.box{
-			border-width: 1px;
+			border-width: @boxBoderWidth;
+			padding: @boxPadding;
+		}
+		.PopupLayer.show.video{
+			width: calc(25vw - @videoPaddingRight);
+		}
+		.PopupLayer.show.videoControl .main{
+			height: calc(33.33vh - 2*@boxBoderWidth - 2*@boxPadding);
+		}
+		.voidListBox{
+			min-width: 334px; width: calc(25vw - @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
+		}
+		.voidMonitorBox{
+			width: calc(25vw - 2*@boxPadding - 2*@boxBoderWidth);
 		}
 	}
 </style>

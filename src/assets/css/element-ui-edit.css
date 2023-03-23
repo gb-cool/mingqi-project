@@ -126,6 +126,9 @@
 .el-table th.el-table__cell:last-child{
 	border-right: 1px solid rgba(172, 199, 255, 0.5);
 }
+.el-menu-item{
+	font-size: 1rem;
+}
 /**
  * 滚动条
  */

@@ -163,9 +163,13 @@ export const limoCameraToID = (id) => {
 	右侧顶部关闭按钮 class名称为 deviceCameraBox-close，样式文件在 ./industyEquip.css 内部，按照需求调整关闭按钮样式。
 */
 export const userClickDeviceID = (room, id) => {
-	let row = CacheData.device.relationData.filter((item) => Object.is(item._id, id))[0]
-	const device = new Device()
-	CachePublicFun.isLMJBT(row._id) ? device.setLMJBTData(row) : CachePublicFun.showDeviceLabel(row)	// 设备标签显示
-	device.setDeviceAnimations(row)	// 设置设备动画
-    console.log("当前所处车间：", room, ";当前设备ID: ", id);
+	let relation = CacheData.device.relationData.filter((item) => Object.is(item._id, id))
+	if(relation.length > 0){
+		let row = relation[0]
+		const device = new Device()
+		CachePublicFun.isLMJBT(row._id) ? device.setLMJBTData(row) : CachePublicFun.showDeviceLabel(row)	// 设备标签显示
+		device.setDeviceAnimations(row)	// 设置设备动画
+	}else{
+		console.log("当前所处车间：", room, ";当前设备ID: ", id);
+	}
 };
