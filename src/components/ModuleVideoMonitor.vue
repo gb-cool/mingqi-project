@@ -284,8 +284,6 @@
 			    iCoverTop = (iCoverTop > _height) ? _height : iCoverTop;
 			    iCoverRight = (iCoverRight > _width) ? _width : iCoverRight;
 			    iCoverBottom = (iCoverBottom > _height) ? _height : iCoverBottom;
-				console.log(oDivRect)
-				console.log(iCoverLeft, iCoverTop, iCoverRight, iCoverBottom)
 			
 				oWebControl.JS_RepairPartWindow(0, 0, _width + 1, _height);    // 多1个像素点防止还原后边界缺失一个像素条
 			    if (iCoverLeft != 0) {

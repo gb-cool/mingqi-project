@@ -33,6 +33,10 @@ var CacheData = {
 		allData: [],			// 所有人员数据
 		realListData: []			// 重点区域人员实时数据
 	},
+	car:{
+		// 车辆
+		realListData: []	// 车辆实时数据
+	},
 	video: {
 		// 视频
 		oWebControl: null,		// 视频控件

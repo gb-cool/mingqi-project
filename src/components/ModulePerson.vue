@@ -16,7 +16,7 @@
 	import { ref, inject, onMounted, onDeactivated, watch } from 'vue'
 	import ModulePersonInfo from './ModulePersonInfo.vue'
 	import { JoySuch, Seekey } from '../assets/js/positionPerson.js'
-	import { initalizeMan_3d, realtimeMotionMan_3d, focusPeople_3d, visibleMan_3d } from "../3d/index";
+	import { initalizeMan_3d, realtimeMotionMan_3d, focusPeople_3d, visibleMan_3d, initalizeCar_3d, realtimeMotionCar_3d } from "../3d/index";
 	import { visibleMan } from '@/3d/industryEquip';
 	export default {
 		name: 'ModulePerson',
@@ -70,6 +70,7 @@
 			const seekey = new Seekey()
 			seekey.getSeekeyAccessToken()
 			let timerCount = 0;
+			
 			const realTime = () => {
 				if(CacheData.person.allData.length == 0 || Object.is(toolsType.value, "roaming")){
 					setTimeout(() => realTime(), 1000)
@@ -79,17 +80,17 @@
 					// 执行1个小时更新获取相对位置Token值
 					seekey.getSeekeyAccessToken()
 				}
-				joySuch.getRealTimeData((result) => {
+				joySuch.getRealTimeData(async (result) => {
 					if(result.code == 0){	//成功
-						let pData = result.data.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
+						let PCData =  result.data
 						// 查询想对位置token值，并获取相对位置数据
 						let _seekD = []
-						seekey.getBlts((seekData) => {
-							if(seekData.errorCode == 0) _seekD = seekData.data.data
-							mergePositionData(pData, _seekD)	// 合并人员实时位置信息
+						await seekey.getBlts().then((response) => {
+							if(response.data.errorCode == 0) _seekD = response.data.data.data
+							mergePositionData(PCData, _seekD)	// 合并人员实时位置信息
 						})
-						personData.value = pData
-						ctx.emit('getPersonNum', "（"+ pData.length +"人）")	// 将人员数量传递给父级
+						personData.value = CacheData.person.realListData
+						ctx.emit('getPersonNum', "（"+ personData.value.length +"人）")	// 将人员数量传递给父级
 					}else if(result.code == 1002){  // token失效
 						getData()
 					}
@@ -103,6 +104,8 @@
 			 * @param {Object} seekeyData	// 相对位置信息
 			 * @return {type}	// 返回人员实时位置信息
 			 */
+			let historyRealListData = []	// 记录历史数据
+			let carHistoryListData = []	// 记录车辆历史数据，用于判断车辆是否都存在，存在则不需要创建
 			function mergePositionData(joySuchData, seekeyData){
 				for(let i=0; i < joySuchData.length; i++){
 					let _joyItem = joySuchData[i]
@@ -116,41 +119,55 @@
 						}
 					}
 				}
-				let hideData = []
-				if(CacheData.person.realListData.length > 0){
-					let historyData = CacheData.person.realListData	// 缓存的历史数据
+				let personHideData = []	// 需要隐藏的人员数据
+				let carHideData = []	// 需要隐藏的车辆数据
+				if(historyRealListData.length > 0){
+					let historyData = historyRealListData	// 缓存的历史数据
 					historyData.forEach((item) => {
 						let isa = joySuchData.filter((e) => Object.is(e.deviceNo, item.deviceNo))
 						if(isa.length == 0){
-							hideData.push(item.deviceNo)
+							item.specifictype == 4 ? carHideData.push(item.deviceNo) : personHideData.push(item.deviceNo)
 						}
 					})
 				}
-				if(hideData.length > 0){
-					visibleMan_3d(hideData, false)	// 根据状态决定是否显示当前人员模型
+				if(personHideData.length > 0){
+					visibleMan_3d(personHideData, false)	// 隐藏模型
 				}
-				CacheData.person.realListData = joySuchData	// 缓存人员信息
-				setPersonMove(joySuchData)
-				// Object.is(toolsType.value, "roaming") ? setTimeout(() => realTime(), 10000) : setPersonMove(joySuchData)
+				historyRealListData = joySuchData // 人员车辆数据缓存
+				let personData = joySuchData.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
+				CacheData.person.realListData = personData	// 缓存人员信息
+				let carData = joySuchData.filter((item) => (item.specifictype == '4'))
+				// carData = personData
+				CacheData.car.realListData = carData	// 缓存车辆信息
+				// 人员模型显示
+				let showData = []
+				personData.forEach((item) => showData.push(item.deviceNo))
+				visibleMan_3d(showData, true)	// 显示当前人员模型
+				// 车模型加载
+				let carShowData = []
+				carData.forEach(item => carShowData.push({id: item.deviceNo,name: item.empName,x: item.x,y: item.y}))
+				// 判断车辆是否以上一次一致，一致则不需要重新创建
+				if(carHistoryListData.length == carShowData.length){
+					let isCar = false
+					carHistoryListData.forEach( item => carShowData.filter((c) => Object.is(item.id, c.id)).length == 0 ? isCar = true : "")
+					if(isCar){
+						initalizeCar_3d(carShowData)
+					}
+				}else{
+					initalizeCar_3d(carShowData)
+				}
+				carHistoryListData = carShowData	// 车辆数据存储
+				setMove(joySuchData, carData)
 			}
 			/**
-			 * 设置人员动画
+			 * 设置人员车辆动画
 			 */
-			function setPersonMove(data){
-				let showData = []
-				data.forEach((item) => showData.push(item.deviceNo))
-				visibleMan_3d(showData, true)	// 显示当前人员模型
-				let len = data.length
-				let count = 0
-				data.forEach((p) => {
-					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {
-						// count++
-						// if(count >= len){
-						// 	setTimeout(function(){
-						// 		realTime()
-						// 	}, 5000)
-						// }
-					})
+			function setMove(personData, carData){
+				personData.forEach((p) => {
+					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {})
+				})
+				carData.forEach((p) => {
+					realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 2000 ,() => {})
 				})
 				setTimeout(() => realTime(), 6000)
 			}

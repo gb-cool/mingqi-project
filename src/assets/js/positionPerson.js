@@ -410,20 +410,21 @@ export class Seekey extends PositionPerson{
 	/**
 	 * 通过建筑ID获取该建筑下标签列表信息。查询结果支持分页
 	 */
-	getBlts(callback){
+	async getBlts(callback){
 		const options = {
 			method: 'POST',
 			url: this.Seekey.url + 'api/v4/device/blts',
 			headers: this.Seekey.Headers,
 			data: {pageNum: 1, pageSize: 100}
 		};
-		axios.request(options).then(function (response) {
-			if(callback){
-				callback(response.data)
-			}
-			// console.log(response)
-		}).catch(function (error) {
-			console.log(error)
-		});
+		return await axios.request(options)
+		// axios.request(options).then(function (response) {
+		// 	if(callback){
+		// 		callback(response.data)
+		// 	}
+		// 	// console.log(response)
+		// }).catch(function (error) {
+		// 	console.log(error)
+		// });
 	}
 }
