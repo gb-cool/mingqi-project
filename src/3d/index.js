@@ -45,6 +45,7 @@ import {
     limoCameraDeviceDataup,
     sceneDeviceLook,
     shoucengAnimations,
+    suishiModelAnimation,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -368,7 +369,12 @@ export const sceneDeviceLook_3d = (id, times, isPlane, td) => {
     sceneDeviceLook(id, times, isPlane, td);
 };
 
-// 收尘动画展示隐藏  type = 1(破碎间)  2(筛分间)  3(碎石配料间)  speed = 速度   bool = true(显示)  false(隐藏)
-export const shoucengAnimations_3d = (type, speed, bool) => {
-    shoucengAnimations(type, speed, bool);
+// 收尘动画展示隐藏  type = 1(破碎间)  2(筛分间)  3(碎石配料间)  speed = 速度  color = 0xffffff（颜色）   bool = true(显示)  false(隐藏)
+export const shoucengAnimations_3d = (type, speed, color, bool) => {
+    shoucengAnimations(type, speed, color, bool);
+};
+
+// 碎石配料动画模型动画显示隐藏   bool = true(半透明显示)  false(不透明遮挡)   opacity = 透明度 0-1
+export const suishiModelAnimation_3d = (bool, opacity) => {
+    suishiModelAnimation(bool, opacity);
 };

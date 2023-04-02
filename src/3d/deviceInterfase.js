@@ -151,8 +151,8 @@ export const limoRobotClickFun = () => {
 
 // 立磨间摄像头设备点击事件
 export const limoCameraToID = (id) => {
-	CacheData.video.limoSelectId = id
-	document.getElementById("openVideoDom").click()
+    CacheData.video.limoSelectId = id;
+    document.getElementById("openVideoDom").click();
     console.log("立磨间摄像头设备ID：", id);
 };
 
@@ -162,7 +162,14 @@ export const limoCameraToID = (id) => {
 	右侧顶部关闭按钮 class名称为 deviceCameraBox-close，样式文件在 ./industyEquip.css 内部，按照需求调整关闭按钮样式。
 */
 export const userClickDeviceID = (room, id) => {
-	let row = CacheData.device.relationData.filter((item) => Object.is(item._id, id))[0]
-	CachePublicFun.showDeviceLabel(row)
+    let row = CacheData.device.relationData.filter((item) =>
+        Object.is(item._id, id)
+    )[0];
+    CachePublicFun.showDeviceLabel(row);
     console.log("当前所处车间：", room, ";当前设备ID: ", id);
+};
+
+// 场景漫游过程中需要打开的二维视频函数
+export const openTovideo = (name) => {
+    console.log("此时应当打开的视频是：", name);
 };
