@@ -6,7 +6,7 @@
 			@row-click="intelligentWorkshopEvent"
 			border style="width: 100%, height: 200px">
 			<el-table-column align="center" prop="deviceIdentifyType" label="设备识别类型"/>
-			<el-table-column align="center" prop="deviceKey" label="设备KEY">
+			<el-table-column align="center" prop="deviceName" label="设备名称">
 				<template  #default="scope">
 					<el-popover 
 					placement="right" 
@@ -14,7 +14,7 @@
 					@show="moduleDeviceTaskSelect = scope.row.deviceKey"
 					trigger="click">
 						<template #reference>
-							<span :ref="'popover-'+scope.row.deviceKey">{{scope.row.deviceKey}}</span>
+							<span :ref="'popover-'+scope.row.deviceKey">{{scope.row.deviceName}}</span>
 						</template>
 						<ModuleDeviceTask v-if="Object.is(scope.row.deviceKey, moduleDeviceTaskSelect)" 
 						:deviceKey = "scope.row.deviceKey" 
@@ -23,7 +23,7 @@
 				</template>
 			</el-table-column>
 			
-			<el-table-column align="center" prop="deviceName" label="设备名称" />
+			<!-- <el-table-column align="center" prop="deviceKey" label="设备KEY" /> -->
 			<el-table-column align="center" prop="deviceName" label="位置">
 				<template #default="scope">
 					<span>{{getWorkShonInfo(scope.row, 'workshop')}}</span>
@@ -48,7 +48,7 @@
 					<span>{{scope.row.state==1? "在线":"离线"}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column align="center" prop="_concentration" label="浓度"/>
+			<el-table-column align="center" prop="_concentration" :label=" Object.is(type, 'oxygen') ? '浓度（%Vol）' : '浓度（mg/m³）'"/>
 		</el-table>
 	</div>
 </template>

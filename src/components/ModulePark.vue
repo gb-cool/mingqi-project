@@ -62,7 +62,13 @@
 						<el-table-column 
 						prop="empName" 
 						label="车牌" 
-						align="center">
+						align="left">
+							<template #default="scope">
+								<p style="position: relative;text-indent: 2.5rem;">
+									<img @click.stop="carLocationEvent(scope.row)" style="position: absolute;width: 2rem;max-width: 32px;top: 50%;left:0px;transform: translate(0, -50%);" src="../assets/img/car.png"/>
+									<span>{{scope.row.empName}}</span>
+								</p>
+							</template>
 						</el-table-column>
 						<el-table-column
 						prop="deviceNo" 
@@ -108,7 +114,7 @@
 <script>
 	import { ref, inject, watch, onMounted, onDeactivated } from 'vue'
 	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity, mainView, outRoomOpactiy_3d, limoRobotAnimation_3d, 
-	limoXunjianRobotFocus_3d, updataLiMoRobotPlane_3d } from "../3d/index";	// 三维
+	limoXunjianRobotFocus_3d, updataLiMoRobotPlane_3d, focusCar_3d } from "../3d/index";	// 三维
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
 	export default {
@@ -396,14 +402,19 @@
 						getData()
 					}
 				})
-				joySuch.getRealTimeData((result) => {
-					if(result.code == 0){	//成功
-						carData.value = result.data.filter((item) => (item.specifictype == '4'))
-					}else if(result.code == 1002){  // token失效
-						getData()
-					}
-				})
+				// joySuch.getRealTimeData((result) => {
+				// 	if(result.code == 0){	//成功
+				// 		console.log(result)
+				// 		carData.value = result.data.filter((item) => (item.specifictype == '4'))
+				// 	}else if(result.code == 1002){  // token失效
+				// 		getData()
+				// 	}
+				// })
 			})
+			carData.value = CacheData.car.realListData
+			setInterval(() => {
+				carData.value = CacheData.car.realListData
+			}, 20000)
 			// 人员触发弹窗点击事件
 			const personEvent = (row, event, column) => {
 				row.alarmTemplate =""
@@ -420,6 +431,9 @@
 				popupContent.value = row
 				popupFileds.value = carFileds
 				popupType.value = 'json'
+			}
+			const carLocationEvent= (row) => {
+				focusCar_3d(row.deviceNo, 2000, () => {}) // 车辆聚焦
 			}
 			
 			onMounted(()=>{ //组件挂载时的生命周期执行的方法
@@ -444,6 +458,7 @@
 				robotEvent,
 				carData,
 				carEvent,
+				carLocationEvent,
 				personData,
 				personEvent,
 				lookRobotEvent

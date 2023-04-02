@@ -1,7 +1,7 @@
 <!-- 视频监控 -->
 <template>
 	<div class="ModuleVideoMonitor">
-		<div id="playWndOther" style="height: calc(0.6 * 100vh);" ref="playWndOther" class="playWnd">
+		<div id="playWndOther" ref="playWndOther" class="playWnd">
 			<span v-if="isProgress">正在加载中...</span>
 		</div>
 	</div>
@@ -19,13 +19,19 @@
 			// 创建播放实例
 			let initCount = 0
 			let pubKey = ''
-			CacheData.video.otherOWebControl = null
+			
 			let oWebControl = null
 			let playWndOther = ref()
 			
 			const isProgress = ref(true)
 			
+			let iframePos = urlConfig.iframePos	// iframe与文档的偏移量
+			if(top == self || !location.href.includes("type=iframe")){
+				iframePos = {left: 0,top: 0}
+			}
+			
 			function initPlugin () {
+				CacheData.video.otherOWebControl = "开始创建"
 			    oWebControl = new WebControl({
 			        szPluginContainer: "playWndOther",                       // 指定容器id
 					iServicePortStart: 15900,                           // 指定起止端口号，建议使用该值
@@ -38,8 +44,12 @@
 							oWebControl.JS_SetWindowControlCallback({   // 设置消息回调
 								cbIntegrationCallBack: cbIntegrationCallBack
 							});
-							oWebControl.JS_CreateWnd("playWndOther", _width, _height).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
-								init();  // 创建播放实例成功后初始化
+							oWebControl.JS_CreateWnd("playWndOther", _width, _height, {
+								cbSetDocTitle: function (uuid) {oWebControl._pendBg = false}
+							}).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
+								CacheData.video.otherOWebControl = oWebControl	// 缓存视频控件
+								setDocOffset()
+								init()  // 创建播放实例成功后初始化
 							});
 						}, function (e) { // 启动插件服务失败
 							console.log(e)
@@ -66,11 +76,6 @@
 						oWebControl = null;
 					}
 				});
-				CacheData.video.otherOWebControl = oWebControl	// 缓存视频控件
-			}
-			// 设置窗口控制回调
-			function setCallbacks() {
-			    
 			}
 			// 推送消息
 			function cbIntegrationCallBack(oData) {
@@ -81,6 +86,17 @@
 					oWebControl.JS_RequestInterface({
 					    funcName: "setFullScreen"
 					})
+				}
+			}
+			/**
+			 * 设置控件位置
+			 */
+			function setDocOffset(){
+				if(iframePos.left){
+					oWebControl.JS_SetDocOffset({
+						left: iframePos.left,
+						top: iframePos.top
+					});  // 更新插件窗口位置
 				}
 			}
 			//初始化
@@ -159,15 +175,25 @@
 					_height = playWndOther.value.offsetHeight
 					_width = playWndOther.value.offsetWidth
 					if (oWebControl != null) {
+						setDocOffset()
 					    oWebControl.JS_Resize(_width, _height);
 					    setWndCover();
 					}
 				},3000)
-			}		
+			}
+			let popupTitle = inject('popupTitle')	// 弹出标题
+			watch(popupTitle, (newValue, oldValue) => {
+				let item = CacheData.video.selectCameraData
+				// console.log(item)
+				if(item){
+					startPreview(item.cameraIndexCode)
+				}
+			})
 			onMounted(()=>{
 				_width = playWndOther.value.offsetWidth
 				_height = playWndOther.value.offsetHeight
-				initPlugin()
+				
+				setInitPlugin()
 
 				window.addEventListener('scroll', calculate, true);	// 监听滚动条scroll事件，使插件窗口跟随浏览器滚动而移动
 				window.addEventListener('resize', calculate);	//监听resize事件，使插件窗口尺寸跟随DIV窗口变化
@@ -176,6 +202,28 @@
 				window.removeEventListener('scroll', calculate, true);  
 				window.removeEventListener('resize', calculate);
 			});
+			function setInitPlugin(){
+				// console.log(CacheData.video.otherOWebControl)
+				if(CacheData.video.otherOWebControl == "开始创建"){
+					setTimeout(()=>{
+						setInitPlugin()
+					},100)
+					return false
+				}
+				if(CacheData.video.otherOWebControl == null){
+					initPlugin()
+				}else{
+					CacheData.video.otherOWebControl.JS_DestroyWnd().then(function(){ // oWebControl 为 WebControl 的对象
+						console.log("成功")
+						// 销毁插件窗口成功
+						CacheData.video.otherOWebControl = null
+						setInitPlugin()
+					},function(){
+						// 销毁插件窗口失败
+						console.log("失败")
+					});
+				}
+			}
 			
 			// 设置窗口裁剪，当因滚动条滚动导致窗口需要被遮住的情况下需要JS_CuttingPartWindow部分窗口
 			function setWndCover() {
@@ -239,8 +287,7 @@
 				const gpuMode = 0;                                        //是否启用GPU硬解，0-不启用，1-启用
 				let wndId = 0;                                      //播放窗口序号（在2x2以上布局下可指定播放窗口）
 				
-				let item =  new Video().getIpToCameraIndexCode("ip", CacheData.video.limoSelectId)[0]	// 根据ID获取关联值
-				// let item = 	CacheData.video.limoListData.filter((da) => Object.is(da.cameraIndexCode, mate.cameraIndexCode))
+				let item = CacheData.video.selectCameraData
 				wndId++
 				let cameraIndexCode = item.cameraIndexCode
 				cameraIndexCode = cameraIndexCode.replace(/(^\s*)/g, "");
@@ -280,7 +327,9 @@
 	}
 </script>
 
-<style scoped>
+<style scoped lang="less">
+	@boxPadding: 20px;
+	@boxBoderWidth: 3px;
 	.ModuleVideoMonitor, video{
 		width: 100%;
 		height: 100%;
@@ -288,9 +337,8 @@
 	/* video{
 		object-fit: fill;
 	} */
-	.playWnd{
-		/* width: 354px; */              
-		height: 100%;
+	.playWnd{             
+		height: calc(33.33vh - 2*@boxPadding - 2*@boxBoderWidth);
 		position: relative;
 	}
 	.playWnd>span{
@@ -298,5 +346,12 @@
 		top: 40%;
 		left: 50%;
 		transform: translate(-50%, 0);
+	}
+	@media screen and (max-width: 1920px) {
+		@boxPadding: 10px;
+		@boxBoderWidth: 1px;
+		.playWnd{
+			height: calc(33.33vh - 2*@boxPadding - 2*@boxBoderWidth);
+		}
 	}
 </style>

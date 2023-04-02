@@ -228,34 +228,11 @@
 					}
 				}else if(Object.is(row._hz_type, "device")){
 					sceneDeviceLook_3d(row._id, 2000, true, () => {
-						isLMJBT(row._id) ? setLMJBTData(row) : CachePublicFun.showDeviceLabel(row)	// 设备标签显示
+						CachePublicFun.isLMJBT(row._id) ? device.setLMJBTData(row) : CachePublicFun.showDeviceLabel(row)	// 设备标签显示
+						device.setDeviceAnimations(row)	// 设置设备动画
 					})	// 设备聚焦
 				}
 			}
-			/**
-			 * 判断是否立磨机本体
-			 */
-			function isLMJBT(id){
-				let data = ['LMJBT-M01', 'LMJBT-M02', 'LMJBT-M03', 'LMJBT-M04', 'LMJBT-M05', 'LMJBT-M06', 'LMJBT-M07', 'LMJBT-M08']
-				return data.includes(id)
-			}
-			/**
-			 * 立磨机本体数据显示
-			 * @param {Object} row
-			 */
-			function setLMJBTData(row){
-				let k = row._id.split("-")[1].replace("0", "")
-				let verticalData = CacheData.vertical.realTableData.filter((item) => item.deviceName.includes(k))
-				if(verticalData.length > 0){
-					let data = verticalData[0]
-					device.getQueryDeviceShadow(data.deviceKey, data.projectId, (result) => {
-						result.code == "200" ? CachePublicFun.showDeviceLabel(Object.assign(row, result.data)) : CachePublicFun.showDeviceLabel(row)
-					})
-				}else{
-					CachePublicFun.showDeviceLabel(row)	// 设备标签显示
-				}
-			}
-			
 			/**
 			 * 获取样式标签
 			 */

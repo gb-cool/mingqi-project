@@ -33,13 +33,17 @@ var CacheData = {
 		allData: [],			// 所有人员数据
 		realListData: []			// 重点区域人员实时数据
 	},
+	car:{
+		// 车辆
+		realListData: []	// 车辆实时数据
+	},
 	video: {
 		// 视频
 		oWebControl: null,		// 视频控件
 		otherOWebControl: null, 
 		listData: [],	// 重点区域列表数据
 		limoListData: [],	//立磨车间摄像头数据
-		limoSelectId: null	//立磨车间选中的摄像头id值	
+		selectCameraData: null,	// 选中摄像头数据
 	},
 	robot: {
 		// 巡检机器人
@@ -58,33 +62,34 @@ var CacheData = {
 			{_id: 'EP02', _room:"破碎车间", _name: '颚式破碎机 EP02', _use: '粗碎'},
 			{_id: 'YP01', _room:"破碎车间", _name: '单缸液压圆锥破碎机 YP01', _use: '细碎'},
 			{_id: 'YP02', _room:"破碎车间", _name: '单缸液压圆锥破碎机 YP02', _use: '细碎'},
-			{_id: 'SP01', _room:"筛分车间", _name: '双层振动筛 SP01', _use: '预先检查筛分'},
-			{_id: 'SP02', _room:"筛分车间", _name: '双层振动筛 SP02', _use: '预先检查筛分'},
 			{_id: 'P-101', _room:"破碎车间", _name: '破碎料皮带 P-101', _use: '系列颚破、圆锥破底部出料皮带汇集'},
 			{_id: 'P-102', _room:"破碎车间", _name: '破碎料皮带 P-102', _use: '系列颚破、圆锥破底部出料皮带汇集'},
-			{_id: 'P-103', _room:"破碎车间", _name: '振动筛给料皮带 P-103', _use: '将破碎后的碎石爬坡输送至振动筛'},
-			{_id: 'P-104', _room:"筛分车间", _name: '振动筛给料皮带 P-104', _use: '将破碎后的碎石爬坡输送至振动筛'},
-			{_id: 'P-105', _room:"筛分车间", _name: '振动筛集料皮带 P-105', _use: '横向布置收集振动筛筛上物'},
-			{_id: 'P-106', _room:"筛分车间", _name: '振动筛集料皮带 P-106', _use: '横向布置收集振动筛筛上物'},
 			{_id: 'F-101', _room:"破碎车间", _name: '振动筛返料皮带 F-101', _use: '将筛上物输送返回至圆锥破中间仓'},
 			{_id: 'F-102', _room:"破碎车间", _name: '振动筛返料皮带 F-102', _use: '将筛上物输送返回至圆锥破中间仓'},
 			{_id: 'F-103', _room:"破碎车间", _name: '可移动皮带 F-103', _use: '圆锥破给料'},
 			{_id: 'F-104', _room:"破碎车间", _name: '可移动皮带 F-104', _use: '圆锥破给料'},
 			{_id: 'CP-001', _room:"破碎车间", _name: '圆锥破中间仓 CP-001', _use: '圆锥破储存给料中间仓'},
 			{_id: 'CP-002', _room:"破碎车间", _name: '圆锥破中间仓 CP-002', _use: '圆锥破储存给料中间仓'},
-			{_id: 'P-107', _room:"筛分车间", _name: '振动筛出料皮带 P-107', _use: '将筛下物输送至碎石仓顶布料小车'},
-			{_id: 'P-108', _room:"筛分车间", _name: '振动筛出料皮带 P-108', _use: '将筛下物输送至碎石仓顶布料小车'},
-			{_id: 'T-107', _room:"破碎车间", _name: '破碎出料除铁器 T-107', _use: '圆锥破储存给料中间仓'},
-			{_id: 'T-108', _room:"破碎车间", _name: '破碎出料除铁器 T-108', _use: '圆锥破储存给料中间仓'},
-			{_id: 'T-101', _room:"筛分车间", _name: '筛分回料除铁器 T-101', _use: '圆锥破储存给料中间仓'},
-			{_id: 'T-102', _room:"筛分车间", _name: '筛分回料除铁器 T-102', _use: '圆锥破储存给料中间仓'},
+			{_id: 'T-101', _room:"破碎车间", _name: '筛分回料除铁器 T-101', _use: '圆锥破储存给料中间仓'},
+			{_id: 'T-102', _room:"破碎车间", _name: '筛分回料除铁器 T-102', _use: '圆锥破储存给料中间仓'},
 			{_id: 'SC-001', _room:"破碎车间", _name: '破碎除尘器', _use: '破碎收尘器'},
-			{_id: 'SC-002', _room:"筛分车间", _name: '筛分除尘器', _use: '筛分收尘器'},
 			{_id: 'psxc_001', _room:"破碎车间", _name: '破碎行车', _use: ''},
+			// 破碎车间总计 18
+			{_id: 'SP01', _room:"筛分车间", _name: '双层振动筛 SP01', _use: '预先检查筛分'},
+			{_id: 'SP02', _room:"筛分车间", _name: '双层振动筛 SP02', _use: '预先检查筛分'},
+			{_id: 'P-103', _room:"筛分车间", _name: '振动筛给料皮带 P-103', _use: '将破碎后的碎石爬坡输送至振动筛'},
+			{_id: 'P-104', _room:"筛分车间", _name: '振动筛给料皮带 P-104', _use: '将破碎后的碎石爬坡输送至振动筛'},
+			{_id: 'P-105', _room:"筛分车间", _name: '振动筛集料皮带 P-105', _use: '横向布置收集振动筛筛上物'},
+			{_id: 'P-106', _room:"筛分车间", _name: '振动筛集料皮带 P-106', _use: '横向布置收集振动筛筛上物'},
+			{_id: 'SC-002', _room:"筛分车间", _name: '筛分除尘器', _use: '筛分收尘器'},
 			{_id: 'sfxc_001', _room:"筛分车间", _name: '筛分行车', _use: ''},
-			
-			{_id: 'P-109', _room:"碎石配料间", _name: '移动卸料小车胶带机', _position:'碎石仓顶北侧', _use: ''},
-			{_id: 'P-110', _room:"碎石配料间", _name: '移动卸料小车胶带机', _position:'碎石仓顶南侧', _use: ''},
+			// 筛分车间总计 8
+			{_id: 'P-107', _room:"碎石配料间", _name: '振动筛出料皮带 P-107', _use: '将筛下物输送至碎石仓顶布料小车'},
+			{_id: 'P-108', _room:"碎石配料间", _name: '振动筛出料皮带 P-108', _use: '将筛下物输送至碎石仓顶布料小车'},
+			{_id: 'T-107', _room:"碎石配料间", _name: '破碎出料除铁器 T-107', _use: '圆锥破储存给料中间仓'},
+			{_id: 'T-108', _room:"碎石配料间", _name: '破碎出料除铁器 T-108', _use: '圆锥破储存给料中间仓'},
+			{_id: 'P-109', _room:"碎石配料间", _name: '移动卸料小车胶带机 P-109', _position:'碎石仓顶北侧', _use: ''},
+			{_id: 'P-110', _room:"碎石配料间", _name: '移动卸料小车胶带机 P-110', _position:'碎石仓顶南侧', _use: ''},
 			{_id: 'ydxc_109', _room:"碎石配料间", _name: 'P-109移动小车', _position:'', _use: ''},
 			{_id: 'ydxc_110', _room:"碎石配料间", _name: 'P-110移动小车', _position:'', _use: ''},
 			{_id: 'CS-101', _room:"碎石配料间", _name: '碎石仓101', _position:'', _use: ''},
@@ -139,31 +144,31 @@ var CacheData = {
 			{_id: 'WP-211', _room:"碎石配料间", _name: '碎石配料皮带秤211', _position:'碎石仓底', _use: ''},
 			{_id: 'WP-212', _room:"碎石配料间", _name: '碎石配料皮带秤212', _position:'碎石仓底', _use: ''},
 			{_id: 'WP-213', _room:"碎石配料间", _name: '碎石配料皮带秤213', _position:'碎石仓底', _use: ''},
-			{_id: 'P-111', _room:"碎石配料间", _name: '配料汇总皮带', _position:'北侧汇总皮带', _use: ''},
-			{_id: 'P-112', _room:"碎石配料间", _name: '配料汇总皮带', _position:'南侧汇总皮带', _use: ''},
-			{_id: 'P-113', _room:"碎石配料间", _name: '配料中转皮带', _position:'在线分析仪底部', _use: ''},
+			{_id: 'P-111', _room:"碎石配料间", _name: '配料汇总皮带 P-111', _position:'北侧汇总皮带', _use: ''},
+			{_id: 'P-112', _room:"碎石配料间", _name: '配料汇总皮带 P-112', _position:'南侧汇总皮带', _use: ''},
+			{_id: 'P-113', _room:"碎石配料间", _name: '配料中转皮带 P-113', _position:'在线分析仪底部', _use: ''},
 			{_id: 'P-113-1', _room:"碎石配料间", _name: '中子活化在线分析仪', _position:'在线分析仪底部', _use: ''},
-			{_id: 'P-114', _room:"碎石配料间", _name: '配料中转爬坡皮带', _position:'西侧爬坡皮带', _use: ''},
-			{_id: 'P-115', _room:"碎石配料间", _name: '配料中转爬坡皮带', _position:'东侧爬坡皮带', _use: ''},
 			{_id: 'SC-003', _room:"碎石配料间", _name: '碎石仓顶除尘器1', _position:'', _use: ''},
 			{_id: 'SC-004', _room:"碎石配料间", _name: '碎石仓底配料除尘器', _position:'', _use: ''},
 			{_id: 'cddhl-1', _room:"碎石配料间", _name: '仓顶电动葫芦1', _position:'', _use: ''},
 			{_id: 'cddhl-2', _room:"碎石配料间", _name: '仓顶电动葫芦2', _position:'', _use: ''},
-			
+			// 碎石配料间 总计 68
+			{_id: 'P114', _room:"立磨车间", _name: '配料中转爬坡皮带 P114', _position:'西侧爬坡皮带', _use: ''},
+			{_id: 'P115', _room:"立磨车间", _name: '配料中转爬坡皮带 P115', _position:'东侧爬坡皮带', _use: ''},
 			{_id: 'P114M', _room:"立磨车间", _name: '除铁器 P114M', _position:'', _use: ''},
 			{_id: 'P115M', _room:"立磨车间", _name: '除铁器 P115M', _position:'', _use: ''},
-			{_id: 'P-116', _room:"立磨车间", _name: '移动卸料小车胶带机', _position:'碎石仓顶北侧', _use: ''},
-			{_id: 'P-117', _room:"立磨车间", _name: '移动卸料小车胶带机', _position:'碎石仓顶南侧', _use: ''},
+			{_id: 'P-116', _room:"立磨车间", _name: '移动卸料小车胶带机 P-116', _position:'碎石仓顶北侧', _use: ''},
+			{_id: 'P-117', _room:"立磨车间", _name: '移动卸料小车胶带机 P-117', _position:'碎石仓顶南侧', _use: ''},
 			{_id: 'LMYDXC-P-116', _room:"立磨车间", _name: 'P-116移动小车', _position:'', _use: ''},
 			{_id: 'LMYDXC-P-117', _room:"立磨车间", _name: 'P-117移动小车', _position:'', _use: ''},
-			{_id: 'LMJBT-M01', _room:"立磨车间", _name: '立磨机本体M01', _position:'', _use: ''},
-			{_id: 'LMJBT-M02', _room:"立磨车间", _name: '立磨机本体M02', _position:'', _use: ''},
-			{_id: 'LMJBT-M03', _room:"立磨车间", _name: '立磨机本体M03', _position:'', _use: ''},
-			{_id: 'LMJBT-M04', _room:"立磨车间", _name: '立磨机本体M04', _position:'', _use: ''},
-			{_id: 'LMJBT-M05', _room:"立磨车间", _name: '立磨机本体M05', _position:'', _use: ''},
-			{_id: 'LMJBT-M06', _room:"立磨车间", _name: '立磨机本体M06', _position:'', _use: ''},
-			{_id: 'LMJBT-M07', _room:"立磨车间", _name: '立磨机本体M07', _position:'', _use: ''},
-			{_id: 'LMJBT-M08', _room:"立磨车间", _name: '立磨机本体M08', _position:'', _use: ''},
+			{_id: 'LMJBT-M01', _room:"立磨车间", _name: '立磨机本体M01', _position:'', _use: '', _deviceKey:"16735812250003f39b"},
+			{_id: 'LMJBT-M02', _room:"立磨车间", _name: '立磨机本体M02', _position:'', _use: '', _deviceKey:"1672825159000fb72f"},
+			{_id: 'LMJBT-M03', _room:"立磨车间", _name: '立磨机本体M03', _position:'', _use: '', _deviceKey:"1672825280000ad947"},
+			{_id: 'LMJBT-M04', _room:"立磨车间", _name: '立磨机本体M04', _position:'', _use: '', _deviceKey:"1672825567000c9946"},
+			{_id: 'LMJBT-M05', _room:"立磨车间", _name: '立磨机本体M05', _position:'', _use: '', _deviceKey:"16728256160002d46d"},
+			{_id: 'LMJBT-M06', _room:"立磨车间", _name: '立磨机本体M06', _position:'', _use: '', _deviceKey:"167282566200039a6f"},
+			{_id: 'LMJBT-M07', _room:"立磨车间", _name: '立磨机本体M07', _position:'', _use: '', _deviceKey:"1672889351000906c1"},
+			{_id: 'LMJBT-M08', _room:"立磨车间", _name: '立磨机本体M08', _position:'', _use: '', _deviceKey:"167282577000043b38"},
 			{_id: 'LMJJSJ-M01', _room:"立磨车间", _name: '立磨机减速机M01', _position:'', _use: ''},
 			{_id: 'LMJJSJ-M02', _room:"立磨车间", _name: '立磨机减速机M02', _position:'', _use: ''},
 			{_id: 'LMJJSJ-M03', _room:"立磨车间", _name: '立磨机减速机M03', _position:'', _use: ''},
@@ -261,7 +266,7 @@ var CacheData = {
 			{_id: 'QS-M08', _room:"立磨车间", _name: 'M08密相泵', _position:'', _use: ''},
 			{_id: 'LMXC-1', _room:"立磨车间", _name: '立磨行车1', _position:'', _use: ''},
 			{_id: 'LMXC-2', _room:"立磨车间", _name: '立磨行车2', _position:'', _use: ''},
-			
+			// 立磨车间 总计 113
 			{_id: 'CF-101', _room:"均化车间", _name: '高混料半成品仓1', _position:'北侧', _use: ''},
 			{_id: 'CF-103', _room:"均化车间", _name: '高混料半成品仓2', _position:'北侧', _use: ''},
 			{_id: 'CF-105', _room:"均化车间", _name: '高混料半成品仓3', _position:'北侧', _use: ''},
@@ -399,6 +404,7 @@ var CacheData = {
 			{_id: 'SC-107', _room:"均化车间", _name: '均化仓顶收尘器107', _position:'仓顶收尘器', _use: ''},
 			{_id: 'SC-109', _room:"均化车间", _name: '均化仓顶收尘器109', _position:'仓顶收尘器', _use: ''},
 			{_id: 'SC-111', _room:"均化车间", _name: '均化仓顶收尘器111', _position:'仓顶收尘器', _use: ''},
+			// 均化车间 总计 137
 		],
 		fileds: {
 			_id: "设备编号",
@@ -429,7 +435,6 @@ var CacheData = {
 		}
 	}
 }
-
 /**
  * 公共方法
  */
@@ -461,25 +466,23 @@ var CachePublicFun = {
 		el.setAttribute('style', 'background:rgba(1, 0, 55, 0.7);border: 3px solid rgba(71, 136, 255, 0.5);box-shadow:0px 3px 6px rgba(71,136,255,0.5);padding:20px 84px 20px 36px;border-radius:14px;min-width: 82px;min-height: 32px;')
 		let _div = document.createElement("div")
 		_div.setAttribute('style', 'font-size:54px;color:#fff;position:relative;');
-		// _div.innerHTML ="<p style = 'width:40px;height:40px;border-radius:50%;position:absolute;top: 50%;transform: translate(0, -20px);background:"+ CacheData.oxygen.color.one +"'></p>"+
-		// "<span style='margin-left:44px'>" + row._name + "（"+ row._use +"）</span"
-		/* let ul = "<ul>"
-		for(let key in row){
-			if(fileds.hasOwnProperty(key) && row[key] !=null && row[key] != ""){
-				ul += "<li style='padding:0.8rem 0px;'><p style='float:left;text-align:right;padding-right:2rem;'>"+ fileds[key] +" ： </p><span>"+ row[key] +"</span></li>"
-			}
-		}
-		ul += "</ul>" */
 		let _box = ""
 		_box += "<div style='height:90px;line-height:70px;border-bottom:1px solid #fff;font-weight:700;'>"+ row["_name"] +"</div>"
 		_box += "<table><tbody>"
 		for(let key in row){
 			if(fileds.hasOwnProperty(key) && row[key] !=null && row[key] != "" && key != "_name"){
-				_box += "<tr><td><p style='text-align:right;padding:0.8rem 2rem 0.8rem 0;color:#92A6CB;'>"+ fileds[key] +" ： </p></td><td><span>"+ row[key] +"</span></td></tr>"
+				_box += "<tr><td><p style='text-align:right;padding:0.8rem 2rem 0.8rem 0;color:#92A6CB;white-space: nowrap;'>"+ fileds[key] +" ： </p></td><td><span style='white-space: nowrap;'>"+ row[key] +"</span></td></tr>"
 			}
 		}
 		_box += "</tbody></table>"
 		_div.innerHTML = _box
 		el.appendChild(_div)
+	},
+	/**
+	 * 判断是否立磨机本体
+	 */
+	isLMJBT(id){
+		let data = ['LMJBT-M01', 'LMJBT-M02', 'LMJBT-M03', 'LMJBT-M04', 'LMJBT-M05', 'LMJBT-M06', 'LMJBT-M07', 'LMJBT-M08']
+		return data.includes(id)
 	}
 }

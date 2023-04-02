@@ -16,16 +16,22 @@
 						</el-descriptions>
 					</div>
 					
-					<div style="min-width: 1200px;" v-if="Object.is(type, 'oxygen')">
+					<div style="min-width: 900px;" v-if="Object.is(type, 'oxygen')">
 						<!-- 氧浓度 -->
 						<PopupDeviceView type="oxygen"/>
 					</div>
 					
-					<div style="min-width: 1200px;" v-if="Object.is(type, 'stive')">
+					<div style="min-width: 900px;" v-if="Object.is(type, 'stive')">
 						<!-- 粉尘浓度 -->
 						<PopupDeviceView type="stive"/>
 					</div>
-					<div style="min-width: calc(0.6*100vw);" v-if="Object.is(type, 'video')">
+					
+					<div class="voidListBox" v-if="Object.is(type, 'videoList')">
+						<!-- 视频列表 -->
+						<PopupVideoView type="videoList"/>
+					</div>
+					
+					<div class="voidMonitorBox" v-if="Object.is(type, 'video')">
 						<ModuleVideoMonitorOther />
 					</div>
 				</div>
@@ -36,12 +42,14 @@
 <script>
 	import { ref, onMounted, inject } from 'vue'
 	import PopupDeviceView from './PopupDeviceView.vue'
+	import PopupVideoView from './PopupVideoView.vue'
 	import ModuleVideoMonitorOther from './ModuleVideoMonitorOther.vue'
 	export default {
 		name: 'PopupLayer',
 		components: {
 			PopupDeviceView,
-			ModuleVideoMonitorOther
+			ModuleVideoMonitorOther,
+			PopupVideoView
 		},
 		emits:["isShow"],
 		props: ['title', 'fileds', 'information', 'type'],
@@ -61,21 +69,39 @@
 				console.log(item)
 			}
 			//关闭事件
+			let isClose = false
 			const closeFun = () => {
-				context.emit('isShow', false)
+				if(isClose){
+					return false
+				}
+				isClose = true
 				if(props.type == "video"){
 					// CacheData.video.otherOWebControl.JS_HideWnd()
-					CacheData.video.otherOWebControl.JS_DestroyWnd().then(function(){ // oWebControl 为 WebControl 的对象
-						console.log("成功")
-						// 销毁插件窗口成功
-						CacheData.video.otherOWebControl = null
-						CacheData.video.limoSelectId = null
-						popupType.value = ""
-					},function(){
-						// 销毁插件窗口失败
-						console.log("失败")
-					});
+					closeVideo()
+				}else{
+					context.emit('isShow', false)
+					isClose = false
 				}
+			}
+			function closeVideo(){
+				if(CacheData.video.otherOWebControl == "开始创建"){
+					setTimeout(() => {
+						closeVideo()
+					},100)
+					return false
+				}
+				CacheData.video.otherOWebControl.JS_DestroyWnd().then(function(){ // oWebControl 为 WebControl 的对象
+					console.log("成功")
+					// 销毁插件窗口成功
+					CacheData.video.otherOWebControl = null
+					// CacheData.video.selectCameraData = null
+					popupType.value = ""
+				},function(){
+					// 销毁插件窗口失败
+					console.log("失败")
+				});
+				context.emit('isShow', false)
+				isClose = false
 			}
 			return {
 				getFiled,
@@ -106,6 +132,7 @@
 		top: 50%;
 		transform: translate(-50%, -50%);
 	}
+	
 	.title{
 		height: @title-height;
 		line-height: @title-height;
@@ -123,12 +150,14 @@
 		height: 40%;
 		right: 20px;
 	}
+	@boxBoderWidth: 3px;
+	@boxPadding: 20px;
 	.box{
 		box-sizing: border-box;
-		border: 3px solid rgba(71,136,255,0.5);
+		border: @boxBoderWidth solid rgba(71,136,255,0.5);
 		background: rgba(1,0,55,0.7);
 		box-shadow: inset 0px 0px 46px rgb(4 142 249 / 20%);
-		padding: 20px;
+		padding: @boxPadding;
 	}
 	.main{
 		overflow: auto;
@@ -140,16 +169,60 @@
 	.jsonBox{
 		padding: calc(20/1080*100vh) 0px;
 	}
+	@videoPaddingRight: 20/1920*100vw;
+	.PopupLayer.show.video{
+		left: 25%;
+		top: 50%;
+		transform: translate(0, -50%);
+		width: calc(25vw - @videoPaddingRight);
+		min-width: 380px;
+		// max-width: 460px;
+	}
+	.PopupLayer.show.video .main{
+		min-width: auto;
+	}
+	.PopupLayer.show.videoControl{
+		left: 50%;
+		top: calc(33.33vh - @title-height);
+		transform: translate(0, 0%);
+		width: calc(25vw);
+	}
+	.PopupLayer.show.videoControl .main{
+		min-width: auto;
+		height: calc(33.33vh - 2*@boxBoderWidth - 2*@boxPadding);
+	}
+	
+	.voidListBox{
+		min-width: 334px; width: calc(25vw - @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
+	}
+	.voidMonitorBox{
+		width: calc(25vw - 2*@boxPadding - 2*@boxBoderWidth);
+	}
 	
 	@media screen and (max-width: 1920px) {
+		@title-height: 34px;
+		@boxBoderWidth: 1px;
+		@videoPaddingRight: 20px;
+		@boxPadding: 10px;
 		.title{
-			height: 34px;
-			line-height: 34px;
 			text-indent: 44px;
 			border-width: 1px;
 		}
 		.box{
-			border-width: 1px;
+			border-width: @boxBoderWidth;
+			padding: @boxPadding;
+		}
+		.PopupLayer.show.video{
+			width: calc(25vw - @videoPaddingRight);
+		}
+		.PopupLayer.show.videoControl .main{
+			height: calc(33.33vh - 2*@boxBoderWidth - 2*@boxPadding);
+		}
+		.voidListBox{
+			min-width: 334px; width: calc(25vw - @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
+		}
+		.voidMonitorBox{
+			width: calc(25vw - 2*@boxPadding - 2*@boxBoderWidth);
 		}
 	}
 </style>

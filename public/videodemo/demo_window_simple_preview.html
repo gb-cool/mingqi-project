@@ -99,7 +99,17 @@
 						cbIntegrationCallBack: cbIntegrationCallBack
 					});
 					
-					oWebControl.JS_CreateWnd("playWnd", 1000, 600).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
+					oWebControl.JS_CreateWnd("playWnd", 1000, 600, {
+					    // bEmbed: true,
+						cbSetDocTitle: function (uuid) {
+						  /* oWebControl._pendBg = false;
+						  window.parent.postMessage({
+							  action:'updateTitle',
+							  msg:'子页面通知父页面修改title',
+							  info:uuid
+							}, '\*');    // '\*'表示跨域参数，请结合自身业务合理设置 */
+						}
+					}).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
 						init();  // 创建播放实例成功后初始化
 					});
 				}, function () { // 启动插件服务失败

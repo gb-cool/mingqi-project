@@ -21,6 +21,20 @@
 			let oWebControl = null
 			let playWnd = ref()
 			
+			let iframePos = urlConfig.iframePos	// iframe与文档的偏移量
+			if(top == self || !location.href.includes("type=iframe")){
+				iframePos = {left: 0,top: 0}
+			}
+			// console.log(top == self, !location.href.includes("type=iframe"))
+				
+			// 标签关闭
+			window.addEventListener('unload', function(e){
+				if (oWebControl != null){
+					oWebControl.JS_HideWnd();  // 先让窗口隐藏，规避可能的插件窗口滞后于浏览器消失问题
+					oWebControl.JS_Disconnect().then(function(){}, function() {});
+				}
+			})
+			
 			function initPlugin () {
 			    oWebControl = new WebControl({
 			        szPluginContainer: "playWnd",                       // 指定容器id
@@ -34,7 +48,12 @@
 							oWebControl.JS_SetWindowControlCallback({   // 设置消息回调
 								cbIntegrationCallBack: cbIntegrationCallBack
 							});
-							oWebControl.JS_CreateWnd("playWnd", _width, _height).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
+							oWebControl.JS_CreateWnd("playWnd", _width, _height, {
+								// uuid 为插件提供的 UUID
+								cbSetDocTitle: function (uuid){}
+							}).then(function () { //JS_CreateWnd创建视频播放窗口，宽高可设定
+								CacheData.video.oWebControl = oWebControl	// 缓存视频控件
+								setDocOffset()	// 设置控件位置
 								init();  // 创建播放实例成功后初始化
 							});
 						}, function (e) { // 启动插件服务失败
@@ -63,7 +82,6 @@
 						oWebControl = null;
 					}
 				});
-				CacheData.video.oWebControl = oWebControl	// 缓存视频控件
 			}
 			// 设置窗口控制回调
 			function setCallbacks() {
@@ -103,6 +121,18 @@
 					}
 				}
 			    // showCBInfo(JSON.stringify(oData.responseMsg));
+			}
+			
+			/**
+			 * 设置控件位置
+			 */
+			function setDocOffset(){
+				if(iframePos.left){
+					oWebControl.JS_SetDocOffset({
+						left: iframePos.left,
+						top: iframePos.top
+					});  // 更新插件窗口位置
+				}
 			}
 			//初始化
 			function init()
@@ -191,6 +221,7 @@
 					_height = playWnd.value.offsetHeight
 					_width = playWnd.value.offsetWidth
 					if (oWebControl != null) {
+						setDocOffset()
 					    oWebControl.JS_Resize(_width, _height);
 					    setWndCover();
 					}
