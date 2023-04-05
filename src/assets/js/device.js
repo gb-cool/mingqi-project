@@ -55,12 +55,12 @@ export class Device {
 		}
 		const result = require('../json/device.json')
 		axios.request(options).then(function (response) {
+			// console.log(response);
 			if(response.data.code == 200){
 				if(callback) callback(response.data)
 			}else{
 				// if(callback) callback(result)
 			}
-			// console.log(response);
 		}).catch(function (error) {
 			console.log(error);
 		});
@@ -296,18 +296,18 @@ export class Device {
 	setDeviceAnimations(row){
 		switch(row._id){
 			case "SC-001":
-				shoucengAnimations_3d(1, 0.1, true)	// 破碎间收尘动画
+				shoucengAnimations_3d(1, 0.1, 0xff0000, true)	// 破碎间收尘动画
 				break;
 			case "SC-002":
-				shoucengAnimations_3d(2, 0.1, true)	// 筛分间收尘动画
+				shoucengAnimations_3d(2, 0.1, 0xff0000, true)	// 筛分间收尘动画
 				break;
 			case "SC-004":
-				shoucengAnimations_3d(3, 0.1, true)	// 碎石配料间收尘动画
+				shoucengAnimations_3d(3, 0.1, 0xff0000, true)	// 碎石配料间收尘动画
 				break;
 			default:
-				shoucengAnimations_3d(1, 0.1, false)	// 破碎间收尘动画
-				shoucengAnimations_3d(2, 0.1, false)	// 筛分间收尘动画
-				shoucengAnimations_3d(3, 0.1, false)	// 碎石配料间收尘动画
+				shoucengAnimations_3d(1, 0.1, 0xff0000, false)	// 破碎间收尘动画
+				shoucengAnimations_3d(2, 0.1, 0xff0000, false)	// 筛分间收尘动画
+				shoucengAnimations_3d(3, 0.1, 0xff0000, false)	// 碎石配料间收尘动画
 				break;
 		}
 	}

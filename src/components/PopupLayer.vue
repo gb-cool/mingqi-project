@@ -123,6 +123,7 @@
 		transform: translate(-50%, -50%);
 		transition: 1s;
 		max-width: calc(100vw*0.8);
+		max-height: 80vh;
 	}
 	.PopupLayer.hide{
 		top: 100%;
@@ -176,7 +177,7 @@
 		transform: translate(0, -50%);
 		width: calc(25vw - @videoPaddingRight);
 		min-width: 380px;
-		// max-width: 460px;
+		max-width: calc(25vw/3*2);
 	}
 	.PopupLayer.show.video .main{
 		min-width: auto;
@@ -193,7 +194,10 @@
 	}
 	
 	.voidListBox{
-		min-width: 334px; width: calc(25vw - @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
+		// min-width: 334px;
+		// width: calc(25vw - @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
+		// max-width:calc(25vw/3*2 -  @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
+		width: 100%;
 	}
 	.voidMonitorBox{
 		width: calc(25vw - 2*@boxPadding - 2*@boxBoderWidth);
@@ -219,7 +223,9 @@
 			height: calc(33.33vh - 2*@boxBoderWidth - 2*@boxPadding);
 		}
 		.voidListBox{
-			min-width: 334px; width: calc(25vw - @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
+			// min-width: 334px;
+			// width: calc(25vw - @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
+			// max-width:calc(25vw/3*2 - @videoPaddingRight - 2*@boxBoderWidth - 2*@boxPadding);
 		}
 		.voidMonitorBox{
 			width: calc(25vw - 2*@boxPadding - 2*@boxBoderWidth);

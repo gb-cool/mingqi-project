@@ -145,15 +145,17 @@
 				visibleMan_3d(showData, true)	// 显示当前人员模型
 				// 车模型加载
 				let carShowData = []
-				carData.forEach(item => carShowData.push({id: item.deviceNo,name: item.empName,x: item.x,y: item.y}))
+				carData.forEach(item => carShowData.push({id: item.deviceNo,name: item.empName == null ? "测试" : item.empName,x: item.x,y: item.y}))
 				// 判断车辆是否以上一次一致，一致则不需要重新创建
 				if(carHistoryListData.length == carShowData.length){
 					let isCar = false
 					carHistoryListData.forEach( item => carShowData.filter((c) => Object.is(item.id, c.id)).length == 0 ? isCar = true : "")
 					if(isCar){
+						console.log(carShowData)
 						initalizeCar_3d(carShowData)
 					}
 				}else{
+					console.log(carShowData)
 					initalizeCar_3d(carShowData)
 				}
 				carHistoryListData = carShowData	// 车辆数据存储
@@ -166,9 +168,11 @@
 				personData.forEach((p) => {
 					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {})
 				})
-				carData.forEach((p) => {
-					realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 2000 ,() => {})
-				})
+				setTimeout(() => {
+					carData.forEach((p) => {
+						realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 2000 ,() => {})
+					})
+				}, 2000)
 				setTimeout(() => realTime(), 6000)
 			}
 			

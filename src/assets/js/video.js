@@ -58,6 +58,15 @@ export class Video{
 			console.error(error);
 		})
 	}
+	async getCamerasByRegionIndexCodeAsync(regionIndexCode){
+		const path = this.url + 'data/hikvision/getCamerasByRegionIndexCode'	// 接口地址
+		const options = {
+			method: 'GET',
+			url: path,
+			params: {regionIndexCode: regionIndexCode}
+		}
+		return await axios.request(options)
+	}
 	/**
 	 * 获取监控流
 	 */

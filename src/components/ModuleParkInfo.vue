@@ -77,7 +77,7 @@
 					case "均化车间":
 						getHomogenizingRealTimeData()
 						break;
-					case "道路LED":
+					case "LED显示屏":
 						getLedRealTimeData()
 						break;
 				}
@@ -229,6 +229,13 @@
 				}else if(Object.is(row._hz_type, "device")){
 					sceneDeviceLook_3d(row._id, 2000, true, () => {
 						CachePublicFun.isLMJBT(row._id) ? device.setLMJBTData(row) : CachePublicFun.showDeviceLabel(row)	// 设备标签显示
+						if(row._deviceKey && row._deviceKey != ""){
+							let deviceArry = CacheData.device.allListData.filter(item => Object.is(item.deviceKey, row._deviceKey))
+							let deviceItem = deviceArry.length > 0 ? deviceArry[0] : null
+							if(deviceItem) device.getQueryDeviceShadow(deviceItem.deviceKey, deviceItem.projectId, (result) => CachePublicFun.showDeviceLabel(Object.assign(row, result.data)))
+						}else{
+							CachePublicFun.showDeviceLabel(row)	// 设备标签显示
+						}
 						device.setDeviceAnimations(row)	// 设置设备动画
 					})	// 设备聚焦
 				}

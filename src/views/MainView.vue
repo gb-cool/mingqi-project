@@ -59,7 +59,7 @@
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, 
 	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d, fourColorOpacity_3d,
 	 updataLEDforOutRoadPlane_3d, updataRoomUpLEDplane_3d, posuiDanimation_3d, saifenDanimation_3d, suishiDanimation_3d, 
-	  visibleMan_3d, limoCameraDeviceDataup_3d, shoucengAnimations_3d} from "../3d/index";
+	  visibleMan_3d, limoCameraDeviceDataup_3d} from "../3d/index";
 	import { wareHouseYard } from "../3d/deviceInterfase.js"
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
@@ -272,6 +272,8 @@
 						|| Object.is(item.ip, "10.12.64.88")){
 							if(!Object.is(getLedV(item.key1), "")){ledv.push(item.key1 + " " + item.value1)}
 							if(!Object.is(getLedV(item.key2), "")){ledv.push(item.key2 + " " + item.value2)}
+							if(Object.is(item.ip, "10.12.64.65")) {ledv = ["破碎口A"]}
+							if(Object.is(item.ip, "10.12.64.66")) {ledv = ["破碎口8"]}
 							if(ledv.length == 0) {ledv.push("正在接入中")}
 							item._value = ledv
 							item._id = roomJson[item.ip]

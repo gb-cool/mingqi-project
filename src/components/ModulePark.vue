@@ -64,7 +64,7 @@
 						label="车牌" 
 						align="left">
 							<template #default="scope">
-								<p style="position: relative;text-indent: 2.5rem;">
+								<p style="position: relative;text-indent: 2.5rem;height: 100%;">
 									<img @click.stop="carLocationEvent(scope.row)" style="position: absolute;width: 2rem;max-width: 32px;top: 50%;left:0px;transform: translate(0, -50%);" src="../assets/img/car.png"/>
 									<span>{{scope.row.empName}}</span>
 								</p>
@@ -114,7 +114,7 @@
 <script>
 	import { ref, inject, watch, onMounted, onDeactivated } from 'vue'
 	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity, mainView, outRoomOpactiy_3d, limoRobotAnimation_3d, 
-	limoXunjianRobotFocus_3d, updataLiMoRobotPlane_3d, focusCar_3d } from "../3d/index";	// 三维
+	limoXunjianRobotFocus_3d, updataLiMoRobotPlane_3d, focusCar_3d, suishiModelAnimation_3d } from "../3d/index";	// 三维
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
 	export default {
@@ -142,7 +142,7 @@
 					{id: 3, name: '碎石仓配料车间'},
 					{id: 2, name: '立磨车间'},
 					{id: 1, name: '均化车间'},
-					{id: 6, name: '道路LED'},
+					{id: 6, name: 'LED显示屏'},
 				]
 			// 智能车间点击事件
 			const usagePattern = inject('usagePattern') // 使用模式，1车间，2安防
@@ -154,7 +154,7 @@
 				}
 				usagePattern.value = 1
 				outRoomOpactiy_3d(1)	// 整体外墙透明度
-				
+				suishiModelAnimation_3d(false, 1)
 				if(row.id != -1){
 					switch(row.id){
 						case 0: 
@@ -175,7 +175,9 @@
 						case 3: 
 							// momentMoveing([14,0,1], [16,47,-89]) 
 							// tweenMoveing([-2,-0,18], [-7,24,170], 2000, (e) => {})
-							tweenMoveing([-3769,0,-2840], [-2115,724,-1564], 2000, (e) => {})
+							tweenMoveing([-3769,0,-2840], [-2115,724,-1564], 2000, (e) => {
+								suishiModelAnimation_3d(true, 0.5)
+							})
 							break;
 						case 4: 
 							// momentMoveing([0,0,-11], [-0,38,44]) 

@@ -66,7 +66,8 @@
 	import { ref, inject } from 'vue'
 	import * as THREE from 'three'
 	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, 
-	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d, roamAnimation_3d} from "../3d/index"	// 三维
+	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d, roamAnimation_3d, suishiModelAnimation_3d} from "../3d/index"	// 三维
+	import { Device } from '../assets/js/device.js'
 	export default {
 		name: "ToolsMenu",
 		setup() {
@@ -157,6 +158,7 @@
 			}
 			
 			// 园区漫游
+			const device = new Device()
 			const isRoamingShow = ref(false)	// 是否显示漫游控制按钮
 			const roamingSelect = ref('0')
 			const roamingData = [
@@ -180,6 +182,22 @@
 			}
 			// 选择车间事件
 			const roamingRoomEvent = (item) => {
+				suishiModelAnimation_3d(false, 1)
+				if(item.roomId == "1"){
+					suishiModelAnimation_3d(true, 0.5)
+				}
+				switch(item.roomId){
+					case "0":
+						device.setDeviceAnimations({"_id":"SC-001"})
+						device.setDeviceAnimations({"_id":"SC-002"})
+						break;
+					case "1":
+						device.setDeviceAnimations({"_id":"SC-004"})
+						break;
+					default: 
+						device.setDeviceAnimations("")
+						break;
+				}
 				roamingRoomSelect.value = item.roomId
 				roamingSelect.value = 0
 				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})
@@ -227,6 +245,8 @@
 						break;
 					case "roaming":	// 漫游
 						isRoamingShow.value = true
+						device.setDeviceAnimations({"_id":"SC-001"})
+						device.setDeviceAnimations({"_id":"SC-002"})
 						roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})	// 执行漫游
 						break;
 					case "pipe":	//管道

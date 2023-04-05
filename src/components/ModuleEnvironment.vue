@@ -194,6 +194,8 @@
 			let verticalData = []	//立磨数据
 			device.getBatchDevices((result) => {
 				const devices= result.data.devices
+				CacheData.device.allListData = devices	// 缓存所有设备数据
+				
 				oxygenTableData = devices.filter((item) =>  item.productKey.includes('8814edb5acdf4cb4b28c790cd924ddc3'))	// 氧浓度数据
 				oxygenTableData.forEach((item,index,self) => {
 					let infoItem = getWorkShonInfoItem(item)
