@@ -95,7 +95,7 @@ var CacheData = {
 			{_id: 'ydxc_110', _room:"碎石配料间", _name: 'P-110移动小车', _position:'', _use: ''},
 			{_id: 'CS-101', _room:"碎石配料间", _name: '碎石仓101', _position:'', _use: '', _deviceKey:"16754098280005c4e2"},
 			{_id: 'CS-102', _room:"碎石配料间", _name: '碎石仓102', _position:'', _use: '', _deviceKey:"1675410614000f7c55"},
-			{_id: 'CS-103', _room:"碎石配料间", _name: '碎石仓103', _position:'', _use: '', _deviceKey:""},
+			{_id: 'CS-103', _room:"碎石配料间", _name: '碎石仓103', _position:'', _use: '', _deviceKey:"168051393700022e23"},
 			{_id: 'CS-104', _room:"碎石配料间", _name: '碎石仓104', _position:'', _use: '', _deviceKey:"167541154400035885"},
 			{_id: 'CS-105', _room:"碎石配料间", _name: '碎石仓105', _position:'', _use: '', _deviceKey:"1675411851000bcf02"},
 			{_id: 'CS-106', _room:"碎石配料间", _name: '碎石仓106', _position:'', _use: '', _deviceKey:"1675412200000efdbe"},

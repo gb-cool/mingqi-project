@@ -182,6 +182,7 @@
 			}
 			// 选择车间事件
 			const roamingRoomEvent = (item) => {
+				roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
 				suishiModelAnimation_3d(false, 1)
 				if(item.roomId == "1"){
 					suishiModelAnimation_3d(true, 0.5)
@@ -200,7 +201,7 @@
 				}
 				roamingRoomSelect.value = item.roomId
 				roamingSelect.value = 0
-				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})
+				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})	// 执行漫游
 			}
 			
 			// 返回主场景事件 园区总览
@@ -228,6 +229,7 @@
 				
 				window.clearInterval(timer.value);
 				
+				outwallCondition_3d(1)	// 外墙和外楼顶透明度状态
 				roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
 				
 				usagePattern.value = 1	// 使用模式
@@ -248,6 +250,7 @@
 						device.setDeviceAnimations({"_id":"SC-001"})
 						device.setDeviceAnimations({"_id":"SC-002"})
 						roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})	// 执行漫游
+						outwallCondition_3d(0.5)	// 外墙和外楼顶透明度状态
 						break;
 					case "pipe":	//管道
 						isPipelineShow.value = true	// 显示管道
