@@ -184,7 +184,7 @@
 			const roamingRoomEvent = (item) => {
 				roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
 				suishiModelAnimation_3d(false, 1)
-				if(item.roomId == "1"){
+				if(item.roomId == "2" || item.roomId == "1"){
 					suishiModelAnimation_3d(true, 0.5)
 				}
 				switch(item.roomId){
@@ -250,7 +250,7 @@
 						device.setDeviceAnimations({"_id":"SC-001"})
 						device.setDeviceAnimations({"_id":"SC-002"})
 						roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})	// 执行漫游
-						outwallCondition_3d(0.5)	// 外墙和外楼顶透明度状态
+						outwallCondition_3d(0.2)	// 外墙和外楼顶透明度状态
 						break;
 					case "pipe":	//管道
 						isPipelineShow.value = true	// 显示管道
