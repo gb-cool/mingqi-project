@@ -44,6 +44,12 @@ var CacheData = {
 		listData: [],	// 重点区域列表数据
 		limoListData: [],	//立磨车间摄像头数据
 		selectCameraData: null,	// 选中摄像头数据
+		gif:{
+			"棒条给料机视频": {name: "棒条给料机", src: "振动给料机动态图.gif"},
+			"鄂式破视频": {name: "鄂式破", src: "颚式破碎机动态图.gif"},
+			"圆锥破视频": {name: "圆锥破", src: "圆锥破动态图.gif"},
+			"筛分机视频": {name: "筛分机", src: "双层振动筛动态图.gif"},
+		}
 	},
 	robot: {
 		// 巡检机器人

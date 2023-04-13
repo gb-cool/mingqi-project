@@ -39,6 +39,10 @@
 			<li>
 				<div class="rectangle" :class="[Object.is(rectangleActive, 'roaming')?'active':'']" @click="btnEvent('roaming')">园区漫游</div>
 				<div class="otherBox" v-show="isRoamingShow">
+					<div class="videoGif">
+						<p id="deviceVideoName"></p>
+						<img id="deviceVideoGif" src=""/>
+					</div>
 					<div class="pipelineBox"  v-for="(item, index) in roamingData" :key="item.type">
 						<el-tooltip :content="item.name" placement="top" effect="light">
 							<div 
@@ -341,6 +345,21 @@
 	.otherBox .pipelineBox{
 		display: inline-block;
 		margin: 0 0.6rem;
+	}
+	.videoGif{
+		background: #fff;
+		border-radius: 4px;
+		max-width: 24rem;
+		margin: 0 auto 1rem auto;
+		display: none;
+	}
+	.videoGif p{
+		color: #333;
+		height: 32px;
+		line-height: 32px;
+	}
+	.videoGif img{
+		max-width: 22rem;
 	}
 	.pipeline{
 		width: calc(40/1920*100vw);
