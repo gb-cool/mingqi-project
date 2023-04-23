@@ -172,7 +172,10 @@ export const userClickDeviceID = (room, id) => {
 		if(row._id && row._id != ""){
 			let deviceArry = CacheData.device.allListData.filter(item => Object.is(item.deviceKey, row._deviceKey))
 			let deviceItem = deviceArry.length > 0 ? deviceArry[0] : null
-			if(deviceItem) device.getQueryDeviceShadow(deviceItem.deviceKey, deviceItem.projectId, (result) => CachePublicFun.showDeviceLabel(Object.assign(row, result.data)))
+			if(deviceItem){
+				row.productId = deviceItem.productId	// 产品ID
+				device.getQueryDeviceShadow(deviceItem.deviceKey, deviceItem.projectId, (result) => CachePublicFun.showDeviceLabel(Object.assign(row, result.data)))
+			}
 		}else{
 			CachePublicFun.showDeviceLabel(row)	// 设备标签显示
 		}
