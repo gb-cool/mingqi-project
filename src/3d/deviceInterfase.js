@@ -187,14 +187,18 @@ export const userClickDeviceID = (room, id) => {
 
 // 场景漫游过程中需要打开的二维视频函数
 export const openTovideo = (name) => {
-	if(name){
-		document.getElementById("deviceVideoName").parentNode.style.display = "block"
-		document.getElementById("deviceVideoName").innerHTML = CacheData.video.gif[name].name
-		document.getElementById("deviceVideoGif").src = "videoGif/" + CacheData.video.gif[name].src
-	}else{
-		document.getElementById("deviceVideoName").parentNode.style.display = "none"
-		document.getElementById("deviceVideoName").innerHTML = ""
-		document.getElementById("deviceVideoGif").src= ""
+	console.log("此时应当打开的视频是：", name);
+	try{
+		if(name && name in CacheData.video.gif){
+			document.getElementById("deviceVideoName").parentNode.style.display = "block"
+			document.getElementById("deviceVideoName").innerHTML = CacheData.video.gif[name].name
+			document.getElementById("deviceVideoGif").src = "videoGif/" + CacheData.video.gif[name].src
+		}else{
+			document.getElementById("deviceVideoName").parentNode.style.display = "none"
+			document.getElementById("deviceVideoName").innerHTML = ""
+			document.getElementById("deviceVideoGif").src= ""
+		}
+	}catch(e){
+		console.log(e)
 	}
-    console.log("此时应当打开的视频是：", name);
 };

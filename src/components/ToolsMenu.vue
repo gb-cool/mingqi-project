@@ -212,6 +212,7 @@
 				roamingRoomSelect.value = item.roomId
 				roamingSelect.value = 0
 				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {
+					roamingSelect.value = 1	// 改为结束模式
 					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
 				})	// 执行漫游
 			}
@@ -264,6 +265,7 @@
 						device.setDeviceAnimations({"_id":"SC-001"})
 						device.setDeviceAnimations({"_id":"SC-002"})
 						roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {
+							roamingSelect.value = 1	// 改为结束模式
 							document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
 						})	// 执行漫游
 						outwallCondition_3d(0.2)	// 外墙和外楼顶透明度状态
