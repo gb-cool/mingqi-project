@@ -71,6 +71,8 @@
 			seekey.getSeekeyAccessToken()
 			let timerCount = 0;
 			
+			let carVisitFindData = []	// 车辆访问数据缓存
+			
 			const realTime = () => {
 				if(CacheData.person.allData.length == 0 || Object.is(toolsType.value, "roaming")){
 					setTimeout(() => realTime(), 1000)
@@ -83,6 +85,7 @@
 				joySuch.getRealTimeData(async (result) => {
 					if(result.code == 0){	//成功
 						let PCData =  result.data
+						
 						// 查询想对位置token值，并获取相对位置数据
 						let _seekD = []
 						await seekey.getBlts().then((response) => {
@@ -106,7 +109,7 @@
 			 */
 			let historyRealListData = []	// 记录历史数据
 			let carHistoryListData = []	// 记录车辆历史数据，用于判断车辆是否都存在，存在则不需要创建
-			function mergePositionData(joySuchData, seekeyData){
+			async function mergePositionData(joySuchData, seekeyData){
 				for(let i=0; i < joySuchData.length; i++){
 					let _joyItem = joySuchData[i]
 					let deviceNo = _joyItem.deviceNo	// 穿戴设备编号（Mac地址）
@@ -138,6 +141,42 @@
 				CacheData.person.realListData = personData	// 缓存人员信息
 				let carData = joySuchData.filter((item) => (item.specifictype == '4'))
 				// carData = personData
+				/* carData = [{
+					"deviceNo": "1918FF0291C3",
+					"empName": "席波",
+					"empNo": "",
+					"imgaddr": "/image/view?id=2",
+					"dateTime": "2023-04-24 13:42:02",
+					"longitude": 106.98023840024014,
+					"latitude": 29.844178479050115,
+					"layer": 1,
+					"worktype": null,
+					"specifictype": "0",
+					"worktypename": null,
+					"tel": "",
+					"electric": "25-50%",
+					"islxsign": "0",
+					"workunit": "长寿微粉智能制造产业园",
+					"department": "生产车间",
+					"x": 152138,
+					"y": 510881
+				}] */
+				if(carData.length>0){
+					// 获取卡号绑定的车辆信息
+					await joySuch.getVisitFind().then((response) => {
+						let data = response.data.data
+						let carVisitArray = data.filter(item => item.visitType == 1)
+						carData.forEach(item => {
+							let carVisit = carVisitArray.filter(da => Object.is(item.deviceNo, da.sn))
+							if(carVisit.length > 0){
+								item.empName = carVisit[0].name
+								item._visit = carVisit[0]
+								item._visit.x = item.x
+								item._visit.y = item.y
+							}
+						})
+					})
+				}
 				CacheData.car.realListData = carData	// 缓存车辆信息
 				// 人员模型显示
 				let showData = []
@@ -145,7 +184,7 @@
 				visibleMan_3d(showData, true)	// 显示当前人员模型
 				// 车模型加载
 				let carShowData = []
-				carData.forEach(item => carShowData.push({id: item.deviceNo,name: item.empName == null ? "测试" : item.empName,x: item.x,y: item.y}))
+				carData.forEach(item => carShowData.push({id: item.deviceNo, name: item.empName == null ? item.deviceNo : item.empName,x: item.x,y: item.y}))
 				// 判断车辆是否以上一次一致，一致则不需要重新创建
 				if(carHistoryListData.length == carShowData.length){
 					let isCar = false

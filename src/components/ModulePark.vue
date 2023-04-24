@@ -353,7 +353,18 @@
 				electric: '穿戴设备当前电量',
 				islxsign: '状态',
 				workunit: '工作单位',
-				department: '部门_工作组'
+				department: '部门_工作组',
+			}
+			const carVisitFileds = {
+				"leaveTime":"离开时间",
+				"visitTime":"访问时间",
+				"inOutType":"进出类型，0进入1离开",
+				"driverSn":"司机定位卡号",
+				"driverIdCard":"司机身份证号",
+				"name":"车辆名称",
+				"driverName":"司机名称",
+				"sn":"定位卡号",
+				"visitType":"拜访对象类型, 0 访客; 1 车辆"
 			}
 			const carData = ref([])
 			
@@ -416,7 +427,7 @@
 			carData.value = CacheData.car.realListData
 			setInterval(() => {
 				carData.value = CacheData.car.realListData
-			}, 20000)
+			}, 20 * 1000)
 			// 人员触发弹窗点击事件
 			const personEvent = (row, event, column) => {
 				row.alarmTemplate =""
@@ -430,8 +441,13 @@
 			const carEvent = (row) => {
 				popupTitle.value = '车辆详情'
 				popupIsShow.value = true
-				popupContent.value = row
-				popupFileds.value = carFileds
+				if("_visit" in row){
+					popupContent.value = row._visit
+					popupFileds.value = carVisitFileds
+				}else{
+					popupContent.value = row
+					popupFileds.value = carFileds
+				}
 				popupType.value = 'json'
 			}
 			const carLocationEvent= (row) => {
@@ -447,6 +463,12 @@
 			onDeactivated(()=>{ //离开当前组件的生命周期执行的方法
 				window.clearInterval(timer.value);
 			})
+			function handleClick(tab, event) {
+				// if(Object.is(tab.props.name, "third")){
+				// 	renewCarData()	// 更新车辆信息
+				// 	console.log(tab)
+				// }
+			}
 			
 			// >> 人员
 			return {
@@ -463,20 +485,8 @@
 				carLocationEvent,
 				personData,
 				personEvent,
-				lookRobotEvent
-			}
-		},
-		methods: {
-			handleClick(tab, event) {
-				/* console.log(tab)
-				tab.$el.style.opacity = 0
-				tab.$el.style.transition = '1s'
-				// tab.$el.style.position = 'relative'
-				// tab.$el.style.left = '-100%'
-				setTimeout(() => {
-					tab.$el.style.opacity = 1
-					// tab.$el.style.left = '0%'
-				}, 100) */
+				lookRobotEvent,
+				handleClick
 			}
 		}
 	}
