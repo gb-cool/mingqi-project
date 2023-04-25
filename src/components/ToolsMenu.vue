@@ -39,6 +39,10 @@
 			<li>
 				<div class="rectangle" :class="[Object.is(rectangleActive, 'roaming')?'active':'']" @click="btnEvent('roaming')">园区漫游</div>
 				<div class="otherBox" v-show="isRoamingShow">
+					<div class="videoGif">
+						<p id="deviceVideoName"></p>
+						<img id="deviceVideoGif" src=""/>
+					</div>
 					<div class="pipelineBox"  v-for="(item, index) in roamingData" :key="item.type">
 						<el-tooltip :content="item.name" placement="top" effect="light">
 							<div 
@@ -178,15 +182,21 @@
 			// 选择按钮事件
 			const roamingEvent = (item) => {
 				roamingSelect.value = item.type
+				if(item.type == 1){
+					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
+				}
 				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})
 			}
 			// 选择车间事件
 			const roamingRoomEvent = (item) => {
 				roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
 				suishiModelAnimation_3d(false, 1)
-				if(item.roomId == "1"){
+				if(item.roomId == "2" || item.roomId == "1"){
 					suishiModelAnimation_3d(true, 0.5)
 				}
+				
+				document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
+				
 				switch(item.roomId){
 					case "0":
 						device.setDeviceAnimations({"_id":"SC-001"})
@@ -201,7 +211,10 @@
 				}
 				roamingRoomSelect.value = item.roomId
 				roamingSelect.value = 0
-				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})	// 执行漫游
+				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {
+					roamingSelect.value = 1	// 改为结束模式
+					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
+				})	// 执行漫游
 			}
 			
 			// 返回主场景事件 园区总览
@@ -232,6 +245,8 @@
 				outwallCondition_3d(1)	// 外墙和外楼顶透明度状态
 				roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
 				
+				document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
+				
 				usagePattern.value = 1	// 使用模式
 				toolsType.value = name	// 改变功能类型
 				switch(name){
@@ -249,8 +264,11 @@
 						isRoamingShow.value = true
 						device.setDeviceAnimations({"_id":"SC-001"})
 						device.setDeviceAnimations({"_id":"SC-002"})
-						roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})	// 执行漫游
-						outwallCondition_3d(0.5)	// 外墙和外楼顶透明度状态
+						roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {
+							roamingSelect.value = 1	// 改为结束模式
+							document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
+						})	// 执行漫游
+						outwallCondition_3d(0.2)	// 外墙和外楼顶透明度状态
 						break;
 					case "pipe":	//管道
 						isPipelineShow.value = true	// 显示管道
@@ -341,6 +359,21 @@
 	.otherBox .pipelineBox{
 		display: inline-block;
 		margin: 0 0.6rem;
+	}
+	.videoGif{
+		background: #fff;
+		border-radius: 4px;
+		max-width: 24rem;
+		margin: 0 auto 1rem auto;
+		display: none;
+	}
+	.videoGif p{
+		color: #333;
+		height: 32px;
+		line-height: 32px;
+	}
+	.videoGif img{
+		max-width: 22rem;
 	}
 	.pipeline{
 		width: calc(40/1920*100vw);

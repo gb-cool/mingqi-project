@@ -10,7 +10,7 @@
 					<!-- json数据格式类型显示 -->
 					<div class="jsonBox" v-if="Object.is(type, 'json')" >
 						<el-descriptions class="margin-top" title="" :column="1">
-							<el-descriptions-item v-for="(item, key) of information" :label="getFiled(key)" :key="key">
+							<el-descriptions-item v-for="(item, key) of getInformation(information)" :label="getFiled(key)" :key="key">
 								<span v-html="item"></span>
 							</el-descriptions-item>
 						</el-descriptions>
@@ -63,6 +63,15 @@
 				}
 				return props.fileds[key] + "： "
 			}
+			function getInformation(information){
+				let newData = {}
+				for(let key in information){
+					if(information[key] && !Object.is(information[key], "")){
+						newData[key] = information[key]
+					}
+				}
+				return newData
+			}
 			
 			const getInfo = (item) => {
 				return 
@@ -106,7 +115,8 @@
 			return {
 				getFiled,
 				getInfo,
-				closeFun
+				closeFun,
+				getInformation
 			}
 		}
 	}

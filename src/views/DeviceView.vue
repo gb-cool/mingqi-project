@@ -14,7 +14,7 @@
 			<el-table-column prop="deviceName" label="设备名称" />
 			<el-table-column prop="deviceName" label="数据">
 				<template #default="scope">
-					<span>{{scope.row.shadow}}</span>
+					<span @click.stop="LookData(scope.row.shadow)">{{scope.row.shadow}}</span>
 				</template>
 			</el-table-column>
 			
@@ -68,9 +68,13 @@
 			deviceShadow("167282577000043b38", "4351421399475294208", (result) => {
 				// console.log(result)
 			})
+			function LookData(data){
+				console.log(data)
+			}
 			batchDevices
 			return {
-				tableData
+				tableData,
+				LookData
 			}
 		}
 	}

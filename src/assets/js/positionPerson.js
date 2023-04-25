@@ -364,6 +364,26 @@ export class JoySuch extends PositionPerson{
 		}
 		return name
 	}
+	/**
+	 * 访客外来人员进出流水
+	 */
+	async getVisitFind(){
+		let date = new Date()
+		let d = date.getFullYear() + "-" + (date.getMonth()+1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0")
+		const options = {
+			method: 'POST',
+			url: this.JoySuch.url + '/api/v2/visit/find',
+			headers: {token: this.token},
+			data: {
+				buildId: '205046',
+				pageNumber: 1,
+				pageSize: 1000,
+				startTime: d + ' 00:00:00',
+				endTime: d + ' 24:00:00'
+			}
+		}
+		return await axios.request(options)
+	}
 }
 /**
  * 寻息 位置物联网开放平台 接口类

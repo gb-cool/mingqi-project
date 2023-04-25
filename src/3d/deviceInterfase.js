@@ -172,7 +172,10 @@ export const userClickDeviceID = (room, id) => {
 		if(row._id && row._id != ""){
 			let deviceArry = CacheData.device.allListData.filter(item => Object.is(item.deviceKey, row._deviceKey))
 			let deviceItem = deviceArry.length > 0 ? deviceArry[0] : null
-			if(deviceItem) device.getQueryDeviceShadow(deviceItem.deviceKey, deviceItem.projectId, (result) => CachePublicFun.showDeviceLabel(Object.assign(row, result.data)))
+			if(deviceItem){
+				row.productId = deviceItem.productId	// 产品ID
+				device.getQueryDeviceShadow(deviceItem.deviceKey, deviceItem.projectId, (result) => CachePublicFun.showDeviceLabel(Object.assign(row, result.data)))
+			}
 		}else{
 			CachePublicFun.showDeviceLabel(row)	// 设备标签显示
 		}
@@ -184,5 +187,18 @@ export const userClickDeviceID = (room, id) => {
 
 // 场景漫游过程中需要打开的二维视频函数
 export const openTovideo = (name) => {
-    console.log("此时应当打开的视频是：", name);
+	console.log("此时应当打开的视频是：", name);
+	try{
+		if(name && name in CacheData.video.gif){
+			document.getElementById("deviceVideoName").parentNode.style.display = "block"
+			document.getElementById("deviceVideoName").innerHTML = CacheData.video.gif[name].name
+			document.getElementById("deviceVideoGif").src = "videoGif/" + CacheData.video.gif[name].src
+		}else{
+			document.getElementById("deviceVideoName").parentNode.style.display = "none"
+			document.getElementById("deviceVideoName").innerHTML = ""
+			document.getElementById("deviceVideoGif").src= ""
+		}
+	}catch(e){
+		console.log(e)
+	}
 };
