@@ -47,6 +47,11 @@ import {
     shoucengAnimations,
     suishiModelAnimation,
     changeYDcarSpeed,
+    allRoomToggle,
+    junhuaRomaingLight,
+    junhuaRomaingLines,
+    junhuaLoubanSetOpacity,
+    manyouCarToggle,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -383,4 +388,29 @@ export const suishiModelAnimation_3d = (bool, opacity) => {
 // 移动小车改变移动速度  number = 毫秒值
 export const changeYDcarSpeed_3d = (number) => {
     changeYDcarSpeed(number);
+};
+
+// 所有车间显示隐藏  index == 0(筛分间)  1(均化间)  2(立磨间)  3(碎石配料间)  4(破碎间)  5(堆石场)  bool = true(显示) false(隐藏)
+export const allRoomToggle_3d = (index, bool) => {
+    allRoomToggle(index, bool);
+};
+
+// 均化间漫游时单独高亮显示立磨间密相泵物体
+export const junhuaRomaingLight_3d = (bool) => {
+    junhuaRomaingLight(bool);
+};
+
+// 均化间漫游时单独显示单条输送管道
+export const junhuaRomaingLines_3d = (bool, color) => {
+    junhuaRomaingLines(bool, color);
+};
+
+// 均化间中间楼板设置透明度   0 - 1
+export const junhuaLoubanSetOpacity_3d = (i) => {
+    junhuaLoubanSetOpacity(i);
+};
+
+// 漫游小车显示隐藏
+export const manyouCarToggle_3d = (bool) => {
+    manyouCarToggle(bool);
 };
