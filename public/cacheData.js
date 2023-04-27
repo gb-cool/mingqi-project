@@ -658,6 +658,7 @@ var CacheData = {
  */
 var CachePublicFun = {
 	showOSLabel: (row) => {
+		console.log(row)
 		// 粉尘氧浓度标签显示
 		let color = CacheData.oxygen.color
 		let bg = color.one
@@ -668,13 +669,14 @@ var CachePublicFun = {
 		}else if(row._grade == 3){
 			bg = color.four
 		}
+		let _unit = Object.is(row._hz_type, ' oxygen') ? '%Vol' : ' mg/m³'
 		let el = document.getElementsByClassName("deviceCameraModelBox")[0]
 		el.innerHTML = ""
 		el.setAttribute('style', 'background:rgba(1, 0, 55, 0.4);padding:20px 84px 20px 20px;border-radius:14px;min-width: 82px;min-height: 32px;')
 		let _div = document.createElement("div")
 		_div.setAttribute('style', 'font-size:54px;color:#fff;position:relative;');
 		_div.innerHTML ="<p style = 'width:40px;height:40px;border-radius:50%;position:absolute;top: 50%;transform: translate(0, -20px);background:"+ bg +"'></p>"+
-		"<span style='margin-left:44px'>" + row.deviceName + "（"+ row._concentration +"）</span"
+		"<span style='margin-left:44px'>" + row.deviceName + "（"+ row._concentration + _unit +"）</span"
 		el.appendChild(_div)
 	},
 	showDeviceLabel: (row) => {

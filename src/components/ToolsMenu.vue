@@ -70,7 +70,9 @@
 	import { ref, inject } from 'vue'
 	import * as THREE from 'three'
 	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, 
-	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d, roamAnimation_3d, suishiModelAnimation_3d} from "../3d/index"	// 三维
+	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d, roamAnimation_3d, 
+	suishiModelAnimation_3d, junhuaRomaingLight_3d, junhuaRomaingLines_3d, junhuaLoubanSetOpacity_3d, 
+	allRoomToggle_3d} from "../3d/index"	// 三维
 	import { Device } from '../assets/js/device.js'
 	export default {
 		name: "ToolsMenu",
@@ -182,39 +184,85 @@
 			// 选择按钮事件
 			const roamingEvent = (item) => {
 				roamingSelect.value = item.type
-				if(item.type == 1){
-					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
-				}
-				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {})
+				playAnimation()
 			}
 			// 选择车间事件
 			const roamingRoomEvent = (item) => {
-				roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
-				suishiModelAnimation_3d(false, 1)
-				if(item.roomId == "2" || item.roomId == "1"){
-					suishiModelAnimation_3d(true, 0.5)
-				}
-				
-				document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
-				
-				switch(item.roomId){
-					case "0":
-						device.setDeviceAnimations({"_id":"SC-001"})
-						device.setDeviceAnimations({"_id":"SC-002"})
-						break;
-					case "1":
-						device.setDeviceAnimations({"_id":"SC-004"})
-						break;
-					default: 
-						device.setDeviceAnimations("")
-						break;
-				}
 				roamingRoomSelect.value = item.roomId
 				roamingSelect.value = 0
+				playAnimation()
+			}
+			// 执行漫游
+			function playAnimation(){
+				if(roamingSelect.value == 0){	// 开始
+					roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
+					suishiModelAnimation_3d(false, 1)
+					if(roamingRoomSelect.value == "2" || roamingRoomSelect.value == "1"){
+						suishiModelAnimation_3d(true, 0.5)
+					}
+					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
+					// 所有车间显示隐藏  index == 0(筛分间)  1(均化间)  2(立磨间)  3(碎石配料间)  4(破碎间)  5(堆石场)  bool = true(显示) false(隐藏)
+					allRoomToggle_3d(0, true)
+					allRoomToggle_3d(1, true)
+					allRoomToggle_3d(2, true)
+					allRoomToggle_3d(3, true)
+					allRoomToggle_3d(4, true)
+					allRoomToggle_3d(5, true)
+					switch(roamingRoomSelect.value){
+						case "0":	// 破碎间和筛分间
+							device.setDeviceAnimations({"_id":"SC-001"})
+							device.setDeviceAnimations({"_id":"SC-002"})
+							break;
+						case "1":	// 碎石间
+							device.setDeviceAnimations({"_id":"SC-004"})
+							allRoomToggle_3d(4, false)
+							allRoomToggle_3d(2, false)
+							allRoomToggle_3d(1, false)
+							break;
+						case "2":	// 立磨间
+							allRoomToggle_3d(3, false)
+							allRoomToggle_3d(0, false)
+							allRoomToggle_3d(1, false)
+							break;
+						case "3":	// 均化间
+							junhuaRomaingLight_3d(true)	// 均化间漫游时单独高亮显示立磨间密相泵物体
+							junhuaRomaingLines_3d(true)	// 均化间漫游时单独显示单条输送管道
+							junhuaLoubanSetOpacity_3d(0.8)	// 均化间中间楼板设置透明度
+							break;
+						default: 
+							device.setDeviceAnimations("")
+							break;
+					}
+				}
+				if(roamingSelect.value == 1){	// 结束模式
+					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
+					if(roamingRoomSelect.value == 3){	// 均化车间
+						junhuaRomaingLight_3d(false)	// 均化间漫游时单独高亮显示立磨间密相泵物体
+						junhuaRomaingLines_3d(false)	// 均化间漫游时单独显示单条输送管道
+						junhuaLoubanSetOpacity_3d(1)	// 均化间中间楼板设置透明度
+					}
+					allRoomToggle_3d(0, true)
+					allRoomToggle_3d(1, true)
+					allRoomToggle_3d(2, true)
+					allRoomToggle_3d(3, true)
+					allRoomToggle_3d(4, true)
+					allRoomToggle_3d(5, true)
+				}
 				roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {
 					roamingSelect.value = 1	// 改为结束模式
 					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
-				})	// 执行漫游
+					if(roamingRoomSelect.value == 3){	// 均化车间
+						junhuaRomaingLight_3d(false)	// 均化间漫游时单独高亮显示立磨间密相泵物体
+						junhuaRomaingLines_3d(false)	// 均化间漫游时单独显示单条输送管道
+						junhuaLoubanSetOpacity_3d(1)	// 均化间中间楼板设置透明度
+					}
+					allRoomToggle_3d(0, true)
+					allRoomToggle_3d(1, true)
+					allRoomToggle_3d(2, true)
+					allRoomToggle_3d(3, true)
+					allRoomToggle_3d(4, true)
+					allRoomToggle_3d(5, true)
+				})
 			}
 			
 			// 返回主场景事件 园区总览
@@ -242,10 +290,9 @@
 				
 				window.clearInterval(timer.value);
 				
-				outwallCondition_3d(1)	// 外墙和外楼顶透明度状态
-				roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
-				
-				document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
+				roamingSelect.value = 1	// 改为结束模式
+				playAnimation()
+				// outwallCondition_3d(1)	// 外墙和外楼顶透明度状态
 				
 				usagePattern.value = 1	// 使用模式
 				toolsType.value = name	// 改变功能类型
@@ -262,13 +309,14 @@
 						break;
 					case "roaming":	// 漫游
 						isRoamingShow.value = true
+						roamingSelect.value = 0	// 开启
 						device.setDeviceAnimations({"_id":"SC-001"})
 						device.setDeviceAnimations({"_id":"SC-002"})
 						roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {
 							roamingSelect.value = 1	// 改为结束模式
 							document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
 						})	// 执行漫游
-						outwallCondition_3d(0.2)	// 外墙和外楼顶透明度状态
+						// outwallCondition_3d(0.2)	// 外墙和外楼顶透明度状态
 						break;
 					case "pipe":	//管道
 						isPipelineShow.value = true	// 显示管道

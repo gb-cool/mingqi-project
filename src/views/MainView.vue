@@ -59,7 +59,7 @@
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, 
 	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d, fourColorOpacity_3d,
 	 updataLEDforOutRoadPlane_3d, updataRoomUpLEDplane_3d, posuiDanimation_3d, saifenDanimation_3d, suishiDanimation_3d, 
-	  visibleMan_3d, limoCameraDeviceDataup_3d} from "../3d/index";
+	  visibleMan_3d, limoCameraDeviceDataup_3d, changeYDcarSpeed_3d, shoucengAnimations_3d} from "../3d/index";
 	import { wareHouseYard } from "../3d/deviceInterfase.js"
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
@@ -139,6 +139,8 @@
 					suishiDanimation_3d(0.3, true)	// 碎石皮带动画
 					
 					setVideoData()	// 车间摄像头数据
+					changeYDcarSpeed_3d(1000 * 30)	// 移动小车改变移动速度 默认2000	4.26新增
+					shoucengAnimations_3d(4, 0.01, 0xff0000, false)	// 初始化立磨收尘动画颜色 4.26新增
 					setInterval(updateTime, baseTime)
 				})
 			});
