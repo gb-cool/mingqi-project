@@ -3779,7 +3779,7 @@ var roampointArrs = [
     {
         point: [-1915.5438,-0.0000,-4024.7416],
         look: [-2972.4023,367.0302,-4022.7976],
-        speed: 0.08,	// 0.2
+        speed: 4 / urlConfig.speed.roamingVelocity,	// 0.2
         video: '漫游小车出现',
     },
     {point:[-2757.0944,-0.0000,-2903.8875], look:[-2783.2105,374.8987,-4082.3726], speed:0.1, video:null},
@@ -3938,7 +3938,7 @@ var roampointThrit = [
     { point: [-4292.6671,200.3436,-1468.6842], look: [-4406.3345,245.4360,-1473.6253], speed: 0.5, video: null },
     { point: [-3146.2714,200.7692,-1467.6923], look: [-3256.7901,245.4360,-1483.3052], speed: 0.3, video: null },
     { point: [-3316.8491,26.3400,-1395.8622], look: [-3087.7659,118.3230,-1320.9889], speed: 0, video: '立磨视频框' },
-    { point: [-4147.1657,26.3400,-1396.0749], look: [-3918.0825,118.3230,-1321.2016], speed: 2, video: null },
+    { point: [-4147.1657,26.3400,-1396.0749], look: [-3918.0825,118.3230,-1321.2016], speed: 2, video: '立磨视频框' },
 ];
 var roampointFour = [
     {
@@ -4647,13 +4647,18 @@ export const allRoomToggle = (index, bool) => {
 }
 
 // 漫游小车显示隐藏
-export const  manyouCarToggle = (bool) => {
+export const  manyouCarToggle = (bool, isPlay) => {
     manyouCar.visible = bool;
-    if (bool) {
+	if(bool){
+		manyouCarAnimation.time = 0;
+	}
+	if(isPlay == null) return false
+    if (isPlay) {
         manyouCarAnimation.loop = THREE.LoopOnce;
         manyouCarAnimation.time = 0;
         manyouCarAnimation.enabled = true;
         manyouCarAnimation.paused = false;
+		manyouCarAnimation.clampWhenFinished = true;
     } else {
         manyouCarAnimation.paused = true;
     }

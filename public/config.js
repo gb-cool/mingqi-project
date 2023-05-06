@@ -28,4 +28,7 @@ const urlConfig = {
 		left: 69,	// 2560
 		top: 0
 	},	// iframe与文档的偏移量
+	speed: {	// 速度
+		roamingVelocity: 100,	// 漫游速度 速度值越大越慢
+	}
 }

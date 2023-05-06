@@ -7,6 +7,10 @@
 			</li> -->
 			<li>
 				<div class="rectangle" :class="[Object.is(rectangleActive, 'mainScene')?'active':'']" @click="btnEvent('mainScene')">园区总览</div>
+				<div class="videoGif">
+					<p id="deviceVideoName"></p>
+					<img id="deviceVideoGif" src=""/>
+				</div>
 			</li>
 			<li>
 				<div class="rectangle" :class="[Object.is(rectangleActive, 'security')?'active':'']" @click="btnEvent('security')">智慧安防</div>
@@ -39,10 +43,6 @@
 			<li>
 				<div class="rectangle" :class="[Object.is(rectangleActive, 'roaming')?'active':'']" @click="btnEvent('roaming')">园区漫游</div>
 				<div class="otherBox" v-show="isRoamingShow">
-					<div class="videoGif">
-						<p id="deviceVideoName"></p>
-						<img id="deviceVideoGif" src=""/>
-					</div>
 					<div class="pipelineBox"  v-for="(item, index) in roamingData" :key="item.type">
 						<el-tooltip :content="item.name" placement="top" effect="light">
 							<div 
@@ -72,7 +72,7 @@
 	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, 
 	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d, roamAnimation_3d, 
 	suishiModelAnimation_3d, junhuaRomaingLight_3d, junhuaRomaingLines_3d, junhuaLoubanSetOpacity_3d, 
-	allRoomToggle_3d} from "../3d/index"	// 三维
+	allRoomToggle_3d, manyouCarToggle_3d} from "../3d/index"	// 三维
 	import { Device } from '../assets/js/device.js'
 	export default {
 		name: "ToolsMenu",
@@ -179,7 +179,7 @@
 				{name: "立磨间", roomId: "2"},
 				{name: "均化间", roomId: "3"}
 			]
-			const roamingVelocity = 50	// 漫游速度
+			const roamingVelocity = urlConfig.speed.roamingVelocity	// 漫游速度
 			const roamingRoomSelect = ref(0)	// 漫游车间
 			// 选择按钮事件
 			const roamingEvent = (item) => {
@@ -208,8 +208,9 @@
 					allRoomToggle_3d(3, true)
 					allRoomToggle_3d(4, true)
 					allRoomToggle_3d(5, true)
-					switch(roamingRoomSelect.value){
+					switch(roamingRoomSelect.value.toString()){
 						case "0":	// 破碎间和筛分间
+							manyouCarToggle_3d(true)
 							device.setDeviceAnimations({"_id":"SC-001"})
 							device.setDeviceAnimations({"_id":"SC-002"})
 							break;
@@ -310,13 +311,7 @@
 					case "roaming":	// 漫游
 						isRoamingShow.value = true
 						roamingSelect.value = 0	// 开启
-						device.setDeviceAnimations({"_id":"SC-001"})
-						device.setDeviceAnimations({"_id":"SC-002"})
-						roamAnimation_3d(roamingRoomSelect.value, roamingSelect.value, roamingVelocity, () => {
-							roamingSelect.value = 1	// 改为结束模式
-							document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
-						})	// 执行漫游
-						// outwallCondition_3d(0.2)	// 外墙和外楼顶透明度状态
+						playAnimation()
 						break;
 					case "pipe":	//管道
 						isPipelineShow.value = true	// 显示管道
@@ -409,16 +404,19 @@
 		margin: 0 0.6rem;
 	}
 	.videoGif{
-		background: #fff;
-		border-radius: 4px;
-		max-width: 24rem;
-		margin: 0 auto 1rem auto;
+		position: absolute !important;
+		right: 100%;
+		bottom: 0px;
 		display: none;
 	}
 	.videoGif p{
 		color: #333;
+		text-shadow: 0px 1px 3px #fff;
 		height: 32px;
 		line-height: 32px;
+		position: absolute ;
+		bottom: 0px;
+		width: 100%;
 	}
 	.videoGif img{
 		max-width: 22rem;
