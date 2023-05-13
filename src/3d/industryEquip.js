@@ -1987,6 +1987,9 @@ export const fourColorDiagram = (bool, color, color1, speed = 0.01) => {
 function cooTransformToLL(x, y) {
     // YIDONG-001   A 标记点1   [-4067.889709472656, -4267.769775390625]       133778, 304719  单位毫米
     // YIDONG-002   B 标记点2   [-1808.002471923828, -844.051513671875]        276934, 676333  单位毫米
+	
+	// 新A: 133950, 304979
+	// 新B: 276993, 676421
 
     let realCoordinate = [],
         modelCoordinate = [];
@@ -2056,7 +2059,7 @@ function cooTransformToLL(x, y) {
 
     let positionX = (x - realCoordinate[0].x) / offsetX + modelCoordinate[0].x;
     let positionY = (y - realCoordinate[0].y) / offsetY + modelCoordinate[0].y;
-
+	console.log({ x: positionX, z: positionY })
     return { x: positionX, z: positionY };
 }
 

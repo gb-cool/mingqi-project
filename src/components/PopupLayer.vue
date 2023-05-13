@@ -185,9 +185,10 @@
 		left: 25%;
 		top: 50%;
 		transform: translate(0, -50%);
-		width: calc(25vw - @videoPaddingRight);
-		min-width: 380px;
-		max-width: calc(25vw/3*2);
+		// width: calc(25vw - @videoPaddingRight);
+		width: calc(25vw / 1.5);
+		min-width: 240px;
+		max-width: 680px;
 	}
 	.PopupLayer.show.video .main{
 		min-width: auto;

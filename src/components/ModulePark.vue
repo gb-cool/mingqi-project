@@ -451,6 +451,7 @@
 				popupType.value = 'json'
 			}
 			const carLocationEvent= (row) => {
+				console.log(row)
 				focusCar_3d(row.deviceNo, 2000, () => {}) // 车辆聚焦
 			}
 			

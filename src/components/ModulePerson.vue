@@ -89,6 +89,7 @@
 						// 查询想对位置token值，并获取相对位置数据
 						let _seekD = []
 						await seekey.getBlts().then((response) => {
+							console.log(response)
 							if(response.data.errorCode == 0) _seekD = response.data.data.data
 							mergePositionData(PCData, _seekD)	// 合并人员实时位置信息
 						})
@@ -140,27 +141,22 @@
 				let personData = joySuchData.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
 				CacheData.person.realListData = personData	// 缓存人员信息
 				let carData = joySuchData.filter((item) => (item.specifictype == '4'))
-				// carData = personData
-				/* carData = [{
-					"deviceNo": "1918FF0291C3",
-					"empName": "席波",
-					"empNo": "",
-					"imgaddr": "/image/view?id=2",
-					"dateTime": "2023-04-24 13:42:02",
-					"longitude": 106.98023840024014,
-					"latitude": 29.844178479050115,
-					"layer": 1,
-					"worktype": null,
-					"specifictype": "0",
-					"worktypename": null,
-					"tel": "",
-					"electric": "25-50%",
-					"islxsign": "0",
-					"workunit": "长寿微粉智能制造产业园",
-					"department": "生产车间",
-					"x": 269925,
-					"y": 333701
-				}] */
+				carData = personData
+				// carData = [{
+				// 	"deviceNo": "11",
+				// 	"empName": "席波1",
+				// 	"empNo": "",
+				// 	"x": 365414,
+				// 	"y": 400440
+				// },
+				// {
+				// 	"deviceNo": "12",
+				// 	"empName": "席波2",
+				// 	"empNo": "",
+				// 	"x": 339391,
+				// 	"y": 544785
+				// }]
+				// console.log(carData)
 				if(carData.length>0){
 					// 获取卡号绑定的车辆信息
 					await joySuch.getVisitFind().then((response) => {

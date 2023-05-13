@@ -155,6 +155,7 @@
 		color: #fff;
 		font-size: 1rem;
 		font-weight: 700;
+		height: 3rem;
 	}
 	:deep(.el-collapse-item__wrap){
 		background: none;
