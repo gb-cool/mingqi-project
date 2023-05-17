@@ -35,7 +35,8 @@ var CacheData = {
 	},
 	car:{
 		// 车辆
-		realListData: []	// 车辆实时数据
+		realListData: []	,// 车辆实时数据
+		visitArrayData: [],	// 车辆出入实时数据
 	},
 	video: {
 		// 视频

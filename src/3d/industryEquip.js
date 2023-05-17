@@ -3,6 +3,7 @@ import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import "./industyEquip.css";
+import {getRectifyData} from "./rectifyPosition"
 import {
     batchDevices,
     deviceShadow,
@@ -1990,79 +1991,78 @@ function cooTransformToLL(x, y) {
 	
 	// 新A: 133950, 304979
 	// 新B: 276993, 676421
+	
+	// A：162900，320800
 
-    let realCoordinate = [],
-        modelCoordinate = [];
-
-    realCoordinate[0] = {
-        x: 133778,
-        y: 304719,
-    };
-    modelCoordinate[0] = {
-        x: -4067.889709472656,
-        y: -4267.769775390625,
-    };
-    realCoordinate[1] = {
-        x: 276934,
-        y: 676333,
-    };
-    modelCoordinate[1] = {
-        x: -1808.002471923828,
-        y: -844.051513671875,
-    };
-
-    let offsetX, offsetY;
-    if (
-        realCoordinate[0].x - realCoordinate[1].x > 0 &&
-        modelCoordinate[0].x - modelCoordinate[1].x > 0
-    ) {
-        offsetX = Math.abs(
-            (realCoordinate[0].x - realCoordinate[1].x) /
-                (modelCoordinate[0].x - modelCoordinate[1].x)
-        ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
-    } else if (
-        realCoordinate[0].x - realCoordinate[1].x < 0 &&
-        modelCoordinate[0].x - modelCoordinate[1].x < 0
-    ) {
-        offsetX = Math.abs(
-            (realCoordinate[0].x - realCoordinate[1].x) /
-                (modelCoordinate[0].x - modelCoordinate[1].x)
-        ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
-    } else {
-        offsetX = -Math.abs(
-            (realCoordinate[0].x - realCoordinate[1].x) /
-                (modelCoordinate[0].x - modelCoordinate[1].x)
-        ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
-    }
-    if (
-        realCoordinate[0].y - realCoordinate[1].y > 0 &&
-        modelCoordinate[0].y - modelCoordinate[1].y > 0
-    ) {
-        offsetY = Math.abs(
-            (realCoordinate[0].y - realCoordinate[1].y) /
-                (modelCoordinate[0].y - modelCoordinate[1].y)
-        ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
-    } else if (
-        realCoordinate[0].y - realCoordinate[1].y < 0 &&
-        modelCoordinate[0].y - modelCoordinate[1].y < 0
-    ) {
-        offsetY = Math.abs(
-            (realCoordinate[0].y - realCoordinate[1].y) /
-                (modelCoordinate[0].y - modelCoordinate[1].y)
-        ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
-    } else {
-        offsetY = -Math.abs(
-            (realCoordinate[0].y - realCoordinate[1].y) /
-                (modelCoordinate[0].y - modelCoordinate[1].y)
-        ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
-    }
-
-    let positionX = (x - realCoordinate[0].x) / offsetX + modelCoordinate[0].x;
-    let positionY = (y - realCoordinate[0].y) / offsetY + modelCoordinate[0].y;
-	console.log({ x: positionX, z: positionY })
-    return { x: positionX, z: positionY };
+    let realCoordinate = [
+		{x: 133778, y: 304719},
+		{x: 276934, y: 676333}
+		],
+        modelCoordinate = [
+			{x: -4067.889709472656, y: -4267.769775390625},
+			{x: -1808.002471923828, y: -844.051513671875}
+		];
+	let data = getRectifyData(x,y)
+	if(data){
+		realCoordinate = data.realCoordinate
+		modelCoordinate = data.modelCoordinate
+	}else{
+		realCoordinate=[{x: 122400, y: 304300},{x: 381000, y: 394100}]
+		modelCoordinate = [{x: -4279.75894, y: -4185.96377},{x: -1507.35475, y: -3929.35733}]
+	}
+	// console.log(x, y, realCoordinate, modelCoordinate)
+	return getCooTransformToLL(x, y, realCoordinate, modelCoordinate)
 }
-
+function getCooTransformToLL(x, y, realCoordinate, modelCoordinate){
+	let offsetX, offsetY;
+	if (
+	    realCoordinate[0].x - realCoordinate[1].x > 0 &&
+	    modelCoordinate[0].x - modelCoordinate[1].x > 0
+	) {
+	    offsetX = Math.abs(
+	        (realCoordinate[0].x - realCoordinate[1].x) /
+	            (modelCoordinate[0].x - modelCoordinate[1].x)
+	    ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
+	} else if (
+	    realCoordinate[0].x - realCoordinate[1].x < 0 &&
+	    modelCoordinate[0].x - modelCoordinate[1].x < 0
+	) {
+	    offsetX = Math.abs(
+	        (realCoordinate[0].x - realCoordinate[1].x) /
+	            (modelCoordinate[0].x - modelCoordinate[1].x)
+	    ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
+	} else {
+	    offsetX = -Math.abs(
+	        (realCoordinate[0].x - realCoordinate[1].x) /
+	            (modelCoordinate[0].x - modelCoordinate[1].x)
+	    ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
+	}
+	if (
+	    realCoordinate[0].y - realCoordinate[1].y > 0 &&
+	    modelCoordinate[0].y - modelCoordinate[1].y > 0
+	) {
+	    offsetY = Math.abs(
+	        (realCoordinate[0].y - realCoordinate[1].y) /
+	            (modelCoordinate[0].y - modelCoordinate[1].y)
+	    ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
+	} else if (
+	    realCoordinate[0].y - realCoordinate[1].y < 0 &&
+	    modelCoordinate[0].y - modelCoordinate[1].y < 0
+	) {
+	    offsetY = Math.abs(
+	        (realCoordinate[0].y - realCoordinate[1].y) /
+	            (modelCoordinate[0].y - modelCoordinate[1].y)
+	    ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
+	} else {
+	    offsetY = -Math.abs(
+	        (realCoordinate[0].y - realCoordinate[1].y) /
+	            (modelCoordinate[0].y - modelCoordinate[1].y)
+	    ); //模型X轴坐标和经度的偏移值(经度差值 / X轴差值）
+	}
+	let positionX = (x - realCoordinate[0].x) / offsetX + modelCoordinate[0].x;
+	let positionY = (y - realCoordinate[0].y) / offsetY + modelCoordinate[0].y;
+	return { x: positionX, z: positionY };
+}
 // 外墙体透明度设置
 export const outwallCondition = (number) => {
     allRoomObjs.forEach((item) => {
@@ -2849,6 +2849,7 @@ export const realtimeMotionMan = (id, point, floor, times, td = () => {}) => {
             mesh.userData.clip.paused = true;
         }
     });
+	if(!mesh) return false
     let cube = mesh.userData.cubeMesh;
 
     let place;
@@ -2860,6 +2861,7 @@ export const realtimeMotionMan = (id, point, floor, times, td = () => {}) => {
 
     let position = cooTransformToLL(point[0], point[1]);
     cube.position.set(position.x, 600, position.z);
+	// console.log("========", cube)
 
     setTimeout(() => {
         findLocalRealtimeY(mesh, cube, place, position, (y) => {

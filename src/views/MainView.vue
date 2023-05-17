@@ -148,9 +148,10 @@
 			/**
 			 * 巡检机器人
 			 */
-			let pid = 1	// 1正向行驶，0返回
+			let pid = 0	// 1正向行驶，0返回
 			// 机器人实时执行函数
 			function realRobotFun(){
+				console.log(pid)
 				isRobotMove.value == 2 ? (limoRobotInitalize_3d(), limoRobotLighting_3d(true)) : limoRobotAnimation_3d(pid == 1 ? 1 : 20, 3700, true)
 				pid = pid == 1 ? 0 : 1
 			}

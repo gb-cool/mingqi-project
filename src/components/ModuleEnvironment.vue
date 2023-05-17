@@ -232,14 +232,14 @@
 						let _concentration = parseFloat(result.data['O2']).toFixed(2)	// 浓度
 						item._concentration = _concentration
 						let thresholdValue = CacheData.oxygen.thresholdValue	// 阈值
-						item._grade = _concentration < thresholdValue[0] ? 1 : ( _concentration >= thresholdValue[0] && _concentration < thresholdValue[1]) ? 2 : 3	// 告警等级
+						item._grade = _concentration < thresholdValue[0] ? 3 : ( _concentration >= thresholdValue[0] && _concentration < thresholdValue[1]) ? 2 : 1	// 告警等级
 						if(item._grade == 3){
 							CacheData.oxygen.alarmListData.unshift(item)	// 缓存告警信息
 						}
 						if(_oxygenIndex >= oxygenTableData.length){
-							oxygenItemMax.value = Math.max.apply(null, oxygenTableData.map((o) => o._concentration)).toFixed(2)
+							oxygenItemMax.value = Math.min.apply(null, oxygenTableData.map((o) => o._concentration)).toFixed(2)
 							// 显示颜色
-							oxygenItemColor.value = oxygenItemMax.value < thresholdValue[0] ? color.one : (oxygenItemMax.value >= thresholdValue[0] && oxygenItemMax.value < thresholdValue[1]) ? color.two : color.four
+							oxygenItemColor.value = oxygenItemMax.value < thresholdValue[0] ? color.four : (oxygenItemMax.value >= thresholdValue[0] && oxygenItemMax.value < thresholdValue[1]) ? color.two : color.one
 							// 弹窗开启 数据存入弹出框内容
 							oxygenTableData.sort((a, b) => b._concentration - a._concentration)
 							// 告警信息缓存

@@ -2,7 +2,7 @@
 <template>
 	<div class="ModulePassage">
 		<div class="box" ref="elTabs">
-			<el-table
+			<!-- <el-table
 			:data="dataList" 
 			style="width: 100%" 
 			:height="contentHeight" 
@@ -17,9 +17,7 @@
 				label="时间" 
 				align="center">
 				<template #default="scope">
-					<!-- <el-tooltip :content="scope.row.time" placement="top" effect="light"> -->
 					<span>{{ changeTime(scope.row.gateTime) }}</span>
-					<!-- </el-tooltip> -->
 				</template>
 				</el-table-column>
 				<el-table-column
@@ -27,6 +25,46 @@
 				align="center">
 				<template #default="scope">
 					<span :style="Object.is(scope.row.direction, '2') ? chuColor : ruColor">{{getDirection(scope.row)}}</span>
+				</template>
+				</el-table-column>
+			</el-table> -->
+			<el-table
+			:data="dataList" 
+			style="width: 100%" 
+			:height="contentHeight" 
+			:show-header="true">
+			    <el-table-column 
+				prop="name" 
+				label="车牌" 
+				align="center">
+				</el-table-column>
+				<el-table-column
+				prop="gateTime" 
+				label="时间" 
+				align="center">
+				<template #default="scope">
+					<span>{{ positionTime(scope.row).time }}</span>
+				</template>
+				</el-table-column>
+				<el-table-column
+				label="出入" 
+				align="center">
+				<template #default="scope">
+					<!-- <el-button
+					size="small"
+					type="primary"
+					plain
+					>{{positionTime(scope.row).type}}</el-button> -->
+					<el-tooltip placement="top">
+					    <template #content>
+							司机名称： {{scope.row.driverName}}<br />
+							车辆牌号：{{scope.row.name}}<br />
+							访问时间：{{scope.row.visitTime}}<br />
+							离开时间：{{Object.is(scope.row.leaveTime, "") ? "-":scope.row.leaveTime}}<br />
+						</template>
+					    <span :style="Object.is(scope.row.inOutType.toString(), '1') ? chuColor : ruColor">{{positionTime(scope.row).type}}</span>
+					</el-tooltip>
+					
 				</template>
 				</el-table-column>
 			</el-table>
@@ -44,7 +82,7 @@
 		setup() {
 			const elTabs = ref()	// 取盒子高度，计算表格内容高度值
 			const chuColor = {
-				color: 'rgba(255, 163, 0, 1)'
+				color: 'rgba(255, 163, 0, 1)',
 			}
 			const ruColor = {
 				color: 'rgba(4, 142, 249, 1)'
@@ -65,16 +103,19 @@
 			const initObj = () => {
 				contentHeight.value = elTabs.value.offsetHeight
 			}
-			new Passage().getData((result) => {
-				let list = result.data.data
-				// let newList = []
-				// if(list.length > 0){
-				// 	for(let i = list.length-1; i>=0; i--){
-				// 		newList.push(list[i])
-				// 	}
-				// }
+
+			function realTime(){
+				let list = CacheData.car.visitArrayData
 				dataList.value = list
-			})
+			}
+			realTime()
+			setInterval(()=>{
+				realTime()
+			}, 1000 * 10)
+			// new Passage().getData((result) => {
+			// 	let list = result.data.data
+			// 	dataList.value = list
+			// })
 			
 			// 获取出入状态：direction：1进场、2出场。isDirection: 是否进出场，0否，1是
 			const getDirection = (row) => {
@@ -96,8 +137,24 @@
 				}
 				return str
 			}
-			
-			const changeTime = (time) => {
+			const positionTime = (row) => {
+				// 进出类型，0进入1离开
+				let time = ""
+				let type = ""
+				if(row.inOutType == 0){
+					time = row.visitTime	// 访问时间
+					type = "已入"
+				}else{
+					time = row.leaveTime	// 离开时间
+					type = "已出"
+				}
+				time = changeTime(time)
+				return {
+					time: time,
+					type: type
+				}
+			}
+			function changeTime(time){
 				return time.substring(0,16)
 			} 
 			onMounted(() => {
@@ -114,7 +171,8 @@
 				ruColor,
 				contentHeight,
 				changeTime,
-				getDirection
+				getDirection,
+				positionTime
 			}
 		}
 	}

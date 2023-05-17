@@ -73,7 +73,12 @@
 			
 			let carVisitFindData = []	// 车辆访问数据缓存
 			
-			const realTime = () => {
+			const realTime = async () => {
+				await joySuch.getVisitFind().then((response) => {
+					let data = response.data.data 
+					// 车辆访客信息	visitType = 1
+					CacheData.car.visitArrayData = data.filter(item => item.visitType == 1)	// 缓存车辆通行数据
+				})
 				if(CacheData.person.allData.length == 0 || Object.is(toolsType.value, "roaming")){
 					setTimeout(() => realTime(), 1000)
 					return false
@@ -89,7 +94,7 @@
 						// 查询想对位置token值，并获取相对位置数据
 						let _seekD = []
 						await seekey.getBlts().then((response) => {
-							console.log(response)
+							// console.log(response)
 							if(response.data.errorCode == 0) _seekD = response.data.data.data
 							mergePositionData(PCData, _seekD)	// 合并人员实时位置信息
 						})
@@ -141,36 +146,26 @@
 				let personData = joySuchData.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
 				CacheData.person.realListData = personData	// 缓存人员信息
 				let carData = joySuchData.filter((item) => (item.specifictype == '4'))
-				carData = personData
+				// carData = personData
 				// carData = [{
 				// 	"deviceNo": "11",
 				// 	"empName": "席波1",
 				// 	"empNo": "",
-				// 	"x": 365414,
-				// 	"y": 400440
-				// },
-				// {
-				// 	"deviceNo": "12",
-				// 	"empName": "席波2",
-				// 	"empNo": "",
-				// 	"x": 339391,
-				// 	"y": 544785
+				// 	"x": 244000,
+				// 	"y": 551800
 				// }]
 				// console.log(carData)
 				if(carData.length>0){
 					// 获取卡号绑定的车辆信息
-					await joySuch.getVisitFind().then((response) => {
-						let data = response.data.data
-						let carVisitArray = data.filter(item => item.visitType == 1)
-						carData.forEach(item => {
-							let carVisit = carVisitArray.filter(da => Object.is(item.deviceNo, da.sn))
-							if(carVisit.length > 0){
-								item.empName = carVisit[0].name
-								item._visit = carVisit[0]
-								item._visit.x = item.x
-								item._visit.y = item.y
-							}
-						})
+					let carVisitArray = CacheData.car.visitArrayData
+					carData.forEach(item => {
+						let carVisit = carVisitArray.filter(da => Object.is(item.deviceNo, da.sn))
+						if(carVisit.length > 0){
+							item.empName = carVisit[0].name
+							item._visit = carVisit[0]
+							item._visit.x = item.x
+							item._visit.y = item.y
+						}
 					})
 				}
 				CacheData.car.realListData = carData	// 缓存车辆信息
@@ -186,7 +181,7 @@
 					let isCar = false
 					carHistoryListData.forEach( item => carShowData.filter((c) => Object.is(item.id, c.id)).length == 0 ? isCar = true : "")
 					if(isCar){
-						console.log(carShowData)
+						// console.log(carShowData)
 						initalizeCar_3d(carShowData)
 					}
 				}else{
@@ -201,14 +196,17 @@
 			 */
 			function setMove(personData, carData){
 				personData.forEach((p) => {
+					p.layer = 1
+					// p.x = 203370
+					// p.y = 655060
 					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {})
 				})
 				setTimeout(() => {
 					carData.forEach((p) => {
-						realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 2000 ,() => {})
+						realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 3000 ,() => {})
 					})
 				}, 2000)
-				setTimeout(() => realTime(), 6000)
+				setTimeout(() => realTime(), 1000 * 10)
 			}
 			
 			/**
