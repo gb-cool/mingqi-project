@@ -196,7 +196,7 @@
 			 */
 			function setMove(personData, carData){
 				personData.forEach((p) => {
-					p.layer = 1
+					// p.layer = 1
 					// p.x = 203370
 					// p.y = 655060
 					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {})

@@ -86,4 +86,42 @@ export class DateTime{
 	　　let newDate = new Date(parseInt(date) * 1000); //转换为时间
 	　　return newDate.getFullYear() + '-' + (newDate.getMonth() + 1).toString().padStart(2, '0') + '-' + newDate.getDate().toString().padStart(2, '0') + " 00:00:00";
 	}
+	/**
+	 * 近1个月的时间段
+	 */
+	getLastMonth() {
+	    var now = new Date();
+	    var year = now.getFullYear();
+	    var month = (now.getMonth() + 1).toString().padStart(2, '0');//0-11表示1-12月
+	    var day = now.getDate().toString().padStart(2, '0');
+		const map = {
+			YYYY: year,
+			MM: month,
+			DD: day,
+			hh: now.getHours().toString().padStart(2, '0'),
+			mm: now.getMinutes().toString().padStart(2, '0'),
+			ss: now.getSeconds().toString().padStart(2, '0')
+		}
+	    var dateObj = {};
+	    dateObj.now = year + '-' + month + '-' + day; 
+	    var nowMonthDay = new Date(year, month, 0).getDate();    //当前月的总天数
+	    if(month - 1 <= 0){ //如果是1月，年数往前推一年<br>　　　　 
+	        dateObj.last = (year - 1) + '-' + 12 + '-' + day;
+	    }else{
+	        var lastMonthDay = new Date(year, (parseInt(month) - 1), 0).getDate();  
+	        if(lastMonthDay < day){    // 1个月前所在月的总天数小于现在的天日期
+	            if(day < nowMonthDay){        //当前天日期小于当前月总天数
+	                dateObj.last = year + '-' + (month - 1) + '-' + (lastMonthDay - (nowMonthDay - day));
+	            }else{
+	                dateObj.last = year + '-' + (month - 1) + '-' + lastMonthDay;
+	            }
+	        }else{
+	            dateObj.last = year + '-' + (month - 1) + '-' + day;
+	        }
+	    }
+		dateObj.map = map
+		let lasts = dateObj.last.split("-")
+		dateObj.last = lasts[0] + "-" + lasts[1].toString().padStart(2, '0') + "-" + lasts[2].toString().padStart(2, '0')
+	    return dateObj;
+	}
 }

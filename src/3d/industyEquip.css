@@ -217,6 +217,7 @@
     text-align: center;
     margin-left: -50%;
     transform: scale(0.6);
+	/* white-space: nowrap; */
 }
 
 .roomUpText {

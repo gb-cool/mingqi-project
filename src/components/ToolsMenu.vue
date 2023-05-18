@@ -221,7 +221,7 @@
 							allRoomToggle_3d(1, false)
 							break;
 						case "2":	// 立磨间
-							allRoomToggle_3d(3, false)
+							allRoomToggle_3d(4, false)
 							allRoomToggle_3d(0, false)
 							allRoomToggle_3d(1, false)
 							break;

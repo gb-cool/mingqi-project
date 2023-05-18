@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import qs from 'qs'
+import { DateTime } from './dateTime.js'
 export class Robot {
 	url = 'http://10.12.64.103:80/'
 	token = null
@@ -80,6 +81,7 @@ export class Robot {
 	 * 获取机器人告警信息
 	 */
 	getAlarmList(robotId, callback){
+		let date = new DateTime().getLastMonth()
 		const options = {
 			method: 'POST',
 			url: this.url + 'prod-api/surfaceInterface/alarm/surfacePageList',
@@ -88,8 +90,8 @@ export class Robot {
 			},
 			data: {
 				robotId: robotId,
-				startTime: '2020-12-12 10:10:00',
-				endTime: '2023-02-09 10:10:00',
+				startTime: date.last + ' 00:00:00',
+				endTime: date.now + ' '+date.map.hh+':'+date.map.mm+':'+date.map.ss,
 				"alarmType" : 1, 
 				"pageNum" : 1, 
 				"pageSize" : 10 

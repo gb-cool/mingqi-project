@@ -151,7 +151,6 @@
 			let pid = 0	// 1正向行驶，0返回
 			// 机器人实时执行函数
 			function realRobotFun(){
-				console.log(pid)
 				isRobotMove.value == 2 ? (limoRobotInitalize_3d(), limoRobotLighting_3d(true)) : limoRobotAnimation_3d(pid == 1 ? 1 : 20, 3700, true)
 				pid = pid == 1 ? 0 : 1
 			}
@@ -275,8 +274,8 @@
 						|| Object.is(item.ip, "10.12.64.88")){
 							if(!Object.is(getLedV(item.key1), "")){ledv.push(item.key1 + " " + item.value1)}
 							if(!Object.is(getLedV(item.key2), "")){ledv.push(item.key2 + " " + item.value2)}
-							if(Object.is(item.ip, "10.12.64.65")) {ledv = ["破碎口A"]}
-							if(Object.is(item.ip, "10.12.64.66")) {ledv = ["破碎口8"]}
+							if(Object.is(item.ip, "10.12.64.65")) {ledv = ["破碎口B"]}
+							if(Object.is(item.ip, "10.12.64.66")) {ledv = ["破碎口A"]}
 							if(ledv.length == 0) {ledv.push("正在接入中")}
 							item._value = ledv
 							item._id = roomJson[item.ip]
