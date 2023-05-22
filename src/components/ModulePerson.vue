@@ -140,6 +140,7 @@
 					})
 				}
 				if(personHideData.length > 0){
+					console.log(personHideData)
 					visibleMan_3d(personHideData, false)	// 隐藏模型
 				}
 				historyRealListData = joySuchData // 人员车辆数据缓存
