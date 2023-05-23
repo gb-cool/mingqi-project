@@ -196,15 +196,25 @@
 			 * 设置人员车辆动画
 			 */
 			function setMove(personData, carData){
+				let len = personData.length + carData.length
+				let num = 0
 				personData.forEach((p) => {
 					// p.layer = 1
 					// p.x = 203370
 					// p.y = 655060
-					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {})
+					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {
+						num++
+						console.log(num)
+						// if(num >= len) realTime()
+					})
 				})
 				setTimeout(() => {
 					carData.forEach((p) => {
-						realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 3000 ,() => {})
+						realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 3000 ,() => {
+							num++
+							console.log(num)
+							// if(num >= len) realTime()
+						})
 					})
 				}, 2000)
 				setTimeout(() => realTime(), 1000 * 10)
