@@ -25,7 +25,7 @@
 				</el-table-column>
 				<el-table-column
 				prop="_hz_value" 
-				label="参数值" 
+				label="参数 / 说明"
 				align="center">
 				</el-table-column>
 			</el-table>
@@ -92,7 +92,7 @@
 					let d = wareHouseData[i]
 					const returnedTarget = Object.assign({
 						_hz_device: d.stockPlaceName,
-						_hz_value: d.currStock,
+						_hz_value: d.currStock + " (t)",
 						_hz_type: "ware"
 					}, d);
 					data.push(returnedTarget)
@@ -190,7 +190,7 @@
 					let d = oxygenData[i]
 					const returnedTarget = Object.assign({
 						_hz_device: d.deviceName,
-						_hz_value: d._concentration,
+						_hz_value: d._concentration + " %Vol",
 						_hz_type: "oxygen"
 					}, d);
 					data.push(returnedTarget)
@@ -199,7 +199,7 @@
 					let d = stiveData[i]
 					const returnedTarget = Object.assign({
 						_hz_device: d.deviceName,
-						_hz_value: d._concentration,
+						_hz_value: d._concentration + " mg/m³",
 						_hz_type: "stive"
 					}, d);
 					data.push(returnedTarget)

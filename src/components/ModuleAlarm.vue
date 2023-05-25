@@ -82,14 +82,21 @@
 							</template>
 						</el-table-column>
 						<el-table-column
+						prop="channelName" 
+						label="报警通道名称" 
+						align="center">
+						</el-table-column>
+						<el-table-column
 						prop="dateTime" 
 						label="触发时间" 
 						align="center">
 							<template #default="scope">
-								<span>{{videoChangeTime(scope.row.dateTime)}}</span>
+								<!-- <span>{{videoChangeTime(scope.row.dateTime)}}</span> -->
+								 <span>{{scope.row.dateTime}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column
+						
+						<!-- <el-table-column
 						prop="ipAddress" 
 						label="IP" 
 						align="center">
@@ -98,7 +105,7 @@
 						prop="eventType" 
 						label="事件类型" 
 						align="center">
-						</el-table-column>
+						</el-table-column> -->
 					</el-table>
 				</el-tab-pane>
 				<el-tab-pane label="定位告警" name="fourth">
@@ -225,6 +232,7 @@
 			const dataList = ref([])
 			const joySuch = new JoySuch()
 			const alarmListHandle = (result) => {
+				console.log(result)
 				if(result.code == 0){	//成功
 					let jsonData = result.data.content
 					jsonData.forEach((item) => {
@@ -340,7 +348,10 @@
 				video.getQueryISAPIAlarmInfo((result) => videoData.value = result)
 			}
 			const videoChangeTime = (time) => {
-				return time.split(" ")[0]
+				let ts = time.split(" ")
+				let dates = ts[0].split("-")
+				let times = ts[1]
+				return times
 			} 
 			videoISAPIAlarm()
 			const videoFiled = {

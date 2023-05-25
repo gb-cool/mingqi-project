@@ -412,8 +412,8 @@ export const junhuaLoubanSetOpacity_3d = (i) => {
 };
 
 // 漫游小车显示隐藏
-export const manyouCarToggle_3d = (bool) => {
-    manyouCarToggle(bool);
+export const manyouCarToggle_3d = (bool, isPlay) => {
+    manyouCarToggle(bool, isPlay);
 };
 
 // 删除车辆

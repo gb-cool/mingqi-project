@@ -93,22 +93,26 @@
 				}
 			}
 			function closeVideo(){
-				if(CacheData.video.otherOWebControl == "开始创建"){
-					setTimeout(() => {
-						closeVideo()
-					},100)
-					return false
+				try{
+					if(CacheData.video.otherOWebControl == "开始创建"){
+						setTimeout(() => {
+							closeVideo()
+						},100)
+						return false
+					}
+					CacheData.video.otherOWebControl.JS_DestroyWnd().then(function(){ // oWebControl 为 WebControl 的对象
+						console.log("成功")
+						// 销毁插件窗口成功
+						CacheData.video.otherOWebControl = null
+						// CacheData.video.selectCameraData = null
+						popupType.value = ""
+					},function(){
+						// 销毁插件窗口失败
+						console.log("失败")
+					});
+				}catch(e){
+					console.log(e)
 				}
-				CacheData.video.otherOWebControl.JS_DestroyWnd().then(function(){ // oWebControl 为 WebControl 的对象
-					console.log("成功")
-					// 销毁插件窗口成功
-					CacheData.video.otherOWebControl = null
-					// CacheData.video.selectCameraData = null
-					popupType.value = ""
-				},function(){
-					// 销毁插件窗口失败
-					console.log("失败")
-				});
 				context.emit('isShow', false)
 				isClose = false
 			}
@@ -185,9 +189,10 @@
 		left: 25%;
 		top: 50%;
 		transform: translate(0, -50%);
-		width: calc(25vw - @videoPaddingRight);
-		min-width: 380px;
-		max-width: calc(25vw/3*2);
+		// width: calc(25vw - @videoPaddingRight);
+		width: calc(25vw / 2);
+		min-width: 240px;
+		max-width: 680px;
 	}
 	.PopupLayer.show.video .main{
 		min-width: auto;
@@ -227,7 +232,7 @@
 			padding: @boxPadding;
 		}
 		.PopupLayer.show.video{
-			width: calc(25vw - @videoPaddingRight);
+			// width: calc(25vw - @videoPaddingRight);
 		}
 		.PopupLayer.show.videoControl .main{
 			height: calc(33.33vh - 2*@boxBoderWidth - 2*@boxPadding);

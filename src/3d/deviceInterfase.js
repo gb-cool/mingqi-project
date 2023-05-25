@@ -1,6 +1,6 @@
 import { Device } from "../assets/js/device.js";
 import { WareHouse } from "../assets/js/warehouse.js";
-import { clickLMJtoChangeColor_3d } from "./index";
+import { clickLMJtoChangeColor_3d, manyouCarToggle_3d ,junhuaRomaingLight_3d, junhuaRomaingLines_3d, junhuaLoubanSetOpacity_3d} from "./index";
 import { Video } from '../assets/js/video.js'
 /**
  * 查询立磨列表数据
@@ -189,10 +189,23 @@ export const userClickDeviceID = (room, id) => {
 export const openTovideo = (name) => {
 	console.log("此时应当打开的视频是：", name);
 	try{
-		if(name && name in CacheData.video.gif){
-			document.getElementById("deviceVideoName").parentNode.style.display = "block"
-			document.getElementById("deviceVideoName").innerHTML = CacheData.video.gif[name].name
-			document.getElementById("deviceVideoGif").src = "videoGif/" + CacheData.video.gif[name].src
+		if(name){
+			if(Object.is(name, "漫游小车出现")){
+				manyouCarToggle_3d(true, true)
+			}
+			if(Object.is(name, "鄂式破视频")){
+				manyouCarToggle_3d(false, false)
+			}
+			if(Object.is(name, '均化间管线和透明度恢复')){
+				junhuaRomaingLight_3d(false)	// 均化间漫游时单独高亮显示立磨间密相泵物体
+				// junhuaRomaingLines_3d(false)	// 均化间漫游时单独显示单条输送管道
+				// junhuaLoubanSetOpacity_3d(1)	// 均化间中间楼板设置透明度
+			}
+			if(name in CacheData.video.gif){
+				document.getElementById("deviceVideoName").parentNode.style.display = "block"
+				document.getElementById("deviceVideoName").innerHTML = CacheData.video.gif[name].name
+				document.getElementById("deviceVideoGif").src = "videoGif/" + CacheData.video.gif[name].src
+			}
 		}else{
 			document.getElementById("deviceVideoName").parentNode.style.display = "none"
 			document.getElementById("deviceVideoName").innerHTML = ""

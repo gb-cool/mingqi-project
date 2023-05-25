@@ -59,7 +59,7 @@
 	import {pageOnload, mainView, momentMoveing, tweenMoveing, outWallSetOpacity, replaceSkyBox, limoRobotAnimation_3d, 
 	limoPDanimation_3d, initalizeMan_3d, limoRobotInitalize_3d, limoRobotLighting_3d, updateLEDPlane_3d, fourColorOpacity_3d,
 	 updataLEDforOutRoadPlane_3d, updataRoomUpLEDplane_3d, posuiDanimation_3d, saifenDanimation_3d, suishiDanimation_3d, 
-	  visibleMan_3d, limoCameraDeviceDataup_3d} from "../3d/index";
+	  visibleMan_3d, limoCameraDeviceDataup_3d, changeYDcarSpeed_3d, shoucengAnimations_3d} from "../3d/index";
 	import { wareHouseYard } from "../3d/deviceInterfase.js"
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
@@ -139,6 +139,8 @@
 					suishiDanimation_3d(0.3, true)	// 碎石皮带动画
 					
 					setVideoData()	// 车间摄像头数据
+					changeYDcarSpeed_3d(1000 * 30)	// 移动小车改变移动速度 默认2000	4.26新增
+					shoucengAnimations_3d(4, 0.01, 0xff0000, false)	// 初始化立磨收尘动画颜色 4.26新增
 					setInterval(updateTime, baseTime)
 				})
 			});
@@ -146,7 +148,7 @@
 			/**
 			 * 巡检机器人
 			 */
-			let pid = 1	// 1正向行驶，0返回
+			let pid = 0	// 1正向行驶，0返回
 			// 机器人实时执行函数
 			function realRobotFun(){
 				isRobotMove.value == 2 ? (limoRobotInitalize_3d(), limoRobotLighting_3d(true)) : limoRobotAnimation_3d(pid == 1 ? 1 : 20, 3700, true)
@@ -272,8 +274,8 @@
 						|| Object.is(item.ip, "10.12.64.88")){
 							if(!Object.is(getLedV(item.key1), "")){ledv.push(item.key1 + " " + item.value1)}
 							if(!Object.is(getLedV(item.key2), "")){ledv.push(item.key2 + " " + item.value2)}
-							if(Object.is(item.ip, "10.12.64.65")) {ledv = ["破碎口A"]}
-							if(Object.is(item.ip, "10.12.64.66")) {ledv = ["破碎口8"]}
+							if(Object.is(item.ip, "10.12.64.65")) {ledv = ["破碎口B"]}
+							if(Object.is(item.ip, "10.12.64.66")) {ledv = ["破碎口A"]}
 							if(ledv.length == 0) {ledv.push("正在接入中")}
 							item._value = ledv
 							item._id = roomJson[item.ip]
