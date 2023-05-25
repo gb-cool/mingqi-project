@@ -52,6 +52,7 @@ import {
     junhuaRomaingLines,
     junhuaLoubanSetOpacity,
     manyouCarToggle,
+    deletCar,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -413,4 +414,9 @@ export const junhuaLoubanSetOpacity_3d = (i) => {
 // 漫游小车显示隐藏
 export const manyouCarToggle_3d = (bool) => {
     manyouCarToggle(bool);
+};
+
+// 删除车辆
+export const deletCar_3d = (id) => {
+    deletCar(id);
 };

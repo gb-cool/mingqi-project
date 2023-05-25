@@ -63,7 +63,7 @@
     width: 50px;
     cursor: pointer !important;
     pointer-events: visible !important;
-	padding: 15px;
+    padding: 15px;
 }
 
 .limoTitle {
@@ -206,8 +206,13 @@
 
 .outRoadLed4 {
     width: 100%;
+    max-height: 22px;
     line-height: 22px;
     text-align: center;
+    font-family: "Simsun";
+    font-size: 13px;
+    white-space: nowrap;
+    /* overflow: hidden; */
 }
 
 .outRoadLed4_len {
@@ -244,7 +249,6 @@
     height: 0.2px;
     background-color: #ff0000;
 }
-
 
 .roomUpLEDplanes {
     width: 100px;
