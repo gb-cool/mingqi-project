@@ -16,7 +16,7 @@
 	import { ref, inject, onMounted, onDeactivated, watch } from 'vue'
 	import ModulePersonInfo from './ModulePersonInfo.vue'
 	import { JoySuch, Seekey } from '../assets/js/positionPerson.js'
-	import { initalizeMan_3d, realtimeMotionMan_3d, focusPeople_3d, visibleMan_3d, initalizeCar_3d, realtimeMotionCar_3d } from "../3d/index";
+	import { initalizeMan_3d, realtimeMotionMan_3d, focusPeople_3d, visibleMan_3d, initalizeCar_3d, realtimeMotionCar_3d,deletCar_3d } from "../3d/index";
 	import { visibleMan } from '@/3d/industryEquip';
 	export default {
 		name: 'ModulePerson',
@@ -146,6 +146,11 @@
 				historyRealListData = joySuchData // 人员车辆数据缓存
 				let personData = joySuchData.filter((item) => (item.specifictype == '0' || item.specifictype == '1' || item.specifictype == '2'))
 				CacheData.person.realListData = personData	// 缓存人员信息
+				// 人员模型显示
+				let showData = []
+				personData.forEach((item) => showData.push(item.deviceNo))
+				visibleMan_3d(showData, true)	// 显示当前人员模型
+				
 				let carData = joySuchData.filter((item) => (item.specifictype == '4'))
 				// carData = personData
 				// carData = [{
@@ -170,27 +175,28 @@
 					})
 				}
 				CacheData.car.realListData = carData	// 缓存车辆信息
-				// 人员模型显示
-				let showData = []
-				personData.forEach((item) => showData.push(item.deviceNo))
-				visibleMan_3d(showData, true)	// 显示当前人员模型
+				
+				
 				// 车模型加载
 				let carShowData = []
 				carData.forEach(item => carShowData.push({id: item.deviceNo, name: item.empName == null ? item.deviceNo : item.empName,x: item.x,y: item.y}))
-				// 判断车辆是否以上一次一致，一致则不需要重新创建
-				if(carHistoryListData.length == carShowData.length){
-					let isCar = false
-					carHistoryListData.forEach( item => carShowData.filter((c) => Object.is(item.id, c.id)).length == 0 ? isCar = true : "")
-					if(isCar){
-						// console.log(carShowData)
-						initalizeCar_3d(carShowData)
-					}
-				}else{
-					console.log(carShowData)
-					initalizeCar_3d(carShowData)
-				}
+				// console.log(carHistoryListData, carShowData)
+				let carJiaoJi = []	// 交集，车辆不做处理
+				let carHide	= []	// 需隐藏车辆
+				let carCreate = []	// 需要创建的车辆
+				carHistoryListData.forEach(e => {
+					let toggler = carShowData.filter(c => Object.is(e.id, c.id))
+					toggler.length == 0 ? carHide.push(e) : carJiaoJi.push(toggler[0])
+				})
+				carShowData.forEach(e => {
+					let toggler = carJiaoJi.filter(c => Object.is(e.id, c.id))
+					if(toggler.length==0) carCreate.push(e)
+				})
+				// console.log(carJiaoJi, carHide, carCreate)
+				carHide.forEach(item => deletCar_3d(item.id))	// 删除已消失车辆
+				if(carCreate.length > 0) {initalizeCar_3d(carShowData)}	// 创建车辆模型
 				carHistoryListData = carShowData	// 车辆数据存储
-				setMove(joySuchData, carData)
+				setMove(personData, carData)
 			}
 			/**
 			 * 设置人员车辆动画
@@ -204,7 +210,7 @@
 					// p.y = 655060
 					realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], joySuch.getLayerToName(p.layer), 2000, (result) => {
 						num++
-						console.log(num)
+						// console.log("pon:" + num)
 						// if(num >= len) realTime()
 					})
 				})
@@ -212,7 +218,7 @@
 					carData.forEach((p) => {
 						realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 3000 ,() => {
 							num++
-							console.log(num)
+							// console.log("car:" + num)
 							// if(num >= len) realTime()
 						})
 					})

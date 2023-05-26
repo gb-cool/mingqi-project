@@ -232,7 +232,7 @@
 			const dataList = ref([])
 			const joySuch = new JoySuch()
 			const alarmListHandle = (result) => {
-				console.log(result)
+				// console.log(result)
 				if(result.code == 0){	//成功
 					let jsonData = result.data.content
 					jsonData.forEach((item) => {
