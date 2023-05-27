@@ -53,6 +53,9 @@ import {
     junhuaLoubanSetOpacity,
     manyouCarToggle,
     deletCar,
+    fenliaoMeshHide,
+    fenliaoOpacity,
+    fenliaoAnimationOne,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -419,4 +422,19 @@ export const manyouCarToggle_3d = (bool, isPlay) => {
 // 删除车辆
 export const deletCar_3d = (id) => {
     deletCar(id);
+};
+
+// 粉料动画模型显示隐藏
+export const fenliaoMeshHide_3d = (bool) => {
+    fenliaoMeshHide(bool);
+};
+
+// 均化间动画外层部分物体透明度设置。
+export const fenliaoOpacity_3d = (bool, opacity) => {
+    fenliaoOpacity(bool, opacity);
+};
+
+// 分料动画1执行
+export const fenliaoAnimationOne_3d = (bool, opacity) => {
+    fenliaoAnimationOne(bool, opacity);
 };
