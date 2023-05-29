@@ -6,8 +6,12 @@ import qs from 'qs'
 import { DateTime } from './dateTime.js'
 export class Passage {
 	url = 'http://10.12.67.2:8738/'
-	constructor() {
-		this.url = urlConfig.passage
+	constructor(config) {
+		if(config){
+			this.url = config.passage
+		}else{
+			this.url = urlConfig.passage
+		}
 	}
 	getData(callback){
 		const dateTime = new DateTime()

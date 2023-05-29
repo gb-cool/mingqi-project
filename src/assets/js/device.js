@@ -14,9 +14,14 @@ export class Device {
 	timestamp = '' // 请求时间，格式：YYYY-MM-DD HH:mm:ss
 	signatureNonce = '' // 唯一随机数
 	signature = '' // 签名结果串
-	constructor() {
+	constructor(config) {
 		// const interfaceParameter = require('../json/interfaceParameter.json')
-		const interfaceParameter = urlConfig
+		let interfaceParameter = null
+		if(config){
+			interfaceParameter = config
+		}else{
+			interfaceParameter = urlConfig
+		}
 		
 		this.url = interfaceParameter.device
 		

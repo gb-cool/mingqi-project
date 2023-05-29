@@ -40,5 +40,12 @@ module.exports = defineConfig({
 				args[0].title = '长寿微粉智能制造三维可视化平台'
 				return args
 			})
+		config.module
+			.rule('worker')
+			.test(/\.worker\.js$/) // 匹配文件名为xxx.worker.js的文件
+			.use('worker-loader')
+			.loader('worker-loader')
+			.end()
+			config.module.rule('js').exclude.add(/\.worker\.js$/)
 	}
 })

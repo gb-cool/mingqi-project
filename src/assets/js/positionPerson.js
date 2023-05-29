@@ -24,9 +24,15 @@ class PositionPerson{
 			Authorization: ''
 		}
 	}
-	constructor () {
+	constructor (config) {
 		// const interfaceParameter = require('../json/interfaceParameter.json')
-		const interfaceParameter = urlConfig
+		let interfaceParameter = null
+		if(config){
+			interfaceParameter = config
+		}else{
+			interfaceParameter = urlConfig
+		}
+		
 		this.Seekey.Headers["X-Timestamp"] = Date.now()
 		this.Seekey.url = interfaceParameter.Seekey
 
@@ -70,8 +76,8 @@ class PositionPerson{
  */
 export class JoySuch extends PositionPerson{
 	token = null
-	constructor () {
-		super()
+	constructor (config) {
+		super(config)
 		// 获取Token
 		this.getToken(() => {
 			// this.getSubscribe()	// 报（预）警信息订阅
@@ -389,8 +395,8 @@ export class JoySuch extends PositionPerson{
  * 寻息 位置物联网开放平台 接口类
  */
 export class Seekey extends PositionPerson{
-	constructor () {
-		super()
+	constructor (config) {
+		super(config)
 	}
 	/**
 	 * 通过Licence获取accessToken和signId（accessToken有效期：2小时），当accessToken失效需要调口

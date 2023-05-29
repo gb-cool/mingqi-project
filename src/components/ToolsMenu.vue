@@ -72,7 +72,8 @@
 	import { replaceSkyBox, outWallSetOpacity, mainView, tweenMoveing, roadFlow_3d, smallRoomFloorPlane_3d, 
 	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d, roamAnimation_3d, 
 	suishiModelAnimation_3d, junhuaRomaingLight_3d, junhuaRomaingLines_3d, junhuaLoubanSetOpacity_3d, 
-	allRoomToggle_3d, manyouCarToggle_3d} from "../3d/index"	// 三维
+	allRoomToggle_3d, manyouCarToggle_3d,
+	fenliaoMeshHide_3d, fenliaoOpacity_3d, fenliaoAnimationOne_3d, intoRoom} from "../3d/index"	// 三维
 	import { Device } from '../assets/js/device.js'
 	export default {
 		name: "ToolsMenu",
@@ -196,6 +197,7 @@
 			function playAnimation(){
 				if(roamingSelect.value == 0){	// 开始
 					roamAnimation_3d(roamingRoomSelect.value, 1, roamingVelocity, () => {})	// 结束漫游
+					manyouCarToggle_3d(false, false)	// ，漫游小车隐藏
 					suishiModelAnimation_3d(false, 1)
 					if(roamingRoomSelect.value == "2" || roamingRoomSelect.value == "1"){
 						suishiModelAnimation_3d(true, 0.5)
@@ -226,9 +228,20 @@
 							allRoomToggle_3d(1, false)
 							break;
 						case "3":	// 均化间
-							junhuaRomaingLight_3d(true)	// 均化间漫游时单独高亮显示立磨间密相泵物体
-							junhuaRomaingLines_3d(true)	// 均化间漫游时单独显示单条输送管道
+							allRoomToggle_3d(0, false)
+							allRoomToggle_3d(3, false)
+							allRoomToggle_3d(4, false)
+							allRoomToggle_3d(5, false)
+							// junhuaRomaingLight_3d(true)	// 均化间漫游时单独高亮显示立磨间密相泵物体
+							// junhuaRomaingLines_3d(true, "#a5c367")	// 均化间漫游时单独显示单条输送管道
 							junhuaLoubanSetOpacity_3d(0.8)	// 均化间中间楼板设置透明度
+							fenliaoMeshHide_3d(true)	// 粉料动画模型显示隐藏
+							fenliaoOpacity_3d(true, 0.3)	// 均化间动画外层部分物体透明度设置。
+							intoRoom(1)
+							if(threeDModuleOpacity.value > 0.2){
+								threeDModuleOpacity.value = 0.0
+							}
+							outWallSetOpacity(threeDModuleOpacity.value)
 							break;
 						default: 
 							device.setDeviceAnimations("")
@@ -237,11 +250,17 @@
 				}
 				if(roamingSelect.value == 1){	// 结束模式
 					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
+					junhuaRomaingLines_3d(false)	// 均化间漫游时单独显示单条输送管道
 					if(roamingRoomSelect.value == 3){	// 均化车间
 						junhuaRomaingLight_3d(false)	// 均化间漫游时单独高亮显示立磨间密相泵物体
-						junhuaRomaingLines_3d(false)	// 均化间漫游时单独显示单条输送管道
 						junhuaLoubanSetOpacity_3d(1)	// 均化间中间楼板设置透明度
+						fenliaoOpacity_3d(false, 1)	// 均化间动画外层部分物体透明度设置。
+						fenliaoAnimationOne_3d(false, 1)	// 分料动画1执行
+						fenliaoMeshHide_3d(false)	// 粉料动画模型显示隐藏
+						threeDModuleOpacity.value = 1
+						outWallSetOpacity(threeDModuleOpacity.value)
 					}
+					
 					allRoomToggle_3d(0, true)
 					allRoomToggle_3d(1, true)
 					allRoomToggle_3d(2, true)

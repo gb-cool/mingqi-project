@@ -29,7 +29,7 @@
 					<ModuleTitle :title="'重点区域人员'+ personNum"/>
 				</template>
 				<template v-slot:main>
-					<ModulePerson @getPersonNum="setPersonNum"/>
+					<ModulePerson :personData = "personData" @getPersonNum="setPersonNum"/>
 				</template>
 			</ModuleBg>
 		</div>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-	import { ref, inject } from 'vue'
+	import { ref, inject, watch } from 'vue'
 	import ModuleBg from './ModuleBg.vue'
 	import ModuleTitle from './ModuleTitle.vue'
 	import ModuleEnvironment from './ModuleEnvironment.vue'
@@ -57,6 +57,15 @@
 			const setPersonNum = (data) => {
 				personNum.value = data
 			}
+			const personData = ref([])
+			// 执行过程数据 监听并执行相应方法
+			const ExecutionData = inject('ExecutionData')
+			watch(ExecutionData, () => {
+				if(Object.is(ExecutionData.value.mark, "person")){
+					personNum.value = "（"+ ExecutionData.value.data.personData.length +"人）"
+					personData.value = ExecutionData.value.data.personData
+				}
+			})
 			
 			let popupIsShow_video = inject('popupIsShow_video')	// 是否显示弹窗
 			let popupTitle_video = inject('popupTitle_video')	// 弹出标题
@@ -75,6 +84,7 @@
 			}
 			return {
 				personNum,
+				personData,
 				setPersonNum,
 				lookVideoEvent
 			}

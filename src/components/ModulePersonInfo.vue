@@ -17,13 +17,13 @@
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	export default {
 		name: "ModulePersonInfo",
-		props: ['thumb', 'name','serial', 'area'],
+		props: ['thumb', 'name','serial', 'area', 'personData'],
 		setup(props, ctx) {
 			const lookPosition = () => {
-				ctx.emit('lookPosition', props.serial)
+				ctx.emit('lookPosition', props.personData)
 			}
 			const lookInfo = () => {
-				ctx.emit('lookInfo', props.serial)
+				ctx.emit('lookInfo', props.personData)
 			}
 			let src = require('../assets/img/head-portrait.png')
 			const setThumb = ref(src)

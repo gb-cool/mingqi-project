@@ -1,6 +1,8 @@
 import { Device } from "../assets/js/device.js";
 import { WareHouse } from "../assets/js/warehouse.js";
-import { clickLMJtoChangeColor_3d, manyouCarToggle_3d ,junhuaRomaingLight_3d, junhuaRomaingLines_3d, junhuaLoubanSetOpacity_3d} from "./index";
+import { clickLMJtoChangeColor_3d, manyouCarToggle_3d ,junhuaRomaingLight_3d,
+ junhuaRomaingLines_3d, junhuaLoubanSetOpacity_3d,
+ fenliaoMeshHide_3d, fenliaoOpacity_3d, fenliaoAnimationOne_3d} from "./index";
 import { Video } from '../assets/js/video.js'
 /**
  * 查询立磨列表数据
@@ -201,6 +203,14 @@ export const openTovideo = (name) => {
 				// junhuaRomaingLines_3d(false)	// 均化间漫游时单独显示单条输送管道
 				// junhuaLoubanSetOpacity_3d(1)	// 均化间中间楼板设置透明度
 			}
+			if(Object.is(name, '均化间物体透明开始')){
+				fenliaoOpacity_3d(true, 0.3)	// 均化间动画外层部分物体透明度设置。
+			}
+			if(Object.is(name, '粉料动画1')){
+				console.log("=======================")
+				fenliaoAnimationOne_3d(true, 0.3)	// 分料动画1执行
+			}
+			
 			if(name in CacheData.video.gif){
 				document.getElementById("deviceVideoName").parentNode.style.display = "block"
 				document.getElementById("deviceVideoName").innerHTML = CacheData.video.gif[name].name

@@ -101,7 +101,7 @@ function getRectifyData(x, y){
 			result.key = key
 		}
 	}
-	console.log(result)
+	// console.log(result)
 	return result
 }
 /**

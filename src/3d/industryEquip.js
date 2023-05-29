@@ -2892,12 +2892,15 @@ function onIntersect(cube, cube2) {
 
 // 车辆实时数据动画
 export const realtimeMotionCar = (id, point, times, td = () => {}) => {
+	if(carObjects.length == 0) return false
     let mesh;
     carObjects.forEach((item) => {
-        if (item.userData.id == id) {
-            mesh = item;
-            item.userData.tweenAnimation && item.userData.tweenAnimation.stop();
-        }
+        if(item){
+			if (item.userData.id == id) {
+			    mesh = item;
+			    item.userData.tweenAnimation && item.userData.tweenAnimation.stop();
+			}
+		}
     });
     let cube = mesh.userData.cubeMesh;
 
@@ -2931,9 +2934,9 @@ export const realtimeMotionCar = (id, point, times, td = () => {}) => {
 };
 const findLocalRealtimeY = (mesh, cube, place, position, td) => {
     if (cube.position.y < 0) {
-        console.log(
-            `当前ID为:${mesh.userData.id}，没有在${place.name}上找到对应Y坐标`
-        );
+        // console.log(
+        //     `当前ID为:${mesh.userData.id}，没有在${place.name}上找到对应Y坐标`
+        // );
         return false;
     }
 
@@ -3070,11 +3073,13 @@ export const realtimeMotionMan = (id, point, floor, times, td = () => {}) => {
     // window.realtimeMotionMan = (id, point, floor, times, td = () => {}) => {
     let mesh;
     renObjects.forEach((item) => {
-        if (item.userData.id == id) {
-            mesh = item;
-            item.userData.tweenAnimation && item.userData.tweenAnimation.stop();
-            mesh.userData.clip.paused = true;
-        }
+		if(item){
+			if (item.userData.id == id) {
+			    mesh = item;
+			    item.userData.tweenAnimation && item.userData.tweenAnimation.stop();
+			    mesh.userData.clip.paused = true;
+			}
+		}
     });
     if (!mesh) return false;
     let cube = mesh.userData.cubeMesh;
@@ -4013,7 +4018,7 @@ var roampointArrs = [
     {
         point: [-1915.5438, -0.0, -4024.7416],
         look: [-2972.4023, 367.0302, -4022.7976],
-        speed: 0.2,
+        speed: 0.04,
         video: "漫游小车出现",
     },
     {
@@ -4281,143 +4286,168 @@ var roampointThrit = [
 ];
 var roampointFour = [
     {
-        point: [-3708.0593, 0.0, -1543.0093],
-        look: [-4130.3758, 81.633, -1547.4525],
-        speed: 3,
-        video: "均化间物体透明开始",
+        point: [-3711.3102,0.0000,-1590.1472],
+        look: [-4133.1135,81.6330,-1568.8638],
+        speed: 1,
+        video: '均化间物体透明开始',
+		delayed: 3,
     },
+	{
+	    point: [-3652.2233,100.0000,-1539.4774],
+	    look: [-4937.1451,408.0623,-1533.9814],
+	    speed: 0.2,
+	    video: 'FM1',
+	},
+	{
+	    point: [-3450.3245,150.0000,-663.2873],
+	    look: [-3540.8224,328.7364,-1189.0581],
+	    speed: 0.03,
+	    video: 'FM2',
+	},
     {
-        point: [-3527.8023, 0.0, -1353.5038],
-        look: [-4336.21, 385.2785, -1598.5225],
+        point: [-3501.1795,275.0000,-1016.7656],
+        look: [-3525.4976,291.9379,-1044.9584],
+        speed: 0.5,
+        video: '粉料动画1',
+		delayed: 1,
+    },
+	{
+	    point: [-3448.7196,216.2123,-636.8995],
+	    look: [-3536.0733,340.9601,-1050.5538],
+	    speed: 0.2,
+	    video: 'FM3',
+	},
+	{
+	    point: [-3740.4036,248.0558,-969.6666],
+	    look: [-4020.7059,345.4952,-991.8590],
+	    speed: 0.2,
+	    video: 'FM4',
+		delayed: 1,
+	},
+    {
+        point: [-3643.6851,40.3705,-1010.6652],
+        look: [ -3824.5319,85.0131,-1003.7700],
         speed: 0.2,
-        video: null,
+        video: 'E',
+		delayed: 3,
+    },
+	{
+	    point: [-3735.4995,40.3705,-1006.1417],
+	    look: [-3815.1137,60.0189,-1003.6459],
+	    speed: 0.1,
+	    video: 'F',
+		delayed: 3,
+	},
+    {
+        point: [-3737.1080,40.3705,-956.4547],
+        look: [-3816.7222,60.0189,-953.9589],
+        speed: 0.2,
+        video: 'G',
+		delayed: 3,
     },
     {
-        point: [-3108.3463, 0.0, -710.7801],
-        look: [-3535.0435, 295.9073, -1073.1112],
-        speed: 0.15,
-        video: null,
-    },
-    {
-        point: [-3501.1795, 275.0, -1016.7656],
-        look: [-3525.4976, 291.9379, -1044.9584],
-        speed: 1,
-        video: "粉料动画1",
-    },
-    {
-        point: [-3497.6049, 273.0679, -947.2329],
-        look: [-3539.6982, 303.0084, -994.0578],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3756.0839, 273.0679, -945.9386],
-        look: [-3805.1794, 307.989, -1000.5528],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3791.1595, 273.0679, -976.2775],
-        look: [-3892.3118, 317.851, -976.176],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3499.2328, 29.0, -1013.3022],
-        look: [-3944.7842, 147.1404, -994.7443],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3643.6851, 40.3705, -1010.6652],
-        look: [-3824.5319, 85.0131, -1003.77],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3735.4995, 40.3705, -1006.1417],
-        look: [-3815.1137, 60.0189, -1003.6459],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3737.108, 40.3705, -956.4547],
-        look: [-3816.7222, 60.0189, -953.9589],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3753.367, 40.3676, -954.9714],
-        look: [-3755.544, 53.833, -869.9816],
-        speed: 1,
-        video: null,
+        point: [-3753.3670,40.3676,-954.9714],
+        look: [-3755.5440,53.8330,-869.9816],
+        speed: 0.2,
+        video: 'H',
+		delayed: 3,
     },
     {
         point: [-3528.2839, 40.3676, -958.42],
         look: [-3530.4609, 53.833, -873.4302],
         speed: 0.5,
-        video: null,
+        video: 'I',
+		delayed: 3,
+    },
+	{
+	    point: [-3525.2057,275.0000,-1297.8802],
+	    look: [-3513.0490,383.0542,-776.9586],
+	    speed: 0,
+	    video: 'J',
+	},
+	// {
+	//     point: [-3657.5542,275.0000,-1051.6108],
+	//     look: [-3329.7112,367.5954,-901.0522],
+	//     speed: 0.2,
+	//     video: 'K',
+	// },
+	{
+	    point: [-3349.4143,275.0000,-1027.1680],
+	    look: [-3374.2076,389.2443,-737.4901],
+	    speed: 0.2,
+	    video: 'K',
+	},
+	{
+	    point: [-3616.4301,275.0000,-852.2180],
+	    look: [-3350.1303,357.7922,-1099.1040],
+	    speed: 0.2,
+	    video: 'L',
+		delayed: 3,
+	},
+    {
+        point: [-3451.6842,275.0000,-834.9601],
+        look: [-3448.1221,327.5840,-1166.9433],
+        speed: 0.2,
+        video: 'M',
+		delayed: 1,
     },
     {
-        point: [-3525.2057, 275.0, -1297.8802],
-        look: [-3513.049, 383.0542, -776.9586],
-        speed: 0,
-        video: null,
+        point: [-3447.8726,33.0000,-712.1840],
+        look: [-3449.3791,132.7553,-1247.9083],
+        speed: 0.2,
+        video: 'N',
+		delayed: 1,
     },
     {
-        point: [-3657.5542, 275.0, -1051.6108],
-        look: [-3329.7112, 367.5954, -901.0522],
-        speed: 1,
-        video: null,
+        point: [-3437.4693,43.6382,-979.4745],
+        look: [-3475.1890,57.6086,-1059.2086],
+        speed: 0.2,
+        video: 'O',
     },
     {
-        point: [-3616.4301, 275.0, -852.218],
-        look: [-3350.1303, 357.7922, -1099.104],
-        speed: 1,
-        video: null,
+        point: [-3437.7184,43.6382,-1041.0669],
+        look: [-3475.4381,57.6086,-1120.8010],
+        speed: 0.2,
+        video: 'P',
+		delayed: 3,
     },
     {
-        point: [-3451.6842, 275.0, -834.9601],
-        look: [-3448.1221, 327.584, -1166.9433],
-        speed: 1,
-        video: null,
+        point: [-3358.6161,100.0000,-996.1976],
+        look: [-3542.2963,134.4882,-1113.1445],
+        speed: 0.2,
+        video: 'Q',
     },
-    {
-        point: [-3447.8726, 33.0, -712.184],
-        look: [-3449.3791, 132.7553, -1247.9083],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3437.4693, 43.6382, -979.4745],
-        look: [-3475.189, 57.6086, -1059.2086],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3437.7184, 43.6382, -1041.0669],
-        look: [-3475.4381, 57.6086, -1120.801],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-3358.6161, 100.0, -996.1976],
-        look: [-3542.2963, 134.4882, -1113.1445],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-1782.9267, 91.2066, -990.7424],
-        look: [-1954.2677, 134.4882, -1102.398],
-        speed: 1,
-        video: null,
-    },
-    {
-        point: [-1202.7639, 91.2066, -575.7781],
-        look: [-1705.877, 218.2955, -903.6354],
-        speed: 1,
-        video: null,
-    },
+	{
+	    point: [-3484.1317,96.3107,-923.5605],
+	    look: [-3722.9151,153.8572,-1136.1186],
+	    speed: 0.2,
+	    video: 'U',
+		delayed: 5,
+	},
+	{
+	    point: [-3627.5626,96.3845,-1299.7556],
+	    look: [-4569.9399,745.2924,-1592.3058],
+	    speed: 0.1,
+	    video: 'V',
+	},
+	// {
+	//     point: [-3484.1317,96.3107,-923.5605],
+	//     look: [-3722.9151,153.8572,-1136.1186],
+	//     speed: 0.2,
+	//     video: 'U',
+	// },
+    // {
+    //     point: [-1782.9267,91.2066,-990.7424],
+    //     look: [-1954.2677,134.4882,-1102.3980],
+    //     speed: 0.2,
+    //     video: 'U',
+    // },
+    // {
+    //     point: [-1202.7639,91.2066,-575.7781],
+    //     look: [-1705.8770,218.2955,-903.6354],
+    //     speed: 0.2,
+    //     video: 'V',
+    // },
 ];
 var roamTimeout,
     roamPausedPosition,
@@ -4653,21 +4683,42 @@ function roamFourMovingView(index, speed, td) {
     let point = new THREE.Vector3(...roampointFour[index].point);
     let distance = oldPoint.distanceTo(point);
     openTovideo(roampointFour[index].video);
-    if (roampointFour[index].speed == 0) {
-        nowMoveView(roampointFour[index].point, roampointFour[index].look);
-        let number = index + 1;
-        roamFourMovingView(number, speed, td);
-    } else {
-        tweenMoveView(
-            roampointFour[index].point,
-            roampointFour[index].look,
-            distance * speed * roampointFour[index].speed,
-            () => {
-                let number = index + 1;
-                roamFourMovingView(number, speed, td);
-            }
-        );
-    }
+	if(roampointFour[index].delayed){
+		setTimeout(() => {
+			if (roampointFour[index].speed == 0) {
+			    nowMoveView(roampointFour[index].point, roampointFour[index].look);
+			    let number = index + 1;
+			    roamFourMovingView(number, speed, td);
+			} else {
+			    tweenMoveView(
+			        roampointFour[index].point,
+			        roampointFour[index].look,
+			        distance * speed * roampointFour[index].speed,
+			        () => {
+			            let number = index + 1;
+			            roamFourMovingView(number, speed, td);
+			        }
+			    );
+			}
+		}, 1000 * roampointFour[index].delayed);
+	}else{
+		if (roampointFour[index].speed == 0) {
+		    nowMoveView(roampointFour[index].point, roampointFour[index].look);
+		    let number = index + 1;
+		    roamFourMovingView(number, speed, td);
+		} else {
+		    tweenMoveView(
+		        roampointFour[index].point,
+		        roampointFour[index].look,
+		        distance * speed * roampointFour[index].speed,
+		        () => {
+		            let number = index + 1;
+		            roamFourMovingView(number, speed, td);
+		        }
+		    );
+		}
+	}
+    
 }
 
 // 所有设备聚焦方法 id = 设备ID   times = 聚焦时间   isPlane = 是否显示信息框  false = 不显示   true = 显示   td = 回调函数
@@ -5109,6 +5160,7 @@ export const junhuaRomaingLines = (bool, color) => {
         GDmodel.visible = true;
         GDmovingSS.parent.visible = true;
         let arrs = [];
+		console.log(GDmovingSS)
         GDmovingSS.traverse((child) => {
             child.visible = true;
             if (child.isMesh) {
@@ -5121,13 +5173,13 @@ export const junhuaRomaingLines = (bool, color) => {
                 ) {
                     child.visible = true;
                 }
-                child.material.color.set(color);
+				child.material.color.set(color);
                 arrs.push(child);
             }
         });
-        container.outlineObjects_2 = arrs;
-        container.outlinePass_2.hiddenEdgeColor = new THREE.Color(color);
-        container.outlinePass_2.visibleEdgeColor = new THREE.Color(color);
+        // container.outlineObjects_2 = arrs;
+        // container.outlinePass_2.hiddenEdgeColor = new THREE.Color(color);
+        // container.outlinePass_2.visibleEdgeColor = new THREE.Color(color);
     } else {
         pipeLineFun(0);
     }
@@ -5135,10 +5187,12 @@ export const junhuaRomaingLines = (bool, color) => {
 
 // 均化间中间楼板设置透明度
 export const junhuaLoubanSetOpacity = (i) => {
-    junhuaLoubanOpacity.forEach((item) => {
-        item.material.transparent = i == 1 ? false : true;
-        item.material.opacity = i;
-    });
+    junhuaLoubanOpacity.forEach(item => {
+		if(Object.is(item.name, "均化底层楼板带透明通道_1")){
+			item.material.transparent = i == 1 ? false : true;
+			item.material.opacity = i;
+		}
+    })
 };
 
 // 粉料动画模型显示隐藏
@@ -5156,23 +5210,25 @@ export const fenliaoOpacity = (bool, opacity) => {
 
 // 分料动画1执行
 export const fenliaoAnimationOne = () => {
-    setTimeout(() => {
-        fenliaoFMmove.forEach((item) => {
-            if (item.name == "楼上阀门M01-01动") {
-                item.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+    // setTimeout(() => {
+        fenliaoFMmove.forEach(item => {
+			item.visible = true
+            if(item.name == "楼上阀门M01-01动") {
+                item.rotateOnWorldAxis(new THREE.Vector3(0,1,0), Math.PI / 2)
             } else {
                 item.rotateOnWorldAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
             }
         });
         fenliaoAnimationMesh.forEach((item) => {
             item.visible = false;
-        });
-    }, 1000);
+        })
+    // }, 1000);
 
     setTimeout(() => {
-        fenliaoFMmove.forEach((item) => {
-            if (item.name == "楼上阀门M01-01动") {
-                item.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+        fenliaoFMmove.forEach(item => {
+			item.visible = true
+            if(item.name == "楼上阀门M01-01动") {
+                item.rotateOnWorldAxis(new THREE.Vector3(0,1,0), Math.PI / 2)
             } else {
                 item.rotateOnWorldAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
             }
@@ -5180,7 +5236,7 @@ export const fenliaoAnimationOne = () => {
         fenliaoAnimationMesh.forEach((item) => {
             item.visible = true;
         });
-    }, 4000);
+    }, 1000);
 };
 
 // 立磨间漫游开始楼梯隐藏
