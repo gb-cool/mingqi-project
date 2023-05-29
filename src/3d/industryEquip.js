@@ -5203,7 +5203,7 @@ export const fenliaoOpacity = (bool, opacity) => {
 
 // 分料动画1执行
 export const fenliaoAnimationOne = () => {
-    setTimeout(() => {
+    // setTimeout(() => {
         fenliaoFMmove.forEach(item => {
 			item.visible = true
             if(item.name == "楼上阀门M01-01动") {
@@ -5215,7 +5215,7 @@ export const fenliaoAnimationOne = () => {
         fenliaoAnimationMesh.forEach(item => {
             item.visible = false;
         })
-    }, 1000);
+    // }, 1000);
 
     setTimeout(() => {
         fenliaoFMmove.forEach(item => {
@@ -5229,5 +5229,5 @@ export const fenliaoAnimationOne = () => {
         fenliaoAnimationMesh.forEach(item => {
             item.visible = true;
         })
-    }, 4000);
+    }, 1000);
 }
