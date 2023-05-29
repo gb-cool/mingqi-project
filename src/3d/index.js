@@ -56,6 +56,7 @@ import {
     fenliaoMeshHide,
     fenliaoOpacity,
     fenliaoAnimationOne,
+    limoStaircaseToggle,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -437,4 +438,9 @@ export const fenliaoOpacity_3d = (bool, opacity) => {
 // 分料动画1执行
 export const fenliaoAnimationOne_3d = (bool, opacity) => {
     fenliaoAnimationOne(bool, opacity);
+};
+
+// 立磨间漫游开始楼梯隐藏
+export const limoStaircaseToggle_3d = (bool) => {
+    limoStaircaseToggle(bool);
 };
