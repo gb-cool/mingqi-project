@@ -2,9 +2,15 @@ import axios from 'axios'
 export class Video{
 	url = "http://10.12.3.98:31500/"
 	alarmUrl = "http://10.12.67.2:8882/"
-	constructor () {
-		this.url = urlConfig.video
-		this.alarmUrl = urlConfig.videoAlarm
+	constructor (config) {
+		if(config){
+			this.url = config.video
+			this.alarmUrl = config.videoAlarm
+		}else{
+			this.url = urlConfig.video
+			this.alarmUrl = urlConfig.videoAlarm
+		}
+		
 	}
 	/**
 	 * 获取类别

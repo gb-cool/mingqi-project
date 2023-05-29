@@ -19,8 +19,13 @@
 import axios from 'axios'
 export class WareHouse{
 	url = 'http://10.12.67.2:8734/'
-	constructor() {
-		this.url = urlConfig.warehouse
+	constructor(config) {
+		if(config){
+			this.url = config.warehouse
+		}else{
+			this.url = urlConfig.warehouse
+		}
+		
 	}
 	getData(callback){
 		const options = {

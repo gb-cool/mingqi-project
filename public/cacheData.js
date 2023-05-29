@@ -710,5 +710,30 @@ var CachePublicFun = {
 	isLMJBT(id){
 		let data = ['LMJBT-M01', 'LMJBT-M02', 'LMJBT-M03', 'LMJBT-M04', 'LMJBT-M05', 'LMJBT-M06', 'LMJBT-M07', 'LMJBT-M08']
 		return data.includes(id)
+	},
+	// 根据楼层数，获取模型名称
+	getLayerToName(layer){
+		let name = "地面一层"
+		switch(layer.toString()){
+			case "1": 
+				name = "地面一层"
+				break;
+			case "2":
+				name = "地面二层"
+				break;
+			case "3":
+				name = "地面三层"
+				break;
+			case "4":
+				name = "地面四层"
+				break;
+			case "5":
+				name = "地面五层"
+				break;
+			case "-1":
+				name = "地面负一层"
+				break;
+		}
+		return name
 	}
 }
