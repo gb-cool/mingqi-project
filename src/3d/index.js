@@ -57,6 +57,7 @@ import {
     fenliaoOpacity,
     fenliaoAnimationOne,
     limoStaircaseToggle,
+    fixFLDHcolors,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -443,4 +444,9 @@ export const fenliaoAnimationOne_3d = (bool, opacity) => {
 // 立磨间漫游开始楼梯隐藏
 export const limoStaircaseToggle_3d = (bool) => {
     limoStaircaseToggle(bool);
+};
+
+// 修改粉料动画管道颜色
+export const fixFLDHcolors_3d = (color) => {
+    fixFLDHcolors(color);
 };
