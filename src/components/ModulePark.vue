@@ -102,9 +102,9 @@
 						</el-table-column>
 					</el-table>
 				</el-tab-pane>
-				<el-tab-pane label="检修清单" name="five">
+				<!-- <el-tab-pane label="检修清单" name="five">
 					
-				</el-tab-pane>
+				</el-tab-pane> -->
 			</el-tabs>
 			<input style="display: none;" type="button" id="robotBtn" @click="lookRobotEvent" value="巡检机器人触发按钮"/>
 		</div>

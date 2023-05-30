@@ -224,6 +224,7 @@ var sceneOnLoad = ({ baseUrl, domElement, callback }) => {
 		junhuaNoOpacity.push(junhuaModelObject.getObjectByName("均化链式提升机1不透明"))
 		junhuaNoOpacity.push(junhuaModelObject.getObjectByName("均化链式提升机1动画右"))
 		junhuaNoOpacity.push(junhuaModelObject.getObjectByName("均化链式提升机1动画左"))
+		junhuaNoOpacity.push(junhuaModelObject.getObjectByName("均化链式提升机1动画").children[2])
 		
 		junhuaChangeOpacity.push(junhuaModelObject.getObjectByName("充气斜槽1主体"))
 		junhuaChangeOpacity.push(junhuaModelObject.getObjectByName("充气斜槽1下料管01_2"))
@@ -5291,13 +5292,22 @@ export const fenliaoOpacity = (bool, opacity) => {
 		bool ? container.addBloom(item) : container.removeBloom(item);
     });
 	junhuaNoOpacity.forEach(obj => {
-		obj.traverse((item) => {
-		    if(item.isMesh){
-				item.material.transparent = false;
-				item.material.opacity = 1;
-				container.removeBloom(item);
+		if(obj){
+			if(obj.isMesh){
+				obj.material.transparent = false;
+				obj.material.opacity = 1;
+				container.removeBloom(obj);
+			}else{
+				obj.traverse((item) => {
+				    if(item.isMesh){
+						item.material.transparent = false;
+						item.material.opacity = 1;
+						container.removeBloom(item);
+					}
+				});
 			}
-		});
+		}
+
 	})
 	junhuaChangeOpacity.forEach(obj => {
 		if(obj){

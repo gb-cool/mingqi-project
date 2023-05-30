@@ -218,7 +218,7 @@
 							break;
 						case "1":	// 碎石间
 							device.setDeviceAnimations({"_id":"SC-004"})
-							allRoomToggle_3d(4, false)
+							// allRoomToggle_3d(4, false)
 							allRoomToggle_3d(2, false)
 							allRoomToggle_3d(1, false)
 							break;

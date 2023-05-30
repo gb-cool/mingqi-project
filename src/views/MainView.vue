@@ -134,18 +134,17 @@
 					isThreeDLoad.value = 1
 					tweenMoveing([-2835,0,-1812], [-1617,837,-1], 2000, (e) => {})
 					workerInit()
-					// setSkyBoxFormWeather()
-					// setRobotMoveObj()	//获取巡检机器人状态并更改
-					// limoPDanimation_3d(0.3, true)	// 立磨皮带动画
-					// setInitalizeMan_3d()	// 获取所有人员数据并缓存
+					setSkyBoxFormWeather()
+					setRobotMoveObj()	//获取巡检机器人状态并更改
+					limoPDanimation_3d(0.3, true)	// 立磨皮带动画
 
-					// fourColorOpacity_3d(0.5)	// 设置四色图透明度
-					// posuiDanimation_3d(0.3, true)	// 破碎皮带动画
-					// saifenDanimation_3d(0.3, true)	// 筛分皮带动画
-					// suishiDanimation_3d(0.3, true)	// 碎石皮带动画
+					fourColorOpacity_3d(0.5)	// 设置四色图透明度
+					posuiDanimation_3d(0.3, true)	// 破碎皮带动画
+					saifenDanimation_3d(0.3, true)	// 筛分皮带动画
+					suishiDanimation_3d(0.3, true)	// 碎石皮带动画
 					
-					// changeYDcarSpeed_3d(1000 * 30)	// 移动小车改变移动速度 默认2000	4.26新增
-					// shoucengAnimations_3d(4, 0.01, 0xff0000, false)	// 初始化立磨收尘动画颜色 4.26新增
+					changeYDcarSpeed_3d(1000 * 30)	// 移动小车改变移动速度 默认2000	4.26新增
+					shoucengAnimations_3d(4, 0.01, 0xff0000, false)	// 初始化立磨收尘动画颜色 4.26新增
 				})
 			});
 			/**
