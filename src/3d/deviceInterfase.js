@@ -204,7 +204,7 @@ export const openTovideo = (name) => {
 				// junhuaLoubanSetOpacity_3d(1)	// 均化间中间楼板设置透明度
 			}
 			if(Object.is(name, '均化间物体透明开始')){
-				fenliaoOpacity_3d(true, 0.3)	// 均化间动画外层部分物体透明度设置。
+				// fenliaoOpacity_3d(true, 0.3)	// 均化间动画外层部分物体透明度设置。
 			}
 			if(Object.is(name, '粉料动画1')){
 				console.log("=======================")
