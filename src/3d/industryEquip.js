@@ -202,7 +202,7 @@ var sceneOnLoad = ({ baseUrl, domElement, callback }) => {
     ];
     // 模型加载过程中函数
     let InTheProcess = (item) => {
-        console.log(item);
+        // console.log(item);
     }
     // 场景加载完成函数
     let InTheEnd = (td) => {
@@ -4322,157 +4322,171 @@ var roampointThrit = [
     },
 ];
 var roampointFour = [
+  //   {
+  //       point: [-3711.3102,0.0000,-1590.1472],
+  //       look: [-4133.1135,81.6330,-1568.8638],
+  //       speed: 1,
+  //       video: '均化间物体透明开始',
+		// delayed: 3,
+  //   },
+	{
+	    point: [-3750.7523,0.0000,-1591.8854],
+	    look: [-4075.7509,71.6901,-1596.7499],
+	    speed: 1,
+	    video: '均化间物体透明开始',
+		delayed: 3,
+	},
+	{
+	    point: [-3652.2233,100.0000,-1539.4774],
+	    look: [-4937.1451,408.0623,-1533.9814],
+	    speed: 0.2,
+	    video: 'FM1',
+	},
+	{
+	    point: [-3450.3245,150.0000,-663.2873],
+	    look: [-3540.8224,328.7364,-1189.0581],
+	    speed: 0.03,
+	    video: 'FM2',
+	},
     {
-        point: [-3711.3102, 0.0, -1590.1472],
-        look: [-4133.1135, 81.633, -1568.8638],
-        speed: 1,
-        video: "均化间物体透明开始",
-        delayed: 3,
-    },
-    {
-        point: [-3652.2233, 100.0, -1539.4774],
-        look: [-4937.1451, 408.0623, -1533.9814],
+        point: [-3401.1267,160.4245,-792.7446],
+        look: [-3522.9806,292.9254,-1054.7911],
         speed: 0.2,
-        video: "FM1",
+        video: '粉料动画1',
     },
+	// {
+	//     point: [-3501.1795,275.0000,-1016.7656],
+	//     look: [-3525.4976,291.9379,-1044.9584],
+	//     speed: 0.5,
+	//     video: '粉料动画1',
+	// 	delayed: 1,
+	// },
+	{
+	    point: [-3396.3059,202.9740,-932.3374],
+	    look: [-3535.7433,300.4481,-988.2782],
+	    speed: 0.2,
+	    video: 'FM3',
+		delayed: 5,
+	},
+	{
+	    point: [-3740.4036,248.0558,-969.6666],
+	    look: [-4020.7059,345.4952,-991.8590],
+	    speed: 0.2,
+	    video: 'FM4',
+		delayed: 2,
+	},
     {
-        point: [-3450.3245, 150.0, -663.2873],
-        look: [-3540.8224, 328.7364, -1189.0581],
-        speed: 0.03,
-        video: "FM2",
-    },
-    {
-        point: [-3501.1795, 275.0, -1016.7656],
-        look: [-3525.4976, 291.9379, -1044.9584],
-        speed: 0.5,
-        video: "粉料动画1",
-        delayed: 1,
-    },
-    {
-        point: [-3448.7196, 216.2123, -636.8995],
-        look: [-3536.0733, 340.9601, -1050.5538],
+        point: [-3643.6851,40.3705,-1010.6652],
+        look: [ -3824.5319,85.0131,-1003.7700],
         speed: 0.2,
-        video: "FM3",
+        video: 'E',
+		delayed: 3,
     },
+	{
+	    point: [-3735.4995,40.3705,-1006.1417],
+	    look: [-3815.1137,60.0189,-1003.6459],
+	    speed: 0.1,
+	    video: 'F',
+		delayed: 3,
+	},
     {
-        point: [-3740.4036, 248.0558, -969.6666],
-        look: [-4020.7059, 345.4952, -991.859],
+        point: [-3737.1080,40.3705,-956.4547],
+        look: [-3816.7222,60.0189,-953.9589],
         speed: 0.2,
-        video: "FM4",
-        delayed: 1,
+        video: 'G',
+		delayed: 3,
     },
     {
-        point: [-3643.6851, 40.3705, -1010.6652],
-        look: [-3824.5319, 85.0131, -1003.77],
+        point: [-3753.3670,40.3676,-954.9714],
+        look: [-3755.5440,53.8330,-869.9816],
         speed: 0.2,
-        video: "E",
-        delayed: 3,
-    },
-    {
-        point: [-3735.4995, 40.3705, -1006.1417],
-        look: [-3815.1137, 60.0189, -1003.6459],
-        speed: 0.1,
-        video: "F",
-        delayed: 3,
-    },
-    {
-        point: [-3737.108, 40.3705, -956.4547],
-        look: [-3816.7222, 60.0189, -953.9589],
-        speed: 0.2,
-        video: "G",
-        delayed: 3,
-    },
-    {
-        point: [-3753.367, 40.3676, -954.9714],
-        look: [-3755.544, 53.833, -869.9816],
-        speed: 0.2,
-        video: "H",
-        delayed: 3,
+        video: 'H',
+		delayed: 3,
     },
     {
         point: [-3528.2839, 40.3676, -958.42],
         look: [-3530.4609, 53.833, -873.4302],
         speed: 0.5,
-        video: "I",
-        delayed: 3,
+        video: 'I',
+		delayed: 3,
     },
+	{
+	    point: [-3525.2057,275.0000,-1297.8802],
+	    look: [-3513.0490,383.0542,-776.9586],
+	    speed: 0,
+	    video: 'J',
+	},
+	// {
+	//     point: [-3657.5542,275.0000,-1051.6108],
+	//     look: [-3329.7112,367.5954,-901.0522],
+	//     speed: 0.2,
+	//     video: 'K',
+	// },
+	{
+	    point: [-3349.4143,275.0000,-1027.1680],
+	    look: [-3374.2076,389.2443,-737.4901],
+	    speed: 0.2,
+	    video: 'K',
+	},
+	{
+	    point: [-3616.4301,275.0000,-852.2180],
+	    look: [-3350.1303,357.7922,-1099.1040],
+	    speed: 0.2,
+	    video: 'L',
+		delayed: 3,
+	},
     {
-        point: [-3525.2057, 275.0, -1297.8802],
-        look: [-3513.049, 383.0542, -776.9586],
-        speed: 0,
-        video: "J",
-    },
-    // {
-    //     point: [-3657.5542,275.0000,-1051.6108],
-    //     look: [-3329.7112,367.5954,-901.0522],
-    //     speed: 0.2,
-    //     video: 'K',
-    // },
-    {
-        point: [-3349.4143, 275.0, -1027.168],
-        look: [-3374.2076, 389.2443, -737.4901],
+        point: [-3451.6842,275.0000,-834.9601],
+        look: [-3448.1221,327.5840,-1166.9433],
         speed: 0.2,
-        video: "K",
+        video: 'M',
+		delayed: 1,
     },
     {
-        point: [-3616.4301, 275.0, -852.218],
-        look: [-3350.1303, 357.7922, -1099.104],
+        point: [-3447.8726,33.0000,-712.1840],
+        look: [-3449.3791,132.7553,-1247.9083],
         speed: 0.2,
-        video: "L",
-        delayed: 3,
+        video: 'N',
+		delayed: 1,
     },
     {
-        point: [-3451.6842, 275.0, -834.9601],
-        look: [-3448.1221, 327.584, -1166.9433],
+        point: [-3437.4693,43.6382,-979.4745],
+        look: [-3475.1890,57.6086,-1059.2086],
         speed: 0.2,
-        video: "M",
-        delayed: 1,
+        video: 'O',
     },
     {
-        point: [-3447.8726, 33.0, -712.184],
-        look: [-3449.3791, 132.7553, -1247.9083],
+        point: [-3437.7184,43.6382,-1041.0669],
+        look: [-3475.4381,57.6086,-1120.8010],
         speed: 0.2,
-        video: "N",
-        delayed: 1,
+        video: 'P',
+		delayed: 3,
     },
     {
-        point: [-3437.4693, 43.6382, -979.4745],
-        look: [-3475.189, 57.6086, -1059.2086],
+        point: [-3358.6161,100.0000,-996.1976],
+        look: [-3542.2963,134.4882,-1113.1445],
         speed: 0.2,
-        video: "O",
+        video: 'Q',
     },
-    {
-        point: [-3437.7184, 43.6382, -1041.0669],
-        look: [-3475.4381, 57.6086, -1120.801],
-        speed: 0.2,
-        video: "P",
-        delayed: 3,
-    },
-    {
-        point: [-3358.6161, 100.0, -996.1976],
-        look: [-3542.2963, 134.4882, -1113.1445],
-        speed: 0.2,
-        video: "Q",
-    },
-    {
-        point: [-3484.1317, 96.3107, -923.5605],
-        look: [-3722.9151, 153.8572, -1136.1186],
-        speed: 0.2,
-        video: "U",
-        delayed: 5,
-    },
-    {
-        point: [-3627.5626, 96.3845, -1299.7556],
-        look: [-4569.9399, 745.2924, -1592.3058],
-        speed: 0.1,
-        video: "V",
-    },
-    // {
-    //     point: [-3484.1317,96.3107,-923.5605],
-    //     look: [-3722.9151,153.8572,-1136.1186],
-    //     speed: 0.2,
-    //     video: 'U',
-    // },
+	{
+	    point: [-3484.1317,96.3107,-923.5605],
+	    look: [-3722.9151,153.8572,-1136.1186],
+	    speed: 0.2,
+	    video: 'U',
+		delayed: 5,
+	},
+	{
+	    point: [-3627.5626,96.3845,-1299.7556],
+	    look: [-4569.9399,745.2924,-1592.3058],
+	    speed: 0.1,
+	    video: 'V',
+	},
+	// {
+	//     point: [-3484.1317,96.3107,-923.5605],
+	//     look: [-3722.9151,153.8572,-1136.1186],
+	//     speed: 0.2,
+	//     video: 'U',
+	// },
     // {
     //     point: [-1782.9267,91.2066,-990.7424],
     //     look: [-1954.2677,134.4882,-1102.3980],
@@ -4491,7 +4505,12 @@ var roamTimeout,
     roamIndex,
     roamPausedType = true,
     roamGoingType = true;
+let roampointFourDelayed = null
 export const roamAnimation = (roomID, type, speed = 20, td = () => {}) => {
+	if(roampointFourDelayed){
+		clearTimeout(roampointFourDelayed)
+		roampointFourDelayed = null
+	}
     if (type == 0) {
         cameraTween && cameraTween.stop();
         orbitTween && orbitTween.stop();
@@ -4540,8 +4559,8 @@ export const roamAnimation = (roomID, type, speed = 20, td = () => {}) => {
             );
         } else if (roomID == 3) {
             tweenMoveView(
-                [-3711.3102, -0.0, -1590.1472],
-                [-4133.1135, 81.633, -1568.8638],
+                roampointFour[0].point,
+                roampointFour[0].look,
                 0,
                 () => {
                     roamTimeout = setTimeout(() => {
@@ -4721,7 +4740,7 @@ function roamFourMovingView(index, speed, td) {
     let distance = oldPoint.distanceTo(point);
     openTovideo(roampointFour[index].video);
     if (roampointFour[index].delayed) {
-        setTimeout(() => {
+        roampointFourDelayed = setTimeout(() => {
             if (roampointFour[index].speed == 0) {
                 nowMoveView(
                     roampointFour[index].point,
@@ -5250,7 +5269,7 @@ export const fenliaoOpacity = (bool, opacity) => {
 
 // 分料动画1执行
 export const fenliaoAnimationOne = () => {
-    // setTimeout(() => {
+    setTimeout(() => {
     fenliaoFMmove.forEach((item) => {
         item.visible = true;
         if (item.name == "楼上阀门M01-01动") {
@@ -5262,7 +5281,7 @@ export const fenliaoAnimationOne = () => {
     fenliaoAnimationMesh.forEach((item) => {
         item.visible = false;
     });
-    // }, 1000);
+    }, 1000);
 
     setTimeout(() => {
         fenliaoFMmove.forEach((item) => {
@@ -5276,7 +5295,7 @@ export const fenliaoAnimationOne = () => {
         fenliaoAnimationMesh.forEach((item) => {
             item.visible = true;
         });
-    }, 1000);
+    }, 4000);
 };
 
 // 立磨间漫游开始楼梯隐藏

@@ -73,7 +73,7 @@
 	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d, roamAnimation_3d, 
 	suishiModelAnimation_3d, junhuaRomaingLight_3d, junhuaRomaingLines_3d, junhuaLoubanSetOpacity_3d, 
 	allRoomToggle_3d, manyouCarToggle_3d,
-	fenliaoMeshHide_3d, fenliaoOpacity_3d, fenliaoAnimationOne_3d, intoRoom} from "../3d/index"	// 三维
+	fenliaoMeshHide_3d, fenliaoOpacity_3d, fenliaoAnimationOne_3d, intoRoom, limoStaircaseToggle_3d, fixFLDHcolors_3d} from "../3d/index"	// 三维
 	import { Device } from '../assets/js/device.js'
 	export default {
 		name: "ToolsMenu",
@@ -234,9 +234,11 @@
 							allRoomToggle_3d(5, false)
 							// junhuaRomaingLight_3d(true)	// 均化间漫游时单独高亮显示立磨间密相泵物体
 							// junhuaRomaingLines_3d(true, "#a5c367")	// 均化间漫游时单独显示单条输送管道
+							fixFLDHcolors_3d("#a5c367")	// 修改粉料动画管道颜色
 							junhuaLoubanSetOpacity_3d(0.8)	// 均化间中间楼板设置透明度
 							fenliaoMeshHide_3d(true)	// 粉料动画模型显示隐藏
 							fenliaoOpacity_3d(true, 0.3)	// 均化间动画外层部分物体透明度设置。
+							limoStaircaseToggle_3d(false)	// 漫游开始楼梯隐藏
 							intoRoom(1)
 							if(threeDModuleOpacity.value > 0.2){
 								threeDModuleOpacity.value = 0.0
@@ -257,6 +259,7 @@
 						fenliaoOpacity_3d(false, 1)	// 均化间动画外层部分物体透明度设置。
 						fenliaoAnimationOne_3d(false, 1)	// 分料动画1执行
 						fenliaoMeshHide_3d(false)	// 粉料动画模型显示隐藏
+						limoStaircaseToggle_3d(true)	// 漫游开始楼梯隐藏
 						threeDModuleOpacity.value = 1
 						outWallSetOpacity(threeDModuleOpacity.value)
 					}
@@ -294,7 +297,8 @@
 			};
 			
 			const timer = ref(0)
-			
+			// controlsPoint(y) 
+			// outViewPoint()
 			// 按钮事件，按钮选中
 			const rectangleActive = ref('mainScene')
 			const btnEvent = (name) => {

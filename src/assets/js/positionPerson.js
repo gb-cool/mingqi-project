@@ -376,6 +376,8 @@ export class JoySuch extends PositionPerson{
 	async getVisitFind(){
 		let date = new Date()
 		let d = date.getFullYear() + "-" + (date.getMonth()+1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0")
+		let preDate = new Date(date.getTime() - 24*60*60*1000); //前一天
+		let pred = preDate.getFullYear() + "-" + (preDate.getMonth()+1).toString().padStart(2, "0") + "-" + preDate.getDate().toString().padStart(2, "0")
 		const options = {
 			method: 'POST',
 			url: this.JoySuch.url + '/api/v2/visit/find',
@@ -384,7 +386,7 @@ export class JoySuch extends PositionPerson{
 				buildId: '205046',
 				pageNumber: 1,
 				pageSize: 1000,
-				startTime: d + ' 00:00:00',
+				startTime: pred + ' 00:00:00',
 				endTime: d + ' 24:00:00'
 			}
 		}

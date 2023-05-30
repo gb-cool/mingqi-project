@@ -164,10 +164,18 @@ let visitArrayData = []
 async function realPersonAndCarData(){
 	// 访客外来人员进出流水
 	await joySuch.getVisitFind().then((response) => {
-		let data = response.data.data 
-		visitArrayData = data.filter(item => item.visitType == 1)
+		let date = new Date()
+		let d = date.getFullYear() + "-" + (date.getMonth()+1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0")
+		let data = response.data.data
+		let cData = data.filter(item => item.visitType == 1)
+		let todadyData = cData.filter(item => item.leaveTime.includes(d) || item.visitTime.includes(d))
+		let rData = cData
+		if(todadyData.length > 0){
+			rData = todadyData
+		}
+		visitArrayData = todadyData
 		// 车辆访客信息	visitType = 1
-		postMessage({mark: "person", use: "visitArrayData", data: visitArrayData})
+		postMessage({mark: "person", use: "visitArrayData", data: rData})
 	})
 	joySuch.getRealTimeData(async (result) => {
 		if(result.code == 0){	//成功
