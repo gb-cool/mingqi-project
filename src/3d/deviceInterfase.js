@@ -199,7 +199,7 @@ export const openTovideo = (name) => {
 				manyouCarToggle_3d(false, false)
 			}
 			if(Object.is(name, '均化间管线和透明度恢复')){
-				junhuaRomaingLight_3d(false)	// 均化间漫游时单独高亮显示立磨间密相泵物体
+				// junhuaRomaingLight_3d(false)	// 均化间漫游时单独高亮显示立磨间密相泵物体
 				// junhuaRomaingLines_3d(false)	// 均化间漫游时单独显示单条输送管道
 				// junhuaLoubanSetOpacity_3d(1)	// 均化间中间楼板设置透明度
 			}

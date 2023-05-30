@@ -235,6 +235,7 @@
 							// junhuaRomaingLight_3d(true)	// 均化间漫游时单独高亮显示立磨间密相泵物体
 							// junhuaRomaingLines_3d(true, "#a5c367")	// 均化间漫游时单独显示单条输送管道
 							fixFLDHcolors_3d("#f9faf4")	// 修改粉料动画管道颜色
+							// fixFLDHcolors_3d("#f9ae08")	// 修改粉料动画管道颜色
 							junhuaLoubanSetOpacity_3d(0.8)	// 均化间中间楼板设置透明度
 							fenliaoMeshHide_3d(true)	// 粉料动画模型显示隐藏
 							fenliaoOpacity_3d(true, 0.1)	// 均化间动画外层部分物体透明度设置。
@@ -254,7 +255,6 @@
 					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
 					junhuaRomaingLines_3d(false)	// 均化间漫游时单独显示单条输送管道
 					if(roamingRoomSelect.value == 3){	// 均化车间
-						junhuaRomaingLight_3d(false)	// 均化间漫游时单独高亮显示立磨间密相泵物体
 						junhuaLoubanSetOpacity_3d(1)	// 均化间中间楼板设置透明度
 						fenliaoOpacity_3d(false, 1)	// 均化间动画外层部分物体透明度设置。
 						fenliaoAnimationOne_3d(false, 1)	// 分料动画1执行
@@ -275,9 +275,13 @@
 					roamingSelect.value = 1	// 改为结束模式
 					document.getElementById("deviceVideoName").parentNode.style.display = "none"	// 漫游GIF图隐藏
 					if(roamingRoomSelect.value == 3){	// 均化车间
-						junhuaRomaingLight_3d(false)	// 均化间漫游时单独高亮显示立磨间密相泵物体
-						junhuaRomaingLines_3d(false)	// 均化间漫游时单独显示单条输送管道
 						junhuaLoubanSetOpacity_3d(1)	// 均化间中间楼板设置透明度
+						fenliaoOpacity_3d(false, 1)	// 均化间动画外层部分物体透明度设置。
+						fenliaoAnimationOne_3d(false, 1)	// 分料动画1执行
+						fenliaoMeshHide_3d(false)	// 粉料动画模型显示隐藏
+						limoStaircaseToggle_3d(true)	// 漫游开始楼梯隐藏
+						threeDModuleOpacity.value = 1
+						outWallSetOpacity(threeDModuleOpacity.value)
 					}
 					allRoomToggle_3d(0, true)
 					allRoomToggle_3d(1, true)
