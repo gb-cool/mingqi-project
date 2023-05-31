@@ -2743,10 +2743,10 @@ export const limoRobotAnimation = (id, speed, bool) => {
 export const limoRobotInitalize = () => {
     limoTween && limoTween.stop();
     moveingRobot.userData.lockID = 1;
-    // moveingRobot.position.set(-3166.68, 214.64 - 3.33, -1504.03);
-    // moveingRobot.lookAt(-3338.21, 214.64 - 3.33, -1503.95);
-    moveingRobot.position.set(-3173.6036, 211.31, -1504.0268);
-    moveingRobot.lookAt(-3095.744, 230.9194, -1454.4951);
+    moveingRobot.position.set(-3166.68, 214.64 - 3.33, -1504.03);
+    moveingRobot.lookAt(-3338.21, 214.64 - 3.33, -1503.95);
+    // moveingRobot.position.set(-3173.6036, 211.31, -1504.0268);
+    // moveingRobot.lookAt(-3095.744, 230.9194, -1454.4951);
 };
 
 // 立磨巡检机器人充电状态
@@ -3810,8 +3810,8 @@ export const limoXunjianRobotFocus = (times, td = () => {}) => {
         moveingRobot.position.y,
         moveingRobot.position.z,
     ];
-    // let looks = [vec3.x, vec3.y, vec3.z];
-    let looks = [vec3.x + 77.8595, vec3.y - 60, vec3.z];
+    let looks = [vec3.x, vec3.y, vec3.z];
+    // let looks = [vec3.x + 77.8595, vec3.y - 60, vec3.z];
     tweenMoveView(controls, looks, times, td);
     // tweenMoveView([-3173.6036,211.3100,-1504.0268], [-3095.7440,230.9194,-1454.4951], times, td);
 };
@@ -4537,8 +4537,8 @@ var roampointFour = [
         point: [-3616.4301, 275.0, -852.218],
         look: [-3350.1303, 357.7922, -1099.104],
         speed: 0.2,
-        video: "L",
-        delayed: 3,
+        video: "均化间漫游动画斜槽开关",
+        delayed: 6,
     },
     {
         point: [-3451.6842, 275.0, -834.9601],

@@ -73,7 +73,8 @@
 	fourColorDiagram_3d, outRoomOpactiy_3d, pipeLineFun_3d, outwallCondition_3d, roamAnimation_3d, 
 	suishiModelAnimation_3d, junhuaRomaingLight_3d, junhuaRomaingLines_3d, junhuaLoubanSetOpacity_3d, 
 	allRoomToggle_3d, manyouCarToggle_3d,
-	fenliaoMeshHide_3d, fenliaoOpacity_3d, fenliaoAnimationOne_3d, intoRoom, limoStaircaseToggle_3d, fixFLDHcolors_3d} from "../3d/index"	// 三维
+	fenliaoMeshHide_3d, fenliaoOpacity_3d, fenliaoAnimationOne_3d, intoRoom, limoStaircaseToggle_3d, fixFLDHcolors_3d,
+	XCopenAnimation_3d} from "../3d/index"	// 三维
 	import { Device } from '../assets/js/device.js'
 	export default {
 		name: "ToolsMenu",
@@ -240,6 +241,7 @@
 							fenliaoMeshHide_3d(true)	// 粉料动画模型显示隐藏
 							fenliaoOpacity_3d(true, 0.1)	// 均化间动画外层部分物体透明度设置。
 							limoStaircaseToggle_3d(false)	// 漫游开始楼梯隐藏
+							
 							intoRoom(1)
 							if(threeDModuleOpacity.value > 0.2){
 								threeDModuleOpacity.value = 0.0
@@ -315,7 +317,7 @@
 				fourColorDiagram_3d(false, "#0000FF", "#FFFF00", 0.1)	// 四色图显示隐藏并更改颜色
 				outRoomOpactiy_3d(1)	// 除地面意外的所有其他物体设置透明度
 				pipeLineFun_3d(0, 0.2, 0xffffff)	// 管道全部正常显示
-				
+				fenliaoMeshHide_3d(false)	// 粉料动画模型显示隐藏
 				window.clearInterval(timer.value);
 				
 				roamingSelect.value = 1	// 改为结束模式

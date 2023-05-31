@@ -2,7 +2,7 @@ import { Device } from "../assets/js/device.js";
 import { WareHouse } from "../assets/js/warehouse.js";
 import { clickLMJtoChangeColor_3d, manyouCarToggle_3d ,junhuaRomaingLight_3d,
  junhuaRomaingLines_3d, junhuaLoubanSetOpacity_3d,
- fenliaoMeshHide_3d, fenliaoOpacity_3d, fenliaoAnimationOne_3d} from "./index";
+ fenliaoMeshHide_3d, fenliaoOpacity_3d, fenliaoAnimationOne_3d, XCopenAnimation_3d} from "./index";
 import { Video } from '../assets/js/video.js'
 /**
  * 查询立磨列表数据
@@ -209,6 +209,9 @@ export const openTovideo = (name) => {
 			if(Object.is(name, '粉料动画1')){
 				console.log("=======================")
 				fenliaoAnimationOne_3d(true, 0.3)	// 分料动画1执行
+			}
+			if(Object.is(name, "均化间漫游动画斜槽开关")){
+				XCopenAnimation_3d()	// 均化间漫游动画斜槽开关
 			}
 			
 			if(name in CacheData.video.gif){
