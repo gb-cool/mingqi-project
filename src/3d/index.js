@@ -58,6 +58,7 @@ import {
     fenliaoAnimationOne,
     limoStaircaseToggle,
     fixFLDHcolors,
+    XCopenAnimation,
 } from "./industryEquip.js";
 var baseUrl = "./3dModel/";
 
@@ -449,4 +450,9 @@ export const limoStaircaseToggle_3d = (bool) => {
 // 修改粉料动画管道颜色
 export const fixFLDHcolors_3d = (color) => {
     fixFLDHcolors(color);
+};
+
+// 均化间漫游动画斜槽开关
+export const XCopenAnimation_3d = () => {
+    XCopenAnimation();
 };
