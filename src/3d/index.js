@@ -185,9 +185,9 @@ export const initalizeMan_3d = (data, td) => {
     initalizeMan(data, td);
 };
 
-// 实时数据驱动人员动画    id=人员id    points=[x,y]   floor=当前行走的地面  times=毫秒值时间  td=动画执行完的回调函数
-export const realtimeMotionMan_3d = (id, point, floor, times, td) => {
-    realtimeMotionMan(id, point, floor, times, td);
+// 实时数据驱动人员动画    id=人员id    points=[x,y]   floor=当前行走的地面   replace=当前车间   times=毫秒值时间  td=动画执行完的回调函数
+export const realtimeMotionMan_3d = (id, point, floor, replace, times, td) => {
+    realtimeMotionMan(id, point, floor, replace, times, td);
 };
 
 // 立磨巡检机器人恢复到初始状态 位置为1
