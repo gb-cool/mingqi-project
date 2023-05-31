@@ -213,7 +213,12 @@
 							})
 							setTimeout(()=>{
 								message.data.carData.forEach((p) => {
-									realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 3000 ,() => {})
+									if(p.dis && p.dis < 10000){
+										console.log(p)
+										realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 0 ,() => {})
+									}else{
+										realtimeMotionCar_3d(p.deviceNo, [p.x, p.y], 3000 ,() => {})
+									}
 								})
 							}, 1000)
 							ExecutionData.value = message

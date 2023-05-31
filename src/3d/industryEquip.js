@@ -214,20 +214,21 @@ var sceneOnLoad = ({ baseUrl, domElement, callback }) => {
     let InTheEnd = (td) => {
         container.clickObjects = [defaultSky]; // 控制点击当前可以点击的模型对象
         td && td();
+		// console.log(junhuaModelObject)
         junhuaDongHuaMesh.push(
-            junhuaModelObject.getObjectByName("充气斜槽1下料管03_2")
+            junhuaModelObject.getObjectByName("充气斜槽1下料管03").children[1]
         );
         junhuaDongHuaMesh.push(
-            junhuaModelObject.getObjectByName("充气斜槽1下料管04_1")
+            junhuaModelObject.getObjectByName("充气斜槽1下料管04").children[0]
         );
         junhuaDongHuaMesh.push(
-            junhuaModelObject.getObjectByName("充气斜槽1下料管04_2")
+            junhuaModelObject.getObjectByName("充气斜槽1下料管04").children[1]
         );
         junhuaDongHuaMesh.push(
-            junhuaModelObject.getObjectByName("充气斜槽1下料管01_1")
+            junhuaModelObject.getObjectByName("充气斜槽1下料管01").children[0]
         );
         junhuaDongHuaMesh.push(
-            junhuaModelObject.getObjectByName("充气斜槽1下料管01_2")
+            junhuaModelObject.getObjectByName("充气斜槽1下料管01").children[1]
         );
 
         junhuaNoOpacity.push(
@@ -250,10 +251,10 @@ var sceneOnLoad = ({ baseUrl, domElement, callback }) => {
             junhuaModelObject.getObjectByName("充气斜槽1主体")
         );
         junhuaChangeOpacity.push(
-            junhuaModelObject.getObjectByName("充气斜槽1下料管01_2")
+            junhuaModelObject.getObjectByName("充气斜槽1下料管01").children[1]
         );
         junhuaChangeOpacity.push(
-            junhuaModelObject.getObjectByName("充气斜槽1下料管03_2")
+            junhuaModelObject.getObjectByName("充气斜槽1下料管03").children[1]
         );
         junhuaChangeOpacity.push(
             junhuaModelObject.getObjectByName("均化间高混料高岭土叶腊石")
