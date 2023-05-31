@@ -264,13 +264,32 @@ async function mergePositionData(joySuchData, seekeyData){
 	carHistoryListData.forEach(e => {
 		let toggler = carShowData.filter(c => Object.is(e.id, c.id))
 		toggler.length == 0 ? carHide.push(e) : carJiaoJi.push(toggler[0])
+		// 计算车辆需要移动的距离
+		if(toggler.length > 0){
+			let dx = Math.abs(e.x - toggler[0].x);
+			let dy = Math.abs(e.y - toggler[0].y);
+			let dis = Math.sqrt(Math.pow(dx,2)+Math.pow(dy,2))
+			toggler[0].dis = dis
+			let carDataActive =  carData.filter(c => Object.is(e.id, c.id))
+			if(carDataActive.length>0){
+				carDataActive[0].dis = dis
+			}
+		}
 	})
 	carShowData.forEach(e => {
 		let toggler = carJiaoJi.filter(c => Object.is(e.id, c.id))
 		if(toggler.length==0) carCreate.push(e)
 	})
+	// carData.forEach(item => {
+	// 	carShowData.forEach(t => {
+	// 		if(Object.is(item.deviceNo, t.id)){
+	// 			item.dis = t.dis
+	// 		}
+	// 	})
+	// })
 	// console.log(carJiaoJi, carHide, carCreate)
 	carHistoryListData = carShowData	// 车辆数据存储
+	// console.log(carData)
 	postMessage({mark: "person", use: "realData", data: {
 		personHideData: personHideData,	// 人员隐藏
 		personShowData: showData,	// 人员显示数据
