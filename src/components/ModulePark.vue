@@ -114,7 +114,7 @@
 <script>
 	import { ref, inject, watch, onMounted, onDeactivated } from 'vue'
 	import { intoRoom, momentMoveing, tweenMoveing, outWallSetOpacity, mainView, outRoomOpactiy_3d, limoRobotAnimation_3d, 
-	limoXunjianRobotFocus_3d, updataLiMoRobotPlane_3d, focusCar_3d, suishiModelAnimation_3d } from "../3d/index";	// 三维
+	limoXunjianRobotFocus_3d, updataLiMoRobotPlane_3d, focusCar_3d, suishiModelAnimation_3d,updateLEDPlane_3d } from "../3d/index";	// 三维
 	import { JoySuch } from '../assets/js/positionPerson.js'
 	import { Robot } from '../assets/js/robot.js'
 	export default {
@@ -186,6 +186,9 @@
 							break;
 						case 5:
 							// momentMoveing([0,0,-11], [-0,38,44]) 
+							if(CacheData.wareHouse.updateLEDPlane_3d.length>0){
+								updateLEDPlane_3d(CacheData.wareHouse.updateLEDPlane_3d)
+							}
 							tweenMoveing([-2534,0,-3630], [-1186,717,-2345], 2000, (e) => {})
 							break;
 					}

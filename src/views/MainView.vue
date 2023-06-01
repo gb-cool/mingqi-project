@@ -183,6 +183,7 @@
 						break;
 					case "warehouse":
 						CacheData.wareHouse.realTableData = message.data.realTableData	// 缓存仓储堆场数据
+						CacheData.wareHouse.updateLEDPlane_3d = message.data.updateLEDPlane_3d	// 缓存仓储堆场数据
 						updateLEDPlane_3d(message.data.updateLEDPlane_3d)
 						break;
 					case "robot":
@@ -209,7 +210,7 @@
 							CacheData.car.realListData =  message.data.carData	// 缓存车辆信息
 							// 人员车辆移动
 							message.data.personData.forEach((p) => {
-								realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], CachePublicFun.getLayerToName(p.layer), 2000, (result) => {})
+								realtimeMotionMan_3d(p.deviceNo, [p.x, p.y], CachePublicFun.getLayerToName(p.layer), null, 2000, (result) => {})
 							})
 							setTimeout(()=>{
 								message.data.carData.forEach((p) => {

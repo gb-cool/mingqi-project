@@ -26,7 +26,8 @@ var CacheData = {
 	},
 	wareHouse: {
 		// 仓储堆场
-		realTableData: []		// 仓储堆场实时表格数据
+		realTableData: [],	// 仓储堆场实时表格数据
+		updateLEDPlane_3d: []
 	},
 	person: {
 		// 人员

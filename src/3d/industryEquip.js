@@ -2379,6 +2379,10 @@ function cooTransformToLL(x, y) {
             { x: -1808.002471923828, y: -844.051513671875 },
         ];
     let data = getRectifyData(x, y);
+	let room = ""
+	if(data){
+		room = data.room ? data.room : ""
+	}
     if (data) {
         realCoordinate = data.realCoordinate;
         modelCoordinate = data.modelCoordinate;
@@ -2393,7 +2397,7 @@ function cooTransformToLL(x, y) {
         ];
     }
     // console.log(x, y, realCoordinate, modelCoordinate)
-    return getCooTransformToLL(x, y, realCoordinate, modelCoordinate);
+    return Object.assign({room: room},getCooTransformToLL(x, y, realCoordinate, modelCoordinate));
 }
 function getCooTransformToLL(x, y, realCoordinate, modelCoordinate) {
     let offsetX, offsetY;
@@ -3227,6 +3231,7 @@ export const realtimeMotionMan = (id, point, floor, replace, times, td = () => {
     });
 
     let position = cooTransformToLL(point[0], point[1]);
+	replace = position.room
     cube.position.set(position.x, 600, position.z);
 
     setTimeout(() => {
@@ -5470,7 +5475,7 @@ var dingweiPosition = [
     {key: '地面二层', name: '均化间', y: 67.72},
     {key: '地面二层', name: '立磨间', y: 82.41},
     {key: '地面二层', name: '碎石配料间-西', y: 249.85},
-    {key: '地面二层', name: '碎石配料间-东', y: 393.80},
+    {key: '地面二层', name: '碎石配料间', y: 393.80},
     {key: '地面二层', name: '筛分间', y: 251.32},
     {key: '地面二层', name: '破碎间', y: 329.17},
     {key: '地面三层', name: '均化间', y: 120.03},

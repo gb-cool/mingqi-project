@@ -174,7 +174,7 @@
 			let popupFileds = inject('popupFileds')	// 弹窗结构
 			let popupType = inject('popupType') // 弹窗内容类型
 			
-			const activeName = 'fourth'	// 默认选中导航值
+			const activeName = 'third'	// 默认选中导航值
 
 			const dateTime = new DateTime()
 			
